@@ -87,7 +87,7 @@ const modalOpen = computed({
     set: (val)=> emit('update:modelValue', val)
 })
 
-const formState = ref<IObj>({}), err = ref(""), setErr = (val: string) => err.value = val;
+const formState = ref<IObj>({demo: true}), err = ref(""), setErr = (val: string) => err.value = val;
 const btnLoading = ref(false), setBtnLoading = (val: boolean) => btnLoading.value = val;
 
 const handleSubmit = async () => {
@@ -99,7 +99,8 @@ const handleSubmit = async () => {
             let data =formState.value
             delete data.id
             const {mode, bot, onDone} = props
-            data = mode == "Create" ? {...data,  user: userStore.user?.username} : {key: "multi", val: {...data, symbol: data.symbol.split(',')}} 
+            data.symbol = data.symbol.split(',')
+            data = mode == "Create" ? {...data,  user: userStore.user?.username} : {key: "multi", val: {...data}} 
             console.log(data);
             setBtnLoading(true)
             const url = mode == "Create" ? "/bots/create" : `/bots/${bot!.id}/edit`

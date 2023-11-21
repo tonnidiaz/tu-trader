@@ -68,7 +68,7 @@
                                         subtitle: (_bot.orders
                                             ? _bot.orders[
                                                   _bot.orders.length - 1
-                                              ].ccy_amt
+                                              ]?.ccy_amt ??0
                                             : 0
                                         ).toFixed(2),
                                     },
