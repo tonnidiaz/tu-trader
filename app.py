@@ -192,8 +192,8 @@ def index():
 
 @app.get('/orders')
 def orders_route():
-    orders : list[Order] = Order.objects()
-    orders = list(map(lambda x: json.loads(x.to_json()), orders))
+    orders : list[Order] = Order.find().run()
+    orders = list(map(lambda x: json.loads(x.model_dump_json()), orders))
     return orders
 
 scheduler.start()
