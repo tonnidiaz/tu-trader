@@ -10,6 +10,8 @@ import hmac
 import base64, requests
 from datetime import datetime
 
+from utils.time_func import date_str_to_timestamp
+
 def get_app():
     try:
         return App.find().run()[0]
@@ -59,7 +61,6 @@ def err_handler(e: Exception):
     filename, lineno, _, _ = tb[-1]
     # Print filename and line number
     print("Exception occurred in file:", filename, f"line {lineno}")
-
 
 def chandelier_exit(df : pd.DataFrame, length = 1, mult = 1.8):
 
@@ -209,3 +210,25 @@ def get_klines(start: int, interval = None, symbol = None, save_fp = None):
     with open(save_fp if save_fp else f'data/klines/bybit/{symbol}.json', 'w') as f:
         json.dump(klines, f)
     print("DONE")
+
+
+from okx import MarketData
+
+market_data_api = MarketData.MarketAPI(flag='1')
+
+
+def get_okx_klines(end = date_str_to_timestamp('2024-05-13 10:45:00')):
+
+    """ Returns 3 months worth of klines if 1h"""
+    global klines
+
+    print('GETTING OKX KLINES...')
+    res = market_data_api.get_index_candlesticks(instId='ETH-USDT', bar="15m", after=end)
+    data = res['data']
+    if len(data) > 0:
+        klines = [*klines,*data]
+        get_okx_klines(end = data[-1][0])
+    d =klines.copy()
+    d.reverse()
+    
+    return d
