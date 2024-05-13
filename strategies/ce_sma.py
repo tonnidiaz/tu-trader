@@ -12,7 +12,7 @@ def back_test(df: pd.DataFrame, balance: float):
     for i, row in df.iterrows():
 
 
-        if row['buy_signal'] ==1 and not pos:
+        if row['buy_signal'] ==1 and not pos and (row['close'] <= row['zlsma'] or row['low'] <= row['zlsma']):
                 pos = True
                 entry_price = row['close']
                 tp = entry_price * ( 1 + p_gain)

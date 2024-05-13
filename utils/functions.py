@@ -109,7 +109,8 @@ def chandelier_exit(df : pd.DataFrame, length = 1, mult = 1.8):
             df.loc[i, 'buy_signal'] = int(df['sir'][i] == 1 and df['sir'][i - 1] == -1)
             df.loc[i, 'sell_signal'] = int(df['sir'][i] == -1 and df['sir'][i - 1] == 1)
 
-    df = df[['timestamp', 'open', 'high', 'low', 'close', 'volume', 'sma_20', 'sma_50', 'buy_signal','sell_signal']]
+    df['zlsma'] = zlsma(df)
+    df = df[['timestamp', 'open', 'high', 'low', 'close', 'volume', 'zlsma', 'sma_20', 'sma_50', 'buy_signal','sell_signal']]
     
     print("CE COMPLETE")
     return df

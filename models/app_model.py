@@ -5,8 +5,8 @@ class App(Document):
     use_swing_low: bool = True
     base: str = 'ETH'
     ccy: str = 'USDT'
-    p_gain: float = 1.5/100
-    sl_const: float = 15
+    p_gain: float = 1/100
+    sl_const: float = 30
     strict: bool = False
     demo: bool = True
     interval:int = 15

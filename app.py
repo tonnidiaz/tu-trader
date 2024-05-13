@@ -166,7 +166,7 @@ def tc_job():
                     print("DF SAVED TO CSV FILE")
 
                 for i, row in df.tail(1).iterrows():
-                    if row['buy_signal'] ==1 or test:
+                    if row['buy_signal'] ==1 and (row['close'] <= row['zlsma'] or row['low'] <= row['zlsma']) or test:
 
                         #scheduler.pause_job(TIME_CHECKER_JOB_ID)
                         print("HAS BUY SIGNAL > GOING IN")
