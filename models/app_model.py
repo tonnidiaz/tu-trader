@@ -6,7 +6,7 @@ class App(Document):
     base: str = 'ETH'
     ccy: str = 'USDT'
     p_gain: float = 1.5/100
-    sl_const: float = 20
+    sl_const: float = 15
     strict: bool = False
     demo: bool = True
     interval:int = 15

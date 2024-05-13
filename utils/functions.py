@@ -189,3 +189,23 @@ def divide_chunks(l, n):
     # looping till length l 
     for i in range(0, len(l), n):  
         yield l[i:i + n] 
+
+def get_klines(start: int, interval = None, symbol = None, save_fp = None):
+    # Get the klines since the start time
+    # Get again from first[timestamp] + interval until first[timestamp] <= now <= first_timestamp + interval
+    global cnt, klines
+
+    first_timestamp = start
+    print(f"GETTING KLINES FOR {interval}m")
+    while first_timestamp <= datetime.now().timestamp() * 1000:
+        print(f"GETTING {cnt + 1} klines...")
+        print(first_timestamp)
+        print(datetime.fromtimestamp(first_timestamp / 1000))
+        res = requests.get(f"https://api.bybit.com/v5/market/kline?category=spot&symbol={symbol}&interval={interval}&start={first_timestamp}")
+        res : list = res.json()['result']['list']
+        first_timestamp = round(float(res[0][0])) + interval * 60 * 1000
+        klines = [*res, *klines]
+        cnt +=1
+    with open(save_fp if save_fp else f'data/klines/bybit/{symbol}.json', 'w') as f:
+        json.dump(klines, f)
+    print("DONE")
