@@ -1,0 +1,4 @@
+Stop loss order
+
+    Not necessarily an order you make to enter a position
+    
