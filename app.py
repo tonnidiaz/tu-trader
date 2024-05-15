@@ -169,7 +169,7 @@ def check_n_place_orders():
 
                 print("HAS SELL SIGNAL > GOING OUT")
                 place_trade(ts=row["timestamp"], price=row["close"], side="sell")
-
+        scheduler.resume_job(TIME_CHECKER_JOB_ID)
 
 @scheduler.task("interval", id=TIME_CHECKER_JOB_ID, seconds=1, misfire_grace_time=900)
 def tc_job():
