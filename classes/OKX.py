@@ -13,10 +13,9 @@ class OKX:
 
     ws_url = "wss://wspap.okx.com:8443/ws/v5/business?brokerId=9999" 
     ws_url_private = "wss://wspap.okx.com:8443/ws/v5/private?brokerId=9999"
-    #symbol = 'ETH-USDT'
-    
-
+    inst = None
     def __init__(self) -> None:
+
         print("INITIALIZE OKX")
         print(os.getenv("OKX_PASSPHRASE"))
         self.app = get_app()
@@ -39,19 +38,19 @@ class OKX:
         print('GETTING OKX KLINES...')
         res = self.market_data_api.get_index_candlesticks(instId=self.get_symbol(), bar=f"{self.app.interval}m", after=end)
         data = res['data']
-        if len(data) > 0:
-            klines = [*klines,*data]
-            self.get_klines(end = data[-1][0])
+        #if len(data) > 0: TODO: Uncomment and indent 2 lines below
+        klines = [*klines,*data]
+        #self.get_klines(end = data[-1][0])
         d =klines.copy()
         d.reverse()
         
         return d
 
-    def get_bal(self):
+    def get_bal(self, ccy):
 
         try:
             print("GETTING BALANCE...")
-            res = self.acc_api.get_account_balance(ccy=f"{self.app.ccy}")
+            res = self.acc_api.get_account_balance(ccy=ccy)
             bal = res["data"][0]["details"][0]["availBal"]
             return float(bal)
 
@@ -63,28 +62,28 @@ class OKX:
         app = self.app
         return f'{app.base}-{app.ccy}'
     
-    def place_order(self, amt, tp = None, sl = None, side = 'buy'):
+    def place_order(self, amt, tp = None, sl = None, side = 'buy', price = 0):
         try:
             print("PLACING ORDER...")
 
-            if side == 'buy':
-                res = self.trade_api.place_order(instId=self.get_symbol(), tdMode='cash', ordType='market', side=side, sz = amt)
+            #if side == 'buy':
+            res = self.trade_api.place_order(instId=self.get_symbol(), tdMode='cash', ordType='market', side=side, sz = amt, px=price)
 
-            else:
+            """ else:
                 res = self.trade_api.place_algo_order(
                     instId=self.get_symbol(), tdMode='cash', side=side, ordType='oco',
                     sz=amt,
                 tpTriggerPx = tp, tpOrdPx = '-1', slTriggerPx =  sl, slOrdPx = '-1'
-                )
+                ) """
 
             if res['code'] != '0':
                 print(res)
                 raise Exception('Failed to place order')
             
-            print(f"{'OCO' if side == 'sell' else ''} ORDER PLACED SUCCESSFULLY!")
+            print(f"{'OCO' if side == 'sell' else ''} ORDER PLACED SUCCESSFULLY!\n")
             data = res['data'][0]
 
-            order_id =data['ordId'] if side =='buy' else data['algoId']
+            order_id =data['ordId']# if side =='buy' else data['algoId']
             return order_id
 
         except Exception as e:
@@ -109,4 +108,4 @@ class OKX:
         except Exception as e:
             err_handler(e)
 
-okx : OKX = None
+#okx : OKX = None

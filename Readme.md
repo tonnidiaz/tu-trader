@@ -21,3 +21,30 @@
 - **5% - 30sl** ->  **$473**
 - **5% - 25sl** ->  **$712**
 
+## Plan
+
+- Check the time
+- is_closed = True
+- If time meets condition:
+    - Check if theres an open position
+        - if last_order:
+            - is_closed = last_order.is_closed
+            - if not is_closed:
+                - order_id = last_order.order_id if last_order.side == 'sell' else last_order.buy_order_id
+                - order = get_order_by_id(order_id)
+                - _is_closed = order['state'] != 'live'
+
+                - if last_order.side == 'buy':
+                    - if _is_closed:
+                        - Update last_order buy values and change side to 'sell'
+
+                - elif last_order.side == 'sell':
+                    - if _is_closed:
+                        - is_closed = _is_closed
+                        - update last_order sell values
+
+    - Get klines and check for signals
+    - If buy_signal and last_order.is_closed: 
+        - Buy
+    - elif sell_signal and not last_order.is_closed and last_order.side == 'sell' and last_order.order_id = '': # buy order was filled but sell order had not been placed yet
+        - sell
