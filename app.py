@@ -112,21 +112,21 @@ def place_trade(amt: float | None = None, ts=None, price: float = 0, side="buy")
 TIME_CHECKER_JOB_ID = "TIME_CHECKER_JOB"
 
 last_check_at: datetime | None = None
-test = True
+test = False
 
 
 
 def check_n_place_orders():
 
-    global cnt, last_check_at, test
+    global cnt, last_check_at
     
 
     okx : OKX= OKX.inst
     now = datetime.now()
     curr_min = now.minute
     app = get_app()
-    test = test and len(Order.find().run()) <= 2
-    print(f"CURR_MIN: [{curr_min}]\n")
+    m_test = test and len(Order.find().run()) <= 2
+    print(f"CURR_MIN: [{curr_min}]\tTEST: {m_test}\n")
 
     prod_time_condition = (
         app.can_trade
@@ -139,7 +139,7 @@ def check_n_place_orders():
         )
     )
 
-    if test or prod_time_condition:
+    if m_test or prod_time_condition:
         last_check_at = datetime.now()
         scheduler.pause_job(TIME_CHECKER_JOB_ID)
         # Check orders
@@ -159,7 +159,7 @@ def check_n_place_orders():
         for i, row in df.tail(1).iterrows():
 
             if  is_closed and (
-                row["buy_signal"] == 1 and (row["sma_20"] > row["sma_50"]) or test
+                row["buy_signal"] == 1 and (row["sma_20"] > row["sma_50"]) or m_test
             ):
 
                 print("HAS BUY SIGNAL > GOING IN")
@@ -167,7 +167,7 @@ def check_n_place_orders():
                 place_trade(ts=row["timestamp"], price=entry_price)
 
             elif not is_closed and last_order.side == 'sell' and last_order.order_id == '' and (
-                row["sell_signal"] == 1 and (row["sma_20"] < row["sma_50"]) or test
+                row["sell_signal"] == 1 and (row["sma_20"] < row["sma_50"]) or m_test
             ):
 
                 print("HAS SELL SIGNAL > GOING OUT")
