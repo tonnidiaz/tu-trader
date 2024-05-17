@@ -6,6 +6,7 @@ from utils.functions import (
     is_dev,
     parse_klines,
 )
+from test import main as test_main
 import time, json
 from datetime import datetime
 from flask import Flask
@@ -111,18 +112,20 @@ def place_trade(amt: float | None = None, ts=None, price: float = 0, side="buy")
 TIME_CHECKER_JOB_ID = "TIME_CHECKER_JOB"
 
 last_check_at: datetime | None = None
-test = False
+test = True
 
 
 
 def check_n_place_orders():
 
-    global cnt, last_check_at
+    global cnt, last_check_at, test
+    
 
-    okx = OKX.inst
+    okx : OKX= OKX.inst
     now = datetime.now()
     curr_min = now.minute
     app = get_app()
+    test = test and len(Order.find().run()) <= 2
     print(f"CURR_MIN: [{curr_min}]\n")
 
     prod_time_condition = (
@@ -210,7 +213,8 @@ def main():
         check_n_place_orders()
 
 if __name__ == "__main__":
-    main()
+    #main()
+    #test_main()
     while True:
         time.sleep(2)
     # app.run( port=8000, debug=True)

@@ -1,21 +1,12 @@
-from bunnet import Indexed, init_bunnet, Document
-from pymongo.mongo_client import MongoClient
+from classes.OKX import OKX
+from utils.functions import chandelier_exit, heikin_ashi, parse_klines
+from utils.time_func import date_str_to_timestamp
 
-
-class User(Document):
-    fname: str = ''
-    lname: str = ''
-    email: Indexed(str, unique = True)
-# Connect to MongoDB first. PyMODM supports all URI options supported by
-# PyMongo. Make sure also to specify a database in the connection string:
-url = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
-client = MongoClient(url)
-db = 'traded'
-init_bunnet(database=client[db], document_models=[User])
-print("MONGO INITIALIZED")
 
 def main():
+    okx: OKX = OKX.inst
+    klines = okx.get_klines(end=date_str_to_timestamp("2024-05-17 07:15:00"))
+    df = chandelier_exit(heikin_ashi(parse_klines(klines)))
+    df.to_csv('data/dfs/okx/df.csv')
+    print("DONE")
 
-    user = User(email='emmy2@gmail.com', fname='John', lname='Doe')
-    user.save()
-main()

@@ -32,15 +32,12 @@ class OKX:
 
         
     def get_klines(self, end = round(datetime.now().timestamp() * 1000)):
-        """ Returns 1 month data if 15m """
-        global klines
-
+        """ Returns Reversed klines """
+        klines = []
         print('GETTING OKX KLINES...')
         res = self.market_data_api.get_index_candlesticks(instId=self.get_symbol(), bar=f"{self.app.interval}m", after=end)
         data = res['data']
-        #if len(data) > 0: TODO: Uncomment and indent 2 lines below
         klines = [*klines,*data]
-        #self.get_klines(end = data[-1][0])
         d =klines.copy()
         d.reverse()
         

@@ -7,7 +7,6 @@ def update_order(orders: list[Order]):
     is_closed = True
     last_order = None
     okx : OKX = OKX.inst
-    print(okx)
     if len(orders) and not orders[-1].is_closed:
         last_order = orders[-1]
         print(f"LAST_ORDER: {last_order}\n")
