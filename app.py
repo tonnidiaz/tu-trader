@@ -126,7 +126,7 @@ def check_n_place_orders():
     curr_min = now.minute
     app = get_app()
     m_test = test and len(Order.find().run()) <= 2
-    print(f"CURR_MIN: [{curr_min}]\tTEST: {m_test}\n")
+    #print(f"CURR_MIN: [{curr_min}]\tTEST: {m_test}\n")
 
     prod_time_condition = (
         app.can_trade
