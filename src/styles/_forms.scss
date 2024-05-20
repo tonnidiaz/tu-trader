@@ -1,0 +1,9 @@
+@import "./colors";
+label{
+    background-color: $color-card !important;
+}
+
+input, textarea{
+    background-color: $color-card !important;
+    border: 2px solid $color-card-2 !important
+}
