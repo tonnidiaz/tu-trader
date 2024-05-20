@@ -1,1 +1,0 @@
-web: cd bend && gunicorn --worker-class eventlet -w 1 app:app --preload
