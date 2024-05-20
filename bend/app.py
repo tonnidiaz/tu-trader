@@ -213,7 +213,7 @@ def orders_route():
     return orders
 
 scheduler.start()
-socketio.run(app,)
+#socketio.run(app, allow_unsafe_werkzeug=True)
 if __name__ == '__main__':
     #socketio.run(app, debug=True, port=5000)
     pass

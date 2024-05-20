@@ -1,1 +1,1 @@
-web: cd bend && gunicorn app:app --preload
+web: cd bend && ggunicorn --worker-class eventlet -w 1 app:app --preload
