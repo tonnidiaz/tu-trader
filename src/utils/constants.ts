@@ -4,7 +4,7 @@ const SITE = "TuTrader";
 const __DEV__ = process.env.NODE_ENV == "development";
 const ROOT = __DEV__ ? "http://localhost:3000" : "https://tu-trader.vercel.app";
 export const BEND_URL = __DEV__
-    ? "http://localhost:5000"
+    ? "http://localhost:8000"
     : "https://tu-trader-3996d65ded90.herokuapp.com";
 export const EMAIL = "tonnidiazed@gmail.com";
 export const DEVELOPER = "Tonni Diaz";

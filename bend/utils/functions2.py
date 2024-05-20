@@ -13,6 +13,9 @@ def update_order(orders: list[Order]):
         is_closed = last_order.is_closed
         oid = last_order.order_id if last_order.side == 'sell' else last_order.buy_order_id
         res = okx.get_order_by_id(oid)
+        
+        if res is None:
+            return None
         _is_closed = res["state"] != "live"
 
         if last_order.side == "sell":

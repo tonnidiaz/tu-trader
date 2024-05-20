@@ -137,8 +137,6 @@ test = False
 def check_n_place_orders():
 
     global cnt, last_check_at
-    
-
     okx : OKX= OKX.inst
     now = datetime.now()
     curr_min = now.minute
@@ -201,10 +199,13 @@ def tc_job():
         check_n_place_orders()
         cnt += 1
 
-
 scheduler.app = app
 scheduler.init_app(app)
 
+
+@app.get("/")
+def index_route():
+    return 'OHK'
 
 @app.get("/orders")
 def orders_route():
