@@ -1,0 +1,1 @@
+web: gunicorn bend/app:app --preload
