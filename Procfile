@@ -1,1 +1,1 @@
-web: gunicorn bend/app:app --preload
+web: cd bend && gunicorn app:app --preload
