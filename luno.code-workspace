@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../luno"
+		},
+		{
+			"path": "../TestTrader"
+		},
+		{
+			"path": "."
+		}
+	],
+    "settings": {
+        "liveServer.settings.multiRootWorkspaceName": "tunedbass"
+    }
+}

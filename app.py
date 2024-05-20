@@ -125,7 +125,7 @@ def check_n_place_orders():
     now = datetime.now()
     curr_min = now.minute
     app = get_app()
-    m_test = test and len(Order.find().run()) <= 2
+    m_test = False#test and len(Order.find().run()) <= 2
     #print(f"CURR_MIN: [{curr_min}]\tTEST: {m_test}\n")
 
     prod_time_condition = (
@@ -172,6 +172,7 @@ def check_n_place_orders():
 
                 print("HAS SELL SIGNAL > GOING OUT")
                 place_trade(ts=row["timestamp"], price=row["close"], side="sell")
+        print("RESUME JOB")
         scheduler.resume_job(TIME_CHECKER_JOB_ID)
 
 @scheduler.task("interval", id=TIME_CHECKER_JOB_ID, seconds=1, misfire_grace_time=900)
