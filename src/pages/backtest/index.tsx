@@ -185,7 +185,7 @@ const Backtest = () => {
                                 <option value="" disabled>
                                     Margin
                                 </option>
-                                {[2, 3, 4, 5].map((e: any, i: number) => (
+                                {[1,2, 3, 4, 5].map((e: any, i: number) => (
                                     <option key={e} value={e}>
                                         x{e}
                                     </option>
