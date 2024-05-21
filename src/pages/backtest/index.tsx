@@ -42,7 +42,7 @@ const Backtest = () => {
                 ? data.start.split("T").join(" ") + ":00"
                 : null;
             const end = data.end ? data.end.split("T").join(" ") + ":00" : null;
-            const fd = { ...data, start, end };
+            const fd = { ...data, start, end, username: 'tonnidiaz' };
             console.log(fd);
             setRes(initRes);
             socket.emit("backtest", fd);
