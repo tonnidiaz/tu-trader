@@ -15,6 +15,11 @@ const Backtest = () => {
 
     useEffect(() => {
         socket.on("backtest", onBacktest);
+        socket.on("disconnect", (r, d)=>{
+            console.log('IO DISCONNECTED');
+            console.log(r);
+            console.log(d);
+        })
     }, []);
 
     const onBacktest = (data: any) => {
