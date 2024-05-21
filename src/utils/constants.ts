@@ -23,7 +23,7 @@ export const symbols = [
 ];
 
 export const API = axios.create({ baseURL: BEND_URL });
-export const socket = io(BEND_URL);
+export const socket = io(BEND_URL, {timeout: 3600000});
 socket.on("connect", () => {
     console.log(`IO CONNECTED`);
 });
