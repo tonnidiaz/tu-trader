@@ -45,7 +45,7 @@ app.config.from_object(Config)
 
 
 socketio = SocketIO(app)
-socketio.init_app(app, cors_allowed_origins="*", logger=True, engineio_logger=True)
+socketio.init_app(app, cors_allowed_origins="*", logger=False, engineio_logger=False)
 
 @socketio.on('connect')
 def test_connect(msg):
@@ -141,8 +141,9 @@ def check_n_place_orders():
     now = datetime.now()
     curr_min = now.minute
     app = get_app()
-    m_test = False#test and len(Order.find().run()) <= 2
-    #print(f"CURR_MIN: [{curr_min}]\tTEST: {m_test}\n")
+    m_test = test and len(Order.find().run()) <= 1
+    if test:
+        print(f"CURR_MIN: [{curr_min}]\tTEST: {m_test}\n")
 
     prod_time_condition = (
         app.can_trade
@@ -173,21 +174,24 @@ def check_n_place_orders():
         print("CHECKING SIGNALS...\n")
 
         for i, row in df.tail(1).iterrows():
-
+            obj = {'ts': row['timestamp'], 'buy_signal' : row['buy_signal'], 'sell_signal': row["sell_signal"], 'sma_20': row['sma_20'], 'sma_50': row['sma_50']}
+            print(f'\n{obj}\n')
             if  is_closed and (
                 row["buy_signal"] == 1 and (row["sma_20"] > row["sma_50"]) or m_test
             ):
 
-                print("HAS BUY SIGNAL > GOING IN")
+                print(f"HAS BUY SIGNAL > GOING IN: {last_order}")
                 entry_price = row["close"]
-                place_trade(ts=row["timestamp"], price=entry_price)
+                amt = last_order.ccy_amt * (1 +  last_order.ccy_amt * last_order.profit / 100) if last_order is not None else None
+                place_trade(ts=row["timestamp"], price=entry_price, amt=amt)
 
             elif not is_closed and last_order.side == 'sell' and last_order.order_id == '' and (
                 row["sell_signal"] == 1 and (row["sma_20"] < row["sma_50"]) or m_test
             ):
 
                 print("HAS SELL SIGNAL > GOING OUT")
-                place_trade(ts=row["timestamp"], price=row["close"], side="sell")
+                amt = last_order.base_amt
+                place_trade(ts=row["timestamp"], price=row["close"], side="sell", amt=amt)
         print("RESUME JOB")
         scheduler.resume_job(TIME_CHECKER_JOB_ID)
 

@@ -5,14 +5,14 @@ const Sidebar = () => {
         <ul className="menu gap-0 sm:gap-5  sidebar">
    
     
-   <li className="tooltip tooltip-right" data-tip="Home">
+   <li className="tooltip tooltip-right" data-tip="Home"> 
        <NextLink href="/">
         <i className="fi fi-rr-home"></i>
        </NextLink>
    </li>
-   <li className="tooltip tooltip-right" data-tip="Apps">
-       <NextLink href="/apps">
-        <i className="fi fi-rr-apps"></i>
+   <li className="tooltip tooltip-right" data-tip="Backtest">
+       <NextLink href="/backtest">
+        <i className="fi fi-rr-blood-test-tube-alt"></i>
        </NextLink>
    </li>
    <li className="tooltip tooltip-right" data-tip="Contact us">

@@ -134,3 +134,9 @@
 .border-1{
     border-width: 1px;
 }
+
+@for $i from 1 through 9{
+    .fw-#{$i}{
+        font-weight: $i * 100;
+    }
+}
