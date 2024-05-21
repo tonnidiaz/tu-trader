@@ -13,6 +13,8 @@ export { SITE, __DEV__, ROOT };
 export const symbols = [
     ["BTC", "USDT"],
     ["ETH", "USDT"],
+    ["BTC", "ZAR"],
+    ["ETH", "ZAR"],
     ["LTC", "USDT"],
     ["USDT", "ZAR"],
     ["XRP", "USDT"],
