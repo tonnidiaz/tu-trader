@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import "@/src/styles/globals.css";
 import "@/src/styles/styles.scss";
+import "@/src/styles/styles2.scss";
 import Head from "next/head";
 import { Theme } from "react-daisyui";
 import { SITE } from "../utils/constants";

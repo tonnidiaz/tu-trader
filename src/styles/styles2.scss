@@ -1,0 +1,43 @@
+@import "./vars";
+
+.params-area{
+    position: fixed;
+    z-index: 100;
+    bottom: 0;
+    right: 0px;
+    transition: all .1s linear;
+    box-shadow: -3px -3px 5px rgba(0, 0, 0, 0.199);
+    max-height: 90vh;
+    padding: 0;
+    margin: 0 1rem;
+   .mb-2{
+    margin-bottom: 0;
+   }
+    .content{
+        display: none;
+    }
+    .ctrl-btn{
+        transform: rotate(180deg);
+    }
+    &.open{
+        bottom: 0; overflow-y: scroll;
+        padding: 1rem;
+        .mb-2{
+            margin-bottom: .5rem;
+        }
+        .content{
+            display: unset;
+        }
+        .ctrl-btn{
+            transform: rotate(0deg);
+        }
+    }
+    .ctrl-btn{
+        float: right
+    }
+}
+@media screen and (max-width: 767px) {
+    .params-area{
+        bottom: calc($sidenav-w + 20px) !important
+    }
+}

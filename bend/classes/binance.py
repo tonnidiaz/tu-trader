@@ -12,11 +12,7 @@ class Binance:
     def __init__(self) -> None:
         print("INIT BINANCE...")
         self.app = get_app()
-        self.flag = "1" if self.app.demo else "0"  # Production trading:0 , demo trading:1
-        self.api_key = os.getenv("BINANCE_API_KEY")
-        self.api_secret = os.getenv( "BINANCE_API_SECRET")
-        self.client = Client(self.api_key, self.api_secret, testnet=True)
-
+        
     def get_klines(self, symbol = None, start = None, end = None, interval = None, save_fp = None):
         try:
             cnt = 0
@@ -24,7 +20,7 @@ class Binance:
             symbol = symbol if symbol else self.get_symbol()
             interval = interval if interval else self.app.interval
             end = end if end is not None else int(datetime.now().timestamp() * 1000)
-            print(end)
+            print(end) 
             if start is not None:
                 first_timestamp = int(start)
                 while first_timestamp <= end:
