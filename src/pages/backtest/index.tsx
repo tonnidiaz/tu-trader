@@ -13,10 +13,11 @@ const Backtest = () => {
     const [res, setRes] = useState<IObj>(initRes);
     const [formData, setFormData] = useState<IObj>({});
     const [msg, setMsg] = useState<IObj>({});
-
+    const [strategies, setStrategies] = useState<any[]>([])
     const paramsAreaRef = useRef<any>()
 
     useEffect(() => {
+        getStrategies()
         socket.on("backtest", onBacktest);
         socket.on("disconnect", (r, d) => {
             console.log("IO DISCONNECTED");
@@ -24,6 +25,11 @@ const Backtest = () => {
             console.log(d);
         });
     }, []);
+
+    const getStrategies = async () => { 
+        const res = await API.get('/strategies')
+        setStrategies(res.data);
+     }
 
     const onBacktest = (data: any) => {
         console.log("ON BACKTEST");
@@ -179,17 +185,18 @@ const Backtest = () => {
                                             strategy: e.target.value,
                                         });
                                     }}
-                                    defaultValue={4}
+                                    defaultValue={'4'}
                                 >
                                     <option value="" disabled>
                                         Strategy
                                     </option>
-                                    {new Array(5).fill(0).map((e, i) => (
+                                    {strategies.map((e, i) => (
                                         <option
                                             value={i + 1}
                                             key={`str_${i + 1}`}
+                                            title={e.desc}
                                         >
-                                            Strategy {i + 1}
+                                            {e.name}
                                         </option>
                                     ))}
                                 </select>

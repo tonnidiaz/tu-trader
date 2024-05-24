@@ -12,14 +12,16 @@ class Binance:
     def __init__(self) -> None:
         print("INIT BINANCE...")
         self.app = get_app()
-        
+
     def get_klines(self, symbol = None, start = None, end = None, interval = None, save_fp = None):
         try:
             cnt = 0
             klines = []
             symbol = symbol if symbol else self.get_symbol()
             interval = interval if interval else self.app.interval
+            interval = int(interval)
             end = end if end is not None else int(datetime.now().timestamp() * 1000)
+            parsed_interval = f"{interval}m" if interval < 60 else f"{int(interval/ 60)}h"
             print(end) 
             if start is not None:
                 first_timestamp = int(start)
@@ -27,15 +29,15 @@ class Binance:
                     print(f"GETTING {cnt + 1} klines...")
                     print(first_timestamp)
                     print(datetime.fromtimestamp(first_timestamp / 1000))
-                    res = requests.get(f"https://data-api.binance.vision/api/v3/klines?symbol={symbol}&interval={interval}m&startTime={first_timestamp}")
+                    res = requests.get(f"https://data-api.binance.vision/api/v3/klines?symbol={symbol}&interval={parsed_interval}&startTime={first_timestamp}")
                     data = res.json()
                     klines = [*klines, *data]
                     if len(data) == 0:
                         break
-                    first_timestamp = round(float(data[-1][0])) + interval * 60 * 1000
+                    first_timestamp = int(float(data[-1][0])) + int(interval) * 60 * 1000
                     cnt += 1
             else:
-                res = requests.get(f"https://data-api.binance.vision/api/v3/klines?symbol={symbol}&interval={interval}m&endTime={end}")
+                res = requests.get(f"https://data-api.binance.vision/api/v3/klines?symbol={symbol}&interval={parsed_interval}m&endTime={end}")
                 klines =  res.json()
             
             if save_fp:
