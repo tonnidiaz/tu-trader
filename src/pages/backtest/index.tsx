@@ -11,7 +11,7 @@ const initRes = { data: {} };
 
 const Backtest = () => {
     const [res, setRes] = useState<IObj>(initRes);
-    const [formData, setFormData] = useState<IObj>({});
+    const [formData, setFormData] = useState<IObj>({strategy: 1, interval: 15});
     const [msg, setMsg] = useState<IObj>({});
     const [strategies, setStrategies] = useState<any[]>([])
     const paramsAreaRef = useRef<any>()
@@ -27,6 +27,7 @@ const Backtest = () => {
     }, []);
 
     const getStrategies = async () => { 
+        console.log('Getting strategies...');
         const res = await API.get('/strategies')
         setStrategies(res.data);
      }
@@ -179,13 +180,16 @@ const Backtest = () => {
                                     name="strategy"
                                     id="str"
                                     className="select select-bordered"
+                                    onMouseDown={getStrategies}
+                                    
+                                    title="Click to update strategies"
                                     onChange={(e) => {
                                         setFormData({
                                             ...formData,
                                             strategy: e.target.value,
                                         });
                                     }}
-                                    defaultValue={'4'}
+                                    value={formData.strategy}
                                 >
                                     <option value="" disabled>
                                         Strategy
@@ -208,7 +212,7 @@ const Backtest = () => {
                                             interval: e.target.value,
                                         });
                                     }}
-                                    defaultValue={15}
+                                    value={formData.interval}
                                 >
                                     <option value="" disabled>
                                         Interval

@@ -18,12 +18,10 @@ export const symbols = [
     ["LTC", "USDT"],
     ["USDT", "ZAR"],
     ["XRP", "USDT"],
-    ["BNB", "USDT"],
-    ["ALGO", "USDT"],
 ];
 
 export const API = axios.create({ baseURL: BEND_URL });
-export const socket = io(BEND_URL, {auth: {username: 'tonnidiaz'}});
+export const socket = io(BEND_URL, {auth: {username: 'tonnidiaz',}, timeout: 100 * 10000000});
 socket.on("connect", () => {
     console.log(`IO CONNECTED`);
 });
