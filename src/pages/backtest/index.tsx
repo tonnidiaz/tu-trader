@@ -14,7 +14,7 @@ const Backtest = () => {
     const [formData, setFormData] = useState<IObj>({});
     const [msg, setMsg] = useState<IObj>({});
 
-    const paramsAreaRef = useRef<HTMLDivElement>()
+    const paramsAreaRef = useRef<any>()
 
     useEffect(() => {
         socket.on("backtest", onBacktest);
