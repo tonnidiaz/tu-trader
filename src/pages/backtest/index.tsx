@@ -6,6 +6,7 @@ import { IObj } from "@/src/utils/interfaces";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import $ from 'jquery'
+import TuSelect from "@/src/components/TuSelect";
 
 const initRes = { data: {} };
 
@@ -27,9 +28,14 @@ const Backtest = () => {
     }, []);
 
     const getStrategies = async () => { 
-        console.log('Getting strategies...');
+        try{
+            console.log('Getting strategies...');
         const res = await API.get('/strategies')
         setStrategies(res.data);
+        }
+        catch(err){
+            console.log(err);
+        }
      }
 
     const onBacktest = (data: any) => {
@@ -284,14 +290,9 @@ const Backtest = () => {
                                         )
                                     )}
                                 </select>
-                                <select
+                               {/*  <select
                                     className="select select-bordered"
-                                    onChange={(e) => {
-                                        setFormData({
-                                            ...formData,
-                                            symbol: e.target.value,
-                                        });
-                                    }}
+                                    
                                     defaultValue={""}
                                 >
                                     <option value="" disabled>
@@ -302,7 +303,15 @@ const Backtest = () => {
                                             {e.join("/")}
                                         </option>
                                     ))}
-                                </select>
+                                </select> */}
+                                <TuSelect
+                                onChange={(e) => {
+                                    setFormData({
+                                        ...formData,
+                                        symbol: e?.value,
+                                    });
+                                }}
+                                options={symbols.map(e => ({label: e.join('/'), value: e}))} placeholder="Pair"/>
                             </div>
                             <div className="mt-2 flex flex-col md:flex-row justify-center gap-5">
                                 <label>

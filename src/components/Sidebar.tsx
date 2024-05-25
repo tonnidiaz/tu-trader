@@ -1,7 +1,7 @@
 import NextLink from 'next/link'
 
 const Sidebar = () => {
-    return (     <aside >
+    return (   
         <ul className="menu gap-0 sm:gap-5  sidebar">
    
     
@@ -26,7 +26,7 @@ const Sidebar = () => {
        </NextLink>
    </li>
 </ul>
-    </aside> );
+   );
 }
  
 export default Sidebar;

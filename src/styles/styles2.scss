@@ -1,4 +1,5 @@
 @import "./vars";
+@import "./colors";
 
 .params-area{
     position: fixed;
@@ -39,5 +40,30 @@
 @media screen and (max-width: 767px) {
     .params-area{
         bottom: calc($sidenav-w + 20px) !important
+    } 
+}
+
+@media screen and (max-width: 767px) {
+    .sidebar {
+        border-radius: 15px;
+        flex-direction: row !important;
+        padding: 0 4px;
+        flex-wrap: nowrap;
+        box-shadow: $shadow; 
+
+        position: fixed !important;
+        width: calc(100% - 20px) !important;
+        height: $sidenav-w !important;
+
+        bottom: 8px !important;
+        left: 10px;
+        top: unset !important;
+        align-items: center !important;
+        justify-content: space-around;
+        border: 1px solid $on-bg-tb; 
+    }
+    main{
+        margin-bottom: $sidenav-w;
     }
 }
+
