@@ -7,7 +7,6 @@ import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import $ from 'jquery'
 import TuSelect from "@/src/components/TuSelect";
-import { number } from "@/node_modules_win/@types/prop-types";
 
 const initRes = { data: {} };
 
