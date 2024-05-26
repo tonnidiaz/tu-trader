@@ -90,7 +90,7 @@ const Backtest = () => {
                             <p>
                                 Profit:{" "}
                                 <span className="text-whit font-bold">
-                                    ${res.profit ?? 0}
+                                    {res.ccy} {res.profit ?? 0}
                                 </span>
                             </p>
                         </div>
