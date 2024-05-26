@@ -7,6 +7,7 @@ import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import $ from 'jquery'
 import TuSelect from "@/src/components/TuSelect";
+import { number } from "@/node_modules_win/@types/prop-types";
 
 const initRes = { data: {} };
 
@@ -173,7 +174,8 @@ const Backtest = () => {
                     </div>
                 </div>
                 <div ref={paramsAreaRef} className="p-4 border-1 border-card br-10 params-area bg-base-100 shadow-lg">
-                    <div className="flex justify-end w-100p mb-2">
+                    <div className="flex justify-between items-center w-100p mb-2">
+                        <span>{formData?.symbol?.join("/")}</span>
                         <button onClick={onCtrlBtnClick} className="ctrl-btn btn btn-primary mb-2">
                             <i className="fi fi-rr-angle-down"></i>
                         </button>
@@ -258,10 +260,13 @@ const Backtest = () => {
                                         </span>
                                     </div>
                                     <input
-                                        type="number"
+                                        type="text"
                                         className="input input-bordered w-full sm:w-auto"
-                                        defaultValue={formData.bal}
+                                        placeholder="Enter balance..."
+                                        value={formData.bal}
                                         onChange={(e) => {
+                                            const val: any = e.target.value;
+                                            if (isNaN(val)) return;
                                             setFormData({
                                                 ...formData,
                                                 bal: e.target.value,
@@ -269,7 +274,8 @@ const Backtest = () => {
                                         }}
                                     />
                                 </label>
-                                <select
+                                <div className="flex gap-4">
+                                            <select
                                     className="select select-bordered"
                                     onChange={(e) => {
                                         setFormData({
@@ -290,20 +296,6 @@ const Backtest = () => {
                                         )
                                     )}
                                 </select>
-                               {/*  <select
-                                    className="select select-bordered"
-                                    
-                                    defaultValue={""}
-                                >
-                                    <option value="" disabled>
-                                        Pair
-                                    </option>
-                                    {symbols.map((e: any, i: number) => (
-                                        <option key={e} value={e}>
-                                            {e.join("/")}
-                                        </option>
-                                    ))}
-                                </select> */}
                                 <TuSelect
                                 onChange={(e) => {
                                     setFormData({
@@ -312,7 +304,9 @@ const Backtest = () => {
                                     });
                                 }}
                                 options={symbols.map(e => ({label: e.join('/'), value: e}))} placeholder="Pair"/>
-                            </div>
+                           
+                                </div>
+                         </div>
                             <div className="mt-2 flex flex-col md:flex-row justify-center gap-5">
                                 <label>
                                     <div className="label">

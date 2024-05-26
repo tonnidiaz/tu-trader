@@ -18,7 +18,7 @@ const TuSelect: ReactSelect = (props) => {
                     ...baseStyles,
                     ...commonStyles,
                     backgroundColor: 'var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)))',
-                   lineHeight: 2, paddingLeft: '1rem',
+                   lineHeight: 2, paddingLeft: '.5rem',
                     
                 }),
                 menu: (base, props) => ({
@@ -34,8 +34,11 @@ const TuSelect: ReactSelect = (props) => {
                     color: "white",
                     fontSize: 12
                 }),
+                placeholder:(base, props)=> ({
+                    ...base,
+                }),
                 singleValue: (base, props) =>( {
-                    ...base, color: 'currentColor'
+                    ...base, color: 'currentColor',  fontSize: 12
                 }),
                 menuList: (base, props) =>({
                     ...base,  maxHeight: 150,
