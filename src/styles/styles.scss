@@ -57,13 +57,12 @@
 
 html,
 body,
-.__nuxt-error-page,
-#__nuxt {
+.__next-error-page,
+#__next {
     padding: 0;
     margin: 0;
     font-family: Inter, sans-serif;
-    @apply bg-primary;
-   // background-color: var(--fallback-b1,oklch(var(--b1)/1));
+   background-color: var(--fallback-b1,oklch(var(--b1)/1));
     * {
         &::-webkit-scrollbar-track {
             -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -137,7 +136,7 @@ $on-bg-black: #1a1a1a8f;
     background-color: $on-bg-black;
 }
 
-body, html, #__nuxt {
+body, html, #__next {
     height: 100%;
 }
 

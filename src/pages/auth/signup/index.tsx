@@ -1,9 +1,12 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
 import $ from "jquery";
-import { API, SITE } from "@/src/utils/constants";
+import { api, SITE, STORAGE_KEYS } from "@/src/utils/constants";
 import Layout2 from "@/src/components/Layout2";
 import { IObj } from "@/src/utils/interfaces";
+import TuMeta from "@/src/components/TuMeta";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/src/redux/reducers/user";
 
 const SignupPage = () => {
     const [btnDisabled, setBtnDisabled] = useState(true);
@@ -13,6 +16,7 @@ const SignupPage = () => {
     const [step, setStep] = useState(0)
 
     const formRef = useRef<any>();
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const form = formRef.current;
@@ -28,9 +32,10 @@ const SignupPage = () => {
                 $("#su-btn").text("Signing up...");
                 let password = form["password"].value;
                 let email = form["email"].value;
+                let username = form["username"].value;
                 setFormData({...formData, email})
-                let fd = { password, email };
-                API.post("/auth/signup?method=custom", fd)
+                let fd = { password, email, username };
+                api().post("/auth/signup?method=custom", fd)
                     .then((res) => {
                         $(".inProgress").hide();
                         setErr("");
@@ -131,13 +136,17 @@ const SignupPage = () => {
     const submitOTP = async (e:any) => { 
         e.preventDefault()
         const form = e.target
-        const btn: HTMLButtonElement = form.querySelector('button')
+        const btn: HTMLButtonElement = form.querySelector('button[type="submit"]')
         try{
             btn.textContent = "..."
             setErr("")
-            setBtnDisabled(true)
-            const res = await API.post('/auth/verify-email', formData)
-            console.log(res.data);
+            setBtnDisabled(true) 
+            const res = await api().post('/auth/verify-email', formData)
+            const { user, token} = res.data
+
+            dispatch(setUser(user))
+            localStorage.setItem(STORAGE_KEYS.authTkn, token)
+
             setTimeout(()=>{setBtnDisabled(false)}, 1500)
             location.href = "/"
         }catch(e: any){
@@ -150,11 +159,26 @@ const SignupPage = () => {
      }
     return (
         <div>
+            <TuMeta title={`Signup - ${SITE}`}/>
             {step == 0 ? (
                 <form ref={formRef} id="su-form" autoComplete="off">
                     <fieldset className="formset m-auto border-card border-1 px-5 pb-5">
-                        <legend>{SITE}</legend>
+                    <legend className="text-primary"><NextLink href="/">{SITE}</NextLink></legend>
                         <h2 className="text-cente my-3 fw-6">Sign up</h2>
+                        <div className="form-group">
+                            <label>
+                                <div className="label">
+                                    <span className="label-text">Username</span>
+                                </div>{" "}
+                                <input
+                                    type="text"
+                                    name="username"
+                                    required
+                                    className=" input input-bordered"
+                                    placeholder="e.g. johndoe"
+                                />
+                            </label>
+                        </div>
                         <div className="form-group">
                             <label>
                                 <div className="label">

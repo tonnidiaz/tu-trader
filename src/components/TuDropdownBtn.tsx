@@ -52,7 +52,7 @@ const TuDropdownBtn = () => {
                 className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-md border-1 border-card bg-base-100 rounded-box w-52 open"
             >
                 {testItems.map((e, i) => (
-                    <li onClick={async()=>{
+                    <li key={`item-${i * 2}`} onClick={async()=>{
                         const close = await e.onTap()
                         if (close){
                             setIsOpen(false)

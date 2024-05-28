@@ -1,11 +1,13 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
 import $ from "jquery";
-import { API, SITE, STORAGE_KEYS } from "@/src/utils/constants";
+import { api, SITE, STORAGE_KEYS } from "@/src/utils/constants";
 import Layout2 from "@/src/components/Layout2";
 import { IObj } from "@/src/utils/interfaces";
 import TuMeta from "@/src/components/TuMeta";
 import { useRouter } from "next/router";
+import { setUser } from "@/src/redux/reducers/user";
+import { useDispatch } from "react-redux";
 
 const SignupPage = () => {
     const [btnDisabled, setBtnDisabled] = useState(false);
@@ -14,6 +16,7 @@ const SignupPage = () => {
 
     const formRef = useRef<any>();
     const router = useRouter()
+    const dispatch = useDispatch()
 
     const submitForm = async (e:any) => { 
         e.preventDefault()
@@ -24,9 +27,11 @@ const SignupPage = () => {
             setErr("")
             setBtnDisabled(true)
             
-            const formData = {email: form.email.value, password: form.password.value}
-            const res = await API.post('/auth/login', formData)
+            const formData = {username: form.username.value, password: form.password.value}
+            console.log(formData);
+            const res = await api().post('/auth/login', formData)
             console.log(res.data);
+            dispatch(setUser(res.data.user))
             localStorage.setItem(STORAGE_KEYS.authTkn, res.data.token)
             setTimeout(()=>{setBtnDisabled(false)}, 1500)
 
@@ -34,10 +39,11 @@ const SignupPage = () => {
 
         }catch(e: any){
             console.log(e)
-            const _err = e.response?.data?.startsWith("tuned:") ? e.response.data.replace("tuned:", "") : "Something went wrong"
-            setErr(_err)
             btn.textContent = "Retry"
             setBtnDisabled(false)
+            const _err = typeof e.response?.data == "string" && e.response?.data?.startsWith("tuned:") ? e.response.data.replace("tuned:", "") : "Something went wrong"
+            setErr(_err)
+            
         }
      }
     return (
@@ -46,19 +52,19 @@ const SignupPage = () => {
             
                 <form ref={formRef} id="si-form" autoComplete="off" onSubmit={submitForm}>
                     <fieldset className="formset m-auto border-card border-1 px-5 pb-5">
-                        <legend>{SITE}</legend>
+                        <legend className="text-primary"><NextLink href="/">{SITE}</NextLink></legend>
                         <h2 className="text-cente my-3 fw-6">Login</h2>
                         <div className="form-group">
                             <label>
                                 <div className="label">
-                                    <span className="label-text">Email</span>
+                                    <span className="label-text">Email or username</span>
                                 </div>{" "}
                                 <input
-                                    type="email"
-                                    name="email"
+                                    type="text"
+                                    name="username"
                                     required
                                     className=" input input-bordered"
-                                    placeholder="e.g. johndoe@gmail.com"
+                                    placeholder="Enter email or username..."
                                 />
                             </label>
                         </div>
@@ -133,6 +139,6 @@ const SignupPage = () => {
     );
 };
 SignupPage.getLayout = function getLayout(page: ReactElement) {
-    return <>{page}</>;
+    return <Layout2>{page}</Layout2>;
 };
 export default SignupPage;

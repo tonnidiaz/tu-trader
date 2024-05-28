@@ -4,6 +4,7 @@ from bunnet import Document, Indexed
 from models.app_model import App
 
 class User(Document):
+    username: Indexed(str, unique=True)
     email: Indexed(str, unique=True)
     password: Indexed(str, unique=True)
     io_id: str = ""

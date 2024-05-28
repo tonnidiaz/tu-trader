@@ -97,7 +97,10 @@ export const symbols =[
 ]
 
 
-export const API = axios.create({ baseURL: BEND_URL });
+export const api = (auth = false) => axios.create({ baseURL: BEND_URL, headers: {
+    Authorization: auth ? `Bearer ${localStorage.getItem(STORAGE_KEYS.authTkn)}` : null, "Content-Type": "application/json"
+},  });
+
 export const socket = io(BEND_URL, {auth: {username: 'tonnidiaz',}, timeout: 100 * 10000000});
 socket.on("connect", () => {
     console.log(`IO CONNECTED`);

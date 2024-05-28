@@ -1,7 +1,7 @@
 "use client";
 import TuField from "@/src/components/TuField";
 import TuForm from "@/src/components/TuForm";
-import { API, SITE, socket, symbols } from "@/src/utils/constants";
+import { api, SITE, socket, symbols } from "@/src/utils/constants";
 import { IObj } from "@/src/utils/interfaces";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
@@ -30,7 +30,7 @@ const Backtest = () => {
     const getStrategies = async () => { 
         try{
             console.log('Getting strategies...');
-        const res = await API.get('/strategies')
+        const res = await api().get('/strategies')
         setStrategies(res.data);
         }
         catch(err){
