@@ -10,6 +10,9 @@ export const EMAIL = "tonnidiazed@gmail.com";
 export const DEVELOPER = "Tonni Diaz";
 export const SITE_SLOGAN = "A Tunedbass site";
 export { SITE, __DEV__, ROOT };
+
+export const STORAGE_KEYS = {authTkn: "TB_AUTH_TOKEN"}
+
 export const symbols =[
     ["BTC", "USDT"],
     ["ETH", "USDT"],

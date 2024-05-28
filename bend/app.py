@@ -48,7 +48,9 @@ def configure(app: Flask):
 def init():
 
     # Create app if not present
-    return
+    if os.environ['ENV'] == "prod":
+        return
+    
     apps = App.find().run()
     if not len(apps):
         # Creating new app
@@ -69,8 +71,8 @@ app.register_blueprint(otp_bp)
 
 class Config:
     SCHEDULER_API_ENABLED = True
-
 app.config.from_object(Config)
+
 configure(app)
 mail = Mail(app)
 JWTManager(app)
@@ -267,5 +269,5 @@ def strategies_route():
 #scheduler.start()
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, port=8000) #TODO change debug to false
+    app.run( debug=False, port=8000) #TODO change debug to false
     

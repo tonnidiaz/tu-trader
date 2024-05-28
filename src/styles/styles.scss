@@ -30,14 +30,40 @@
     font-style: "extra-bold";
 }
 
+@font-face {
+    font-family: Poppins;
+    src: url("/assets/fonts/Inter/Inter-Regular.ttf");
+}
+
+@font-face {
+    font-family: Inter;
+    src: url("/assets/fonts/Inter/Inter-Medium.ttf");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: Inter;
+    src: url("/assets/fonts/Inter/Inter-Bold.ttf");
+    font-weight: 700;
+    font-style: bold;
+}
+
+@font-face {
+    font-family: Inter;
+    src: url("/assets/fonts/Inter/Inter-ExtraBold.ttf");
+    font-weight: 800;
+    font-style: "extra-bold";
+}
+
 html,
 body,
 .__nuxt-error-page,
 #__nuxt {
     padding: 0;
     margin: 0;
-    font-family: Poppins, sans-serif;
-  @apply bg-base-100;
+    font-family: Inter, sans-serif;
+    @apply bg-primary;
+   // background-color: var(--fallback-b1,oklch(var(--b1)/1));
     * {
         &::-webkit-scrollbar-track {
             -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -51,7 +77,7 @@ body,
             //background-color: #6666;
         }
         &::-webkit-scrollbar-thumb {
-            background-color: $color-orange;
+            background-color: oklch(var(--btn-color, var(--b2)) / var(--tw-bg-opacity))
         }
     }
 }

@@ -5,7 +5,7 @@ const DefaultLayout = ({
     children,
   }: Readonly<{
     children: React.ReactNode;
-  }>) => {
+  }>) => { 
     return ( <> <Navbar></Navbar>
     <div className="tu-app">
         <Sidebar></Sidebar>

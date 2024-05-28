@@ -1,4 +1,5 @@
 import json
+import os
 from random import randint
 from flask import Blueprint, request
 from flask_bcrypt import Bcrypt
@@ -29,12 +30,13 @@ def signup_route():
             else:
                 existing_email.delete()
         otp = randint(1000, 9999)
+        print(f"\n{otp}\n")
         user = User(email=email,
                     password=hashed_pass, otp=otp)
         user.save()
 
         return send_mail(subject=f"{details['title']} signup email", body=f"""<h2 style="font-weight: 500; font-size: 1.2rem;">Here is your signup verification OTP:</h2>
-                    <p style="font-size: 20px; font-weight: 600">{user.otp}</p>""", recipients=[email], res={'msg':  'Signup successful'})
+                    <p style="font-size: 20px; font-weight: 600">{user.otp}</p>""", recipients=[email], res={'msg':  'Signup successful'}) if os.environ['ENV'] == 'prod' else {'msg': 'Email sent successfully'}
 
     except Exception as e:
         err_handler(e)
@@ -72,7 +74,7 @@ def login_route():
 
             token = gen_token({ 'email': user.email })
 
-            return { 'user': { **user.model_dump_json(), 'password': password }, 'token': token }
+            return { 'user': { **json.loads(user.model_dump_json()), 'password': password }, 'token': token }
         else:
             return tuned_err(400, "Provide all fields")
     
@@ -99,7 +101,7 @@ def verify_email_route():
             user.otp = otp
         
         else:
-            if user.otp == otp:
+            if user.otp == int(otp):
                 user.is_verified = True
 
             else:
