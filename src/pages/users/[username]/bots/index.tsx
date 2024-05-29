@@ -81,8 +81,11 @@ export default function UserBotsPage() {
     const userStore = useSelector((state: RootState) => state.user);
 
     const getBots = async() => { 
-        const res = await api().get('/bots')
+        try{
+            const res = await api().get('/bots')
         dispatch(setBots(res.data))
+        }catch(e){console.log(e);}
+        
      }
     const getStrategies = async () => {
         try {

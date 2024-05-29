@@ -1,3 +1,6 @@
+import eventlet
+eventlet.monkey_patch()
+
 from datetime import datetime, timedelta
 import json
 import os
@@ -32,6 +35,7 @@ load_dotenv()
 g = gunicorn
 # Init mongo
 TuMongo()
+
 
 def configure(app: Flask):
     app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
