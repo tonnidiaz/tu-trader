@@ -112,7 +112,7 @@ const SignupPage = () => {
                         </div>
                     
                         {err?.length != 0 && <div className="mt-2 ml-2 text-whit fs-12 text-center text-warning"><p >{err?.replace("tuned:", "")}</p></div>}
-                        <div className="mt-2 form-group ">
+                        <div className="mt-4 form-group ">
                             <button
                                 type="submit"
                                 disabled={btnDisabled}

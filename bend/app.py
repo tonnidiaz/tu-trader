@@ -77,7 +77,7 @@ configure(app)
 mail = Mail(app)
 JWTManager(app)
 
-""" socketio = SocketIO(app)
+socketio = SocketIO(app)
 socketio.init_app(app, cors_allowed_origins="*", logger=False, engineio_logger=False)
 
 @socketio.on('connect')
@@ -104,7 +104,7 @@ def test_disconnect(msg):
 @socketio.on('backtest')
 def _on_backtest(data):
     print('\nON BACKTEST\n')
-    on_backtest(data) """
+    on_backtest(data)
 
 scheduler = APScheduler()
 init()
@@ -269,5 +269,5 @@ def strategies_route():
 #scheduler.start()
 
 if __name__ == '__main__':
-    app.run( debug=True, port=8000) #TODO change debug to false
+    socketio.run( app, debug=False, port=8000) #TODO change debug to false
     

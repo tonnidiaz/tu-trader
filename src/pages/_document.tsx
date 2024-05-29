@@ -6,11 +6,13 @@ const HeadTeleport = createTeleporter()
 
 const Doc = () => {
     return (
-        <Html lang="en" className="dark" data-theme="tb">
+        <Html lang="en" className="dark" data-theme="dark">
             <Head/>
             <TuMeta/>
             <body>
                 <Main/>
+                <div id="click-me"></div>
+                
                 <NextScript/>
             </body>
         </Html>

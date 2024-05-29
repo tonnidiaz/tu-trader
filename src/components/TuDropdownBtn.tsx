@@ -1,7 +1,10 @@
 import NextLink from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IDropdownMenuItem } from "../utils/interfaces";
 import { sleep } from "../utils/funcs";
+import { Dropdown, DropdownProps } from "react-daisyui";
+import $ from "jquery";
+import { useRouter } from "next/router";
 
 const testItems: IDropdownMenuItem[] = [
     {
@@ -22,44 +25,86 @@ const testItems: IDropdownMenuItem[] = [
     },
 ];
 
-const TuDropdownBtn = () => {
-    const [isOpen, setIsOpen] = useState(false);
+interface IProps extends DropdownProps {
+    toggler: React.ReactElement;
+    items: IDropdownMenuItem[];
+}
 
+const TuDropdownBtn: React.FC<IProps> = ({ toggler, items, ...args }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [pos, setPos] = useState({ x: 0, y: 0 });
+
+    const menuRef = useRef<any>();
+    const menuPareentRef = useRef<any>();
+
+    const router = useRouter();
+
+    useEffect(() => {
+        document.addEventListener("click", onDocClick);
+        return () => {
+            document.removeEventListener("click", onDocClick);
+        };
+    }, []);
+
+    useEffect(() => {
+        setIsOpen(false);
+    }, [router.pathname]);
+    const onDocClick = (e: any) => {
+        if (!menuPareentRef.current.contains(e.target)) setIsOpen(false);
+    };
+    const toggleDropdown = (e: any) => {
+        console.log(e);
+        const menu = menuRef.current;
+        const { clientX, clientY } = e;
+        let _pos = { x: clientX, y: clientY };
+
+        const menuWidth = $(menu).width()!,
+            menuHeight = menu.clientHeight;
+        const rightPos = clientX + menuWidth;
+        const bottomPos = clientY + menuHeight;
+
+        let deltaW = window.innerWidth - clientX;
+        let deltaH = window.innerHeight - clientY;
+        if (rightPos > window.innerWidth) {
+            let newLeft = window.innerWidth - menuWidth - deltaW;
+            _pos.x = newLeft;
+        }
+
+        if (bottomPos > window.innerHeight) {
+            let newTop = window.innerHeight - menuHeight - deltaH;
+            _pos.y = newTop;
+        }
+        setPos(_pos);
+        setIsOpen(true);
+    };
     return (
-        <div className={"dropdown " + (isOpen ? "dropdown-open" : "dropdown-closed")}>
-            <label
-                onClick={(_) => setIsOpen(!isOpen)}
-                tabIndex={0}
-                className="btn btn-ghost btn-circle"
+        <div ref={menuPareentRef}>
+            <div className="toggler pointer" onClick={toggleDropdown}>
+                {toggler}
+            </div>
+            <div
+                ref={menuRef}
+                style={{
+                    top: pos.y,
+                    left: pos.x,
+                    display: isOpen ? "unset" : "none",
+                }}
+                className="dropdown-content menu p-2 rounded-box fixed z-[10] w-25 bg-base-200 shadow-md border-card border-1 br-6"
             >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4 6h16M4 12h16M4 18h7"
-                    />
-                </svg>
-            </label>
-            <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-md border-1 border-card bg-base-100 rounded-box w-52 open"
-            >
-                {testItems.map((e, i) => (
-                    <li key={`item-${i * 2}`} onClick={async()=>{
-                        const close = await e.onTap()
-                        if (close){
-                            setIsOpen(false)
-                        }
-                    }}>{e.child}</li>
+                {items.map((item, i) => (
+                    <Dropdown.Item
+                        onClick={async (e) => {
+                            const ret = await item.onTap();
+                            if (ret) {
+                                setIsOpen(false);
+                                $("#click-me").trigger("click");
+                            }
+                        }}
+                    >
+                        {item.child}
+                    </Dropdown.Item>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 };

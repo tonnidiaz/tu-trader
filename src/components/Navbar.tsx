@@ -4,15 +4,14 @@ import TuDropdownBtn from "./TuDropdownBtn";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Avatar, Dropdown, Navbar as NB } from "react-daisyui";
+import { sleep } from "../utils/funcs";
 
 const Navbar = () => {
     const userStore = useSelector((state: RootState) => state.user);
 
     return (
         <NB className=" pr-5">
-            <NB.Start>
-                <TuDropdownBtn />
-            </NB.Start>
+            <NB.Start>{/* <TuDropdownBtn /> */}</NB.Start>
             <NB.Center>
                 <a href="/" className="btn btn-ghost normal-case text-xl">
                     {SITE}
@@ -42,24 +41,63 @@ const Navbar = () => {
                     </div>
                 </button>
                 {userStore.user ? (
-                    <Dropdown end open>
-                        <Dropdown.Toggle><Avatar
-                        innerClassName="ring w-30px h-30px ml-4"
-                        size={"xs"}
-                        borderColor="primary"
-                        shape="circle"
-                    >
-                        <span className="text-xl fw-7">
-                            {userStore.user.email[0].toUpperCase()}
-                        </span>
-                    </Avatar></Dropdown.Toggle>
-                    <Dropdown.Menu className="w-25 bg-base-300 shadow shadow-md border-card border-1 br-6">
-                        <Dropdown.Item><span className="mr relative top-"><i className="fi fi-rr-circle-user"></i></span>Profile</Dropdown.Item>
-                        <Dropdown.Item><NextLink href={`/@${userStore.user.username}/bots`}><span className="mr-1 relative top-1"><i className="fi fi-rr-apps"></i></span>Bots</NextLink></Dropdown.Item>
-                        <Dropdown.Item><NextLink href="/auth/logout"><span className="mr-1 relative top-1"><i className="fi fi-rr-sign-out-alt"></i></span>Logout</NextLink></Dropdown.Item>
-                        
-                    </Dropdown.Menu>
-                    </Dropdown>
+                    <TuDropdownBtn end
+                        toggler={
+                            <Avatar
+                                innerClassName="ring w-30px h-30px ml-4"
+                                size={"xs"}
+                                borderColor="neutral"
+                                shape="circle"
+                            >
+                                <span className="text-xl fw-7">
+                                    {userStore.user.email[0].toUpperCase()}
+                                </span>
+                            </Avatar>
+                        }
+                        items={[
+                            {
+                                onTap: async () => true,
+                                child: (
+                                    <NextLink
+                                        href={`/@${userStore.user.username}/bots`}
+                                    >
+                                        <span className="mr-2 relative top-1">
+                                            <i className="fi fi-rr-circle-user"></i>
+                                        </span>
+                                        Profile
+                                    </NextLink>
+                                ),
+                            },
+                            {
+                                onTap: () => {},
+                                child: (
+                                    <NextLink
+                                        href={`/@${userStore.user.username}/bots`}
+                                    >
+                                        <span className="mr-2 relative top-1">
+                                            <i className="fi fi-rr-apps"></i>
+                                        </span>
+                                        Bots
+                                    </NextLink>
+                                ),
+                            },
+                            {
+                                onTap: () => {},
+                                child: (
+                                    <NextLink href="/auth/logout">
+                                        <span className="mr-2 relative top-1">
+                                            <i className="fi fi-rr-sign-out-alt"></i>
+                                        </span>
+                                        Logout
+                                    </NextLink>
+                                ),
+                            },
+                            {onTap: async()=>{
+                                await sleep(1500)
+                                return true
+                            }, child: <p>Just a button</p>}
+                        ]}
+                    />
                 ) : (
                     <NextLink
                         href={

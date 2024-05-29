@@ -39,9 +39,10 @@
     }
 }
 @media screen and (max-width: 767px) {
-    .params-area{
+    .params-area, .fab{
         bottom: calc($sidenav-w + 20px) !important
     } 
+    
 }
 
 @media screen and (max-width: 767px) {
@@ -68,3 +69,25 @@
     }
 }
 
+.pointer {cursor: pointer;}
+.avatar.online:before{
+    width: 27% !important;
+    height: 27% !important;
+    top: 0;
+    right: -0%;
+}
+
+.bot-card{
+    transition: .1s ease-in-out;
+    &:hover{
+        transform: scale(1.04);
+    }
+}
+
+.fab{
+   position: fixed;
+   z-index: 10;
+   right: 15px;
+   bottom: 15px;
+    box-shadow: $shadow;
+}
