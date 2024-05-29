@@ -4,14 +4,18 @@ import { IObj } from "@/src/utils/interfaces";
 const userSlice = createSlice({
     name: "user",
     initialState: {
-        user: null as IObj | null
+        user: null as IObj | null,
+        bots: [] as IObj[]
     },
     reducers: {
         setUser: (state, {payload}) =>{
             state.user = payload
+        },
+        setApps: (state, {payload}) =>{
+            state.bots = payload
         }
     }
 })
 
-export const {setUser} = userSlice.actions
+export const {setUser, setApps} = userSlice.actions
 export default userSlice.reducer
