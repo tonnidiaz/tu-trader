@@ -53,7 +53,12 @@ def place_trade(bot: Bot, amt: float | None = None, ts=None, price: float = 0, s
             buy_fee=float(m_order["fee"]),
             ccy_amt=amt,
             side=side,
+            bot=bot.id, base=bot.base, ccy=bot.ccy
         )
+
+        
+        bot.save()
+        print("\nBuy order placed, Bot updated\n")
     else:
         order = orders[-1]
         order.order_id = order_id
@@ -64,7 +69,8 @@ def place_trade(bot: Bot, amt: float | None = None, ts=None, price: float = 0, s
         order.side = side
 
     order.save()
-
+    if side == "buy":
+        bot.orders.append(order.id)
     print("DB UPDATED\n")
 
 
@@ -85,7 +91,7 @@ class OrderPlacer:
         now = datetime.now()
         curr_min = now.minute
 
-        m_test = test and len(Order.find(Order.bot == bot.id).run()) <= 1
+        m_test = test and len(Order.find(Order.bot == bot.id).run()) <= 2
         if test:
             print(f"CURR_MIN: [{curr_min}]\tTEST: {m_test}\n")
 
@@ -105,7 +111,7 @@ class OrderPlacer:
             scheduler.pause_job(str(bot.id))
             # Check orders
             orders = Order.find(Order.bot == bot.id).run()
-            is_closed, last_order = update_order(orders)
+            is_closed, last_order = update_order(bot, orders)
 
             klines = binance.get_klines(symbol=f"{bot.base}{bot.ccy}")
             df = chandelier_exit(heikin_ashi(parse_klines(klines)))

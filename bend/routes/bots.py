@@ -12,12 +12,12 @@ from utils.constants import scheduler
 router = Blueprint("bots", __name__, url_prefix="/bots")
 
 cnt = 0
-def tu_job(op: OrderPlacer, id):
+def tu_job(op: OrderPlacer, bot: Bot, id):
     with scheduler.app.app_context():
-        print(f"JOB: {id}, RUN {op.cnt}")
+        """ print(f"JOB: {id}, RUN {op.cnt}")
         if op.cnt >= 10:
-            scheduler.pause_job(id)
-
+            scheduler.pause_job(id) """
+        op.check_n_place_orders(bot)
         op.set_cnt(op.cnt + 1)
 
 @router.post('/create')
@@ -106,7 +106,7 @@ def edit_bot_route(id):
                 if not bl:
                     # Add job if it does not exist already
                     op = OrderPlacer()
-                    scheduler.add_job(job_id, lambda : tu_job( op, job_id) , trigger="interval", seconds= 1)
+                    scheduler.add_job(job_id, lambda : tu_job( op, bot, job_id) , trigger="interval", seconds= 1)
                 else:
                     scheduler.resume_job(job_id)
 

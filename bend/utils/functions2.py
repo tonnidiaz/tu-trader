@@ -11,13 +11,14 @@
 from datetime import datetime
 import re
 from classes.OKX import OKX
+from models.bot_model import Bot
 from models.order_model import Order
 
-def update_order(orders: list[Order]):
+def update_order(bot:Bot, orders: list[Order]):
 
     is_closed = True
     last_order = None
-    okx : OKX = OKX.inst
+    okx = OKX(bot)
     if len(orders) and not orders[-1].is_closed:
         last_order = orders[-1]
         print(f"LAST_ORDER: {last_order}\n")
