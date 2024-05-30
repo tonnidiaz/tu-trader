@@ -7,7 +7,7 @@ import { api } from "../utils/constants";
 import { sleep } from "../utils/funcs";
 interface IProps {
     bot: IObj;
-    updateBot: (bot: IObj) => void;
+    updateBot?: (bot: IObj) => void;
 }
 
 const BotCard: React.FC<IProps> = ({ bot, updateBot }) => {
@@ -25,7 +25,8 @@ const BotCard: React.FC<IProps> = ({ bot, updateBot }) => {
                 field: "active",
                 val: val,
             });
-            updateBot(res.data);
+            if (updateBot)
+                updateBot(res.data);
             return true;
         } catch (err) {
             console.log(err);
