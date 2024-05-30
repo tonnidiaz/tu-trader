@@ -38,7 +38,7 @@ def create_bot_route():
             base=base, ccy=ccy,
             active=body.get('active'),
             demo=body.get('demo'),
-            user=user.id, start_bal=float(body.get("amt"))
+            user=user.id, start_amt=float(body.get("amt"))
         )
 
         bot.save()

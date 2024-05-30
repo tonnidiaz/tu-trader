@@ -1,4 +1,4 @@
-from bunnet import Document, Indexed
+from bunnet import Document, Indexed, PydanticObjectId
 
 
 class Order(Document):
@@ -15,6 +15,8 @@ class Order(Document):
     sell_timestamp: str = ''
     buy_fee: float = 0
     sell_fee: float = 0
-    app_id: str
+    base: str
+    ccy: str
+    bot: PydanticObjectId
     def __str__(self):
         return str({'order_id': self.order_id, 'is_closed': self.is_closed, 'side': self.side})

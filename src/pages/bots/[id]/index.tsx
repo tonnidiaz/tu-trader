@@ -1,9 +1,11 @@
 import TuMeta from "@/src/components/TuMeta";
+import TuStat from "@/src/components/TuStat";
 import { SITE, api } from "@/src/utils/constants";
+import { activateBot } from "@/src/utils/funcs";
 import { IObj } from "@/src/utils/interfaces";
 import Error from "next/error";
-import { FC } from "react";
-import { Stats } from "react-daisyui";
+import { FC, useEffect, useState } from "react";
+import { Checkbox, Stats, Textarea } from "react-daisyui";
 import { JSONTree } from "react-json-tree";
 
 interface IProps {
@@ -54,44 +56,91 @@ const testOrders = [
     { name: "Order 4", filed: false },
 ];
 const BotPage: FC<IProps> = ({ bot, err }) => {
+const [_bot, setBot] = useState<IObj>({})
+
+useEffect(()=>{
+    if (bot) setBot(bot)
+}, [bot])
+
     return err ? (
         <Error statusCode={err.code} title={err.msg} />
     ) : (
         <div className="p-5">
-            <TuMeta title={`Bot: ${bot.name} - ${SITE}`} />
+            <TuMeta title={`Bot: ${_bot.name} - ${SITE}`} />
 
             <fieldset className="formset border-card border-1 p-4">
                 <legend>
-                    <h1 className="text-gray-200">{bot.name}</h1>
+                    <h1 className="text-gray-200">{_bot.name}</h1>
                 </legend>
-                <div className="flex gap-4 justify-center">
+                <div className="flex gap-4 justify-center items-center">
                     <span className="fw-8">
-                        {bot.base}/{bot.ccy}
+                        {_bot.base}/{_bot.ccy}
                     </span>{" "}
-                    {bot.active ? (
+                    {_bot.active ? (
                         <div className="badge badge-success">Active</div>
                     ) : (
                         <div className="badge badge-warning">Paused</div>
                     )}
                 </div>
-                <div className="mt-2">
+                <div className="flex gap-4 justify-center mt-3 items-center">
+                    <button onClick={e=> activateBot(e.currentTarget, _bot, setBot )} className="btn btn-primary btn-sm">{_bot.active ? 'Deactivate' :'Activate'}</button>
+                    <button className="btn btn-sm btn-rounded btn-neutral" title="Modify"><span><i className="fi fi-br-pencil"></i></span></button>
+                </div>
+                <div className="mt-">
                     <div className="stats text-center flex">
                         <div className="stat m-auto">
                             <span className="stat-title">Total orders:</span>
                             <span className="stat-value">
-                                {testOrders.length}
+                                {_bot.orders?.length ?? 0}
                             </span>
                         </div>
+                    </div>
+                    <div>
+                        <details className="collapse collapse-arrow border border-card bg-base-100">
+                            <summary className="collapse-title text-xl font-medium">
+                                More details
+                            </summary>
+                            <div className="collapse-content">
+                                <div className="form-group flex items-center gap-3 justify-center">
+                                    <label htmlFor="demo" className="label">Demo mode</label>
+                                    <Checkbox id="demo" checked={_bot.demo} readOnly/>
+                                </div>
+                                <div className="shadow grid grid-cols-2">
+                                    <TuStat
+                                        title="Start amount"
+                                        value={_bot.start_amt ?? 0}
+                                    />
+                                    <TuStat
+                                        title="Current amount"
+                                        value={_bot.curr_amt ?? 0}
+                                    />
+                                    <TuStat
+                                        title="Interval"
+                                        value={`${_bot.interval}m`}
+                                    />
+                                    <TuStat
+                                        title="Strategy"
+                                        value={`#${_bot.strategy}`}
+                                    />
+                                </div>
+                                <div className="mt-1">
+                                    <Textarea placeholder="Description..." readOnly value={_bot.desc}/>
+                                </div>
+                            </div>
+                        </details>
                     </div>
                     <fieldset className="formset border-1 border-card  p-2 mt-2">
                         <legend>Orders</legend>
                         <div className="mt-2 overflow-y-scroll">
-                            {testOrders.map((el, i) => (
+                            {_bot.orders?.map((el: IObj, i: number) => (
                                 <div key={`item-${i * 1}`}>
                                     <JSONTree
                                         theme={theme}
-                                        keyPath={["Orders"]}
+                                        keyPath={["Order"]}
                                         data={el}
+                                        shouldExpandNodeInitially={(k, d, l) =>
+                                            false
+                                        }
                                     />
                                 </div>
                             ))}

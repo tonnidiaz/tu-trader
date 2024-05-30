@@ -4,7 +4,7 @@ import React from "react";
 import NextLink from "next/link";
 import TuDropdownBtn from "./TuDropdownBtn";
 import { api } from "../utils/constants";
-import { sleep } from "../utils/funcs";
+import { activateBot, sleep } from "../utils/funcs";
 interface IProps {
     bot: IObj;
     updateBot?: (bot: IObj) => void;
@@ -12,25 +12,7 @@ interface IProps {
 
 const BotCard: React.FC<IProps> = ({ bot, updateBot }) => {
 
-    const activateBot = async (e: any) => {
-        const el = e.target.parentElement 
-        try {
-            
-            el.innerHTML = `<span class="loading loading-dots loading-sm m-auto"></span>`
-            const val = !bot.active;
-            const res = await api(true).post(`/bots/${bot.id}/edit`, {
-                key: "active",
-                val: val,
-            });
-            if (updateBot)
-                updateBot(res.data);
-            return true;
-        } catch (err) {
-            console.log(err);
-            el.innerHTML = `<span>${bot.active ? "Deactivate" : "Activate"}</span>`
-            return false;
-        }
-    };
+    
 
     return (
         <NextLink
@@ -88,7 +70,7 @@ const BotCard: React.FC<IProps> = ({ bot, updateBot }) => {
                                         {bot.active ? "Deactivate" : "Activate"}
                                     </span>
                                 ),
-                                onTap: activateBot,
+                                onTap: async (e)=> await activateBot(e.target.parentElement, bot, updateBot),
                             },
                             {child: <span>Hellow world!</span>, onTap: (e)=>{}}
                         ]}
