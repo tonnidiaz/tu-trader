@@ -53,7 +53,6 @@ const TuDropdownBtn: React.FC<IProps> = ({ toggler, items, ...args }) => {
         if (!menuPareentRef.current.contains(e.target)) setIsOpen(false);
     };
     const toggleDropdown = (e: any) => {
-        console.log(e);
         const menu = menuRef.current;
         const { clientX, clientY } = e;
         let _pos = { x: clientX, y: clientY };
@@ -92,7 +91,7 @@ const TuDropdownBtn: React.FC<IProps> = ({ toggler, items, ...args }) => {
                 className="dropdown-content menu p-2 rounded-box fixed z-[10] w-25 bg-base-200 shadow-md border-card border-1 br-6"
             >
                 {items.map((item, i) => (
-                    <Dropdown.Item
+                    <li key={`item-${i*1}`}
                         onClick={async (e) => {
                             const ret = await item.onTap();
                             if (ret) {
@@ -102,7 +101,7 @@ const TuDropdownBtn: React.FC<IProps> = ({ toggler, items, ...args }) => {
                         }}
                     >
                         {item.child}
-                    </Dropdown.Item>
+                    </li>
                 ))}
             </div>
         </div>

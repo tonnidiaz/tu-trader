@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from okx import MarketData, Account, Trade
-from models.app_model import App
+from models.bot_model import Bot
 from utils.constants import *
 from utils.functions import err_handler, get_app
 import json, os

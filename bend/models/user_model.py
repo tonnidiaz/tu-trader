@@ -10,4 +10,4 @@ class User(Document):
     otp: Optional[int]
     is_admin: bool = False
     is_verified: bool = False
-    apps: list[PydanticObjectId] = []
+    bots: list[PydanticObjectId] = []

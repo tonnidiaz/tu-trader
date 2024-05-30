@@ -3,7 +3,7 @@ from flask_jwt_extended import create_access_token
 import pandas as pd
 import pandas_ta as pta
 import numpy as np
-from models.app_model import App
+from models.bot_model import Bot
 from utils.constants import *
 import os, time, json
 import hashlib
@@ -130,7 +130,7 @@ def heikin_ashi(data : pd.DataFrame):
 cnt = 0
 klines = []
 
-def get_symbol(app: App):
+def get_symbol(app: Bot):
     return f'{app.base}{app.ccy}'
 
 def divide_chunks(l, n): 
@@ -187,7 +187,7 @@ def get_okx_klines(end = date_str_to_timestamp('2024-05-13 10:45:00')):
 
 def get_app():
     try:
-        return App.find().run()[0]
+        return Bot.find().run()[0]
     except Exception as e:
         print("GE T APP ERROR")
         err_handler(e)

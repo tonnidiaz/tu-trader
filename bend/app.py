@@ -10,7 +10,7 @@ from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from classes.OKX import OKX
 from classes.binance import Binance
-from models.app_model import App
+from models.bot_model import Bot
 from models.user_model import User
 from routes.backtest import router as backtest_bp
 from routes.auth import router as auth_bp
@@ -28,7 +28,7 @@ from utils.io.io import socketio
 from utils.constants import scheduler
 import gunicorn
 from models.order_model import Order
-from models.app_model import App
+from models.bot_model import Bot
 from strategies.main import strategies
 
 load_dotenv()

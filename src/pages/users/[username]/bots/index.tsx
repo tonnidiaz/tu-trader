@@ -5,8 +5,10 @@ import { setApps as setBots } from "@/src/redux/reducers/user";
 import { RootState } from "@/src/redux/store";
 import { SITE, api, symbols } from "@/src/utils/constants";
 import { IObj } from "@/src/utils/interfaces";
+import { GetServerSideProps } from "next";
+import Error from "next/error";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import {
     Avatar,
     Button,
@@ -61,8 +63,25 @@ const tetsBots = [
         id: "ssddaw",
     },
 ];
+  interface IProps {bots?: IObj[], error?: IObj }
 
-export default function UserBotsPage() {
+export const getServerSideProps = (async ({query} : {query: IObj}) =>{
+   try{ // Fetch data from external API
+    
+    const res = await api().get('/bots', {params: {user: query.username}})
+
+    // Pass data to the page via props
+    return { props: { bots: res.data } }}
+    catch(e: any){
+        console.log(e);
+        const code = e.response?.status ?? 500
+        const _err = typeof e.response?.data == "string" && e.response?.data?.startsWith("tuned:") ? e.response.data.replace("tuned:", "") : "Something went wrong"
+        return {props: {error: {code, message: _err}} }
+    }
+  }) satisfies GetServerSideProps<IProps>
+
+
+const UserBotsPage : FC<IProps> = ({bots, error}) => {
     const [strategies, setStrategies] = useState<any[]>([]);
     const [formData, setFormData] = useState<IObj>({bal: 5});
     const [err, setErr] = useState("")
@@ -82,8 +101,8 @@ export default function UserBotsPage() {
 
     const getBots = async() => { 
         try{
-            const res = await api().get('/bots')
-        dispatch(setBots(res.data))
+            //const res = await api().get('/bots')
+            dispatch(setBots(bots))
         }catch(e){console.log(e);}
         
      }
@@ -127,7 +146,7 @@ export default function UserBotsPage() {
             updateBtn("...", true);
             const res = await api(true).post("/bots/create", data);
             console.log(res.data);
-            dispatch(setBots(res.data.apps));
+            dispatch(setBots(res.data.bots));
             updateBtn();
             newBotModalRef.current?.close()
         } catch (e: any) {
@@ -137,28 +156,36 @@ export default function UserBotsPage() {
             setErr(_err)
         }
     };
-    return (
+
+    const showNewBotModal = async () => {
+        await getStrategies();
+        newBotModalRef.current?.showModal();
+    }
+    return ( error ? <Error statusCode={error.code} withDarkMode title={error.message} />:
         <>
             <TuMeta title={`${router.query.username}'s bots - ${SITE}`} />
             <div className="p-5">
                 <h1 className="text-xl text-gray-200">My bots</h1>
                 <div className="mt-5">
-                    <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
-                        {userStore.bots.map((e, i) => (
+                    {userStore.bots.length ? <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
+                        {userStore.bots?.map((e, i) => (
                             <BotCard bot={e} key={`item-${i * 1}`} />
                         ))}
+                    </div> : 
+                    <div className="h-60vh w-100p  flex items-center justify-center">
+                        <button onClick={showNewBotModal} className="btn text-xl btn-ghost border-card border-dotted border-1 br-10 p-5 w-60 h-40 flex itemx-center justify-center">
+                            <span><i className="fi fi-br-plus"></i></span>
+                        </button>
                     </div>
+                    }
                 </div>
                 <button
-                    onClick={async (_) => {
-                        await getStrategies();
-                        newBotModalRef.current?.showModal();
-                    }}
+                    onClick={showNewBotModal}
                     className="btn btn-md btn-primary btn-circle fab"
                 >
                     <i className="fi fi-rr-plus"></i>
                 </button>
-                <Modal ref={newBotModalRef}>
+                <Modal backdrop ref={newBotModalRef}>
                     <Modal.Header className="font-bold">New bot</Modal.Header>
                     <Modal.Body>
                         <form action="" onSubmit={createNewApp}>
@@ -182,6 +209,7 @@ export default function UserBotsPage() {
                                         placeholder="Pair"
                                         required
                                         name="pair"
+                                        id="pair"
                                         options={symbols.map((e) => ({
                                             label: e.join("/"),
                                             value: e,
@@ -233,6 +261,7 @@ export default function UserBotsPage() {
                                 <div className="form-group">
                                     <TuSelect
                                         name="interval"
+                                        id="interval"
                                         required
                                         placeholder="Interval"
                                         options={[5, 15, 30, 60].map((e) => ({
@@ -250,6 +279,7 @@ export default function UserBotsPage() {
                                             value: i + 1,
                                         }))}
                                         name="strategy"
+                                        id="strategy"
                                     />
                                 </div>
                             </div>
@@ -276,13 +306,10 @@ export default function UserBotsPage() {
                             </div>
                         </form>
                     </Modal.Body>
-                    <Modal.Actions>
-                        <form method="dialog">
-                            <Button>Close</Button>
-                        </form>
-                    </Modal.Actions>
                 </Modal>
             </div>
         </>
     );
 }
+
+export default UserBotsPage

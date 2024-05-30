@@ -5,17 +5,18 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Avatar, Dropdown, Navbar as NB } from "react-daisyui";
 import { sleep } from "../utils/funcs";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
     const userStore = useSelector((state: RootState) => state.user);
-
+    const router = useRouter();
     return (
         <NB className=" pr-5">
             <NB.Start>{/* <TuDropdownBtn /> */}</NB.Start>
             <NB.Center>
-                <a href="/" className="btn btn-ghost normal-case text-xl">
+                {/*    <a href="/" className="btn btn-ghost normal-case text-xl">
                     {SITE}
-                </a>
+                </a> */}
             </NB.Center>
             <NB.End>
                 <button tabIndex={0} className="btn btn-ghost btn-circle">
@@ -41,7 +42,8 @@ const Navbar = () => {
                     </div>
                 </button>
                 {userStore.user ? (
-                    <TuDropdownBtn end
+                    <TuDropdownBtn
+                        end
                         toggler={
                             <Avatar
                                 innerClassName="ring w-30px h-30px ml-4"
@@ -92,22 +94,18 @@ const Navbar = () => {
                                     </NextLink>
                                 ),
                             },
-                            {onTap: async()=>{
-                                await sleep(1500)
-                                return true
-                            }, child: <p>Just a button</p>}
+                            {
+                                onTap: async () => {
+                                    await sleep(1500);
+                                    return true;
+                                },
+                                child: <p>Just a button</p>,
+                            },
                         ]}
                     />
                 ) : (
                     <NextLink
-                        href={
-                            typeof window == "undefined"
-                                ? ""
-                                : `/auth/login?red=${location.href.replace(
-                                      location.origin,
-                                      ""
-                                  )}`
-                        }
+                        href={`/auth/login?red=${router.pathname}`}
                         className="btn btn-sm btn-outline btn-primary"
                     >
                         Login
