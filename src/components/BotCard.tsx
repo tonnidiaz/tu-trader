@@ -15,14 +15,11 @@ const BotCard: React.FC<IProps> = ({ bot, updateBot }) => {
     const activateBot = async (e: any) => {
         const el = e.target.parentElement 
         try {
-            //console.log(e);
-            //e.preventDefault()
             
             el.innerHTML = `<span class="loading loading-dots loading-sm m-auto"></span>`
             const val = !bot.active;
-            await sleep(2000)
-            const res = await api().post(`/bots/${bot.id}/edit}`, {
-                field: "active",
+            const res = await api().post(`/bots/${bot.id}/edit`, {
+                key: "active",
                 val: val,
             });
             if (updateBot)

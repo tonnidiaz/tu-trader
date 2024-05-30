@@ -8,24 +8,7 @@ import { useRouter } from "next/router";
 import { CtxTeleport } from "../layouts/Default";
 import { Root, createRoot } from "react-dom/client";
 
-const testItems: IDropdownMenuItem[] = [
-    {
-        onTap: async () => {
-            console.log("ITEM 1 TAPPED");
-            await sleep(1000);
-            return true;
-        },
-        child: <span>Hello</span>,
-    },
-    {
-        onTap: async () => {
-            console.log("ITEM 2 TAPPED");
-            await sleep(2000);
-            return true;
-        },
-        child: <span className="text-primary fw-6">From the other side</span>,
-    },
-];
+
 
 interface IProps extends DropdownProps {
     toggler: React.ReactElement;
@@ -71,14 +54,7 @@ const TuDropdownBtn: React.FC<IProps> = ({ toggler, items, ...args }) => {
     const onDocClick = (e: any) => {
         const menu =  document.getElementById(menuId!);
         if (menu && !menu.contains(e.target)) {
-            console.log("CLOSING MENU");
-            console.log(menu);
-            console.log(e.target);
             setIsOpen(false);
-           
-            /* const par = document.querySelector("#ctx-overlay")
-            if (par?.contains(theMenu))
-                par?.removeChild(theMenu) */
     };
     }
    
@@ -94,7 +70,6 @@ const TuDropdownBtn: React.FC<IProps> = ({ toggler, items, ...args }) => {
     {items.map((item, i) => (
         <li key={`item-${i*1}`}
             onClick={async (e) => {
-                //console.log(e);
                 const ret = await item.onTap(e);
                 if (ret) {
                     setIsOpen(false);
@@ -113,7 +88,6 @@ const toggleDropdown = (e: any) => {
         let menu : HTMLDivElement= menuRef.current
         menu = menu.firstChild as HTMLDivElement
         const size = {w: $(menu).width()!, h: $(menu).height()!}
-        console.log(size);
         const { clientX, clientY } = e;
         let _pos = { x: clientX, y: clientY };
         const rightPos = clientX + size.w;

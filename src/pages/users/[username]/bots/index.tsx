@@ -64,30 +64,37 @@ const tetsBots = [
         id: "ssddaw",
     },
 ];
-  interface IProps {bots?: IObj[], error?: IObj }
+interface IProps {
+    bots?: IObj[];
+    error?: IObj;
+}
 
-export const getServerSideProps = (async ({query} : {query: IObj}) =>{
-   try{ // Fetch data from external API
-    
-    const res = await api().get('/bots', {params: {user: query.username}})
+export const getServerSideProps = (async ({ query }: { query: IObj }) => {
+    try {
+        // Fetch data from external API
 
-    // Pass data to the page via props
-    return { props: { bots: res.data } }}
-    catch(e: any){
+        const res = await api().get("/bots", {
+            params: { user: query.username },
+        });
+
+        // Pass data to the page via props
+        return { props: { bots: res.data } };
+    } catch (e: any) {
         console.log(e);
-        const code = e.response?.status ?? 500
-        const _err = typeof e.response?.data == "string" && e.response?.data?.startsWith("tuned:") ? e.response.data.replace("tuned:", "") : "Something went wrong"
-        return {props: {error: {code, message: _err}} }
+        const code = e.response?.status ?? 500;
+        const _err =
+            typeof e.response?.data == "string" &&
+            e.response?.data?.startsWith("tuned:")
+                ? e.response.data.replace("tuned:", "")
+                : "Something went wrong";
+        return { props: { error: { code, message: _err } } };
     }
-  }) satisfies GetServerSideProps<IProps>
+}) satisfies GetServerSideProps<IProps>;
 
-
-const UserBotsPage : FC<IProps> = ({bots, error}) => {
+const UserBotsPage: FC<IProps> = ({ bots, error }) => {
     const [strategies, setStrategies] = useState<any[]>([]);
-    const [formData, setFormData] = useState<IObj>({bal: 5});
-    const [err, setErr] = useState("")
-
-
+    const [formData, setFormData] = useState<IObj>({ bal: 5 });
+    const [err, setErr] = useState("");
 
     const router = useRouter();
     const dispatch = useDispatch();
@@ -95,18 +102,19 @@ const UserBotsPage : FC<IProps> = ({bots, error}) => {
     const newBotModalRef = useRef<HTMLDialogElement>(null);
 
     useEffect(() => {
-        getBots()
+        getBots();
     }, []);
 
     const userStore = useSelector((state: RootState) => state.user);
 
-    const getBots = async() => { 
-        try{
+    const getBots = async () => {
+        try {
             //const res = await api().get('/bots')
-            dispatch(setBots(bots))
-        }catch(e){console.log(e);}
-        
-     }
+            dispatch(setBots(bots));
+        } catch (e) {
+            console.log(e);
+        }
+    };
     const getStrategies = async () => {
         try {
             console.log("Getting strategies...");
@@ -129,7 +137,7 @@ const UserBotsPage : FC<IProps> = ({bots, error}) => {
         };
 
         try {
-            setErr("")
+            setErr("");
             const { name, amt, interval, strategy, pair, demo, active, desc } =
                 form;
             const data = {
@@ -149,38 +157,64 @@ const UserBotsPage : FC<IProps> = ({bots, error}) => {
             console.log(res.data);
             dispatch(setBots(res.data.bots));
             updateBtn();
-            newBotModalRef.current?.close()
+            newBotModalRef.current?.close();
         } catch (e: any) {
             console.log(e);
             updateBtn("Retry", false);
-            const _err = typeof e.response?.data == "string" && e.response?.data?.startsWith("tuned:") ? e.response.data.replace("tuned:", "") : "Something went wrong"
-            setErr(_err)
+            const _err =
+                typeof e.response?.data == "string" &&
+                e.response?.data?.startsWith("tuned:")
+                    ? e.response.data.replace("tuned:", "")
+                    : "Something went wrong";
+            setErr(_err);
         }
     };
 
     const showNewBotModal = async () => {
         await getStrategies();
         newBotModalRef.current?.showModal();
-    }
-    return ( error ? <Error statusCode={error.code} withDarkMode title={error.message} />:
+    };
+
+    const updateBots = (val: IObj) => {
+        const bots = userStore.bots.map((el) => {
+            return el.id == val.id ? val : el;
+        });
+        dispatch(setBots(bots));
+    };
+    return error ? (
+        <Error statusCode={error.code} withDarkMode title={error.message} />
+    ) : (
         <>
             <TuMeta title={`${router.query.username}'s bots - ${SITE}`} />
             <div className="p-5">
                 <h1 className="text-xl text-gray-200">My bots</h1>
                 <div className="mt-5">
-                    {userStore.bots.length ? <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
-                        {userStore.bots.slice(0).map((e, i) => (
-                            <BotCard bot={e} key={`item-${i * 1}`} />
-                        ))}
-                    </div> : 
-                    <div className="h-60vh w-100p  flex items-center justify-center">
-                        <button onClick={showNewBotModal} className="btn text-xl btn-ghost border-card border-dotted border-1 br-10 p-5 w-60 h-40 flex itemx-center justify-center">
-                            <span><i className="fi fi-br-plus"></i></span>
-                        </button>
-                    </div>
-                    }
+                    {userStore.bots.length ? (
+                        <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
+                            {userStore.bots.slice(0).map((e, i) => (
+                                <BotCard
+                                    bot={e}
+                                    key={`item-${i * 1}`}
+                                    updateBot={updateBots}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="h-60vh w-100p  flex items-center justify-center">
+                            <button
+                                onClick={showNewBotModal}
+                                className="btn text-xl btn-ghost border-card border-dotted border-1 br-10 p-5 w-60 h-40 flex itemx-center justify-center"
+                            >
+                                <span>
+                                    <i className="fi fi-br-plus"></i>
+                                </span>
+                            </button>
+                        </div>
+                    )}
                 </div>
-                <CtxTeleport.Source><h4>Hello there</h4></CtxTeleport.Source>
+                <CtxTeleport.Source>
+                    <h4>Hello there</h4>
+                </CtxTeleport.Source>
                 <button
                     onClick={showNewBotModal}
                     className="btn btn-md btn-primary btn-circle fab"
@@ -247,7 +281,11 @@ const UserBotsPage : FC<IProps> = ({bots, error}) => {
                                             Demo?
                                         </span>
                                     </label>
-                                    <Checkbox defaultChecked name="demo" id="demo" />
+                                    <Checkbox
+                                        defaultChecked
+                                        name="demo"
+                                        id="demo"
+                                    />
                                 </div>
 
                                 <div className="form-group flex items-center gap-2">
@@ -256,7 +294,11 @@ const UserBotsPage : FC<IProps> = ({bots, error}) => {
                                             Active?
                                         </span>
                                     </label>
-                                    <Checkbox defaultChecked name="active" id="active" />
+                                    <Checkbox
+                                        defaultChecked
+                                        name="active"
+                                        id="active"
+                                    />
                                 </div>
                             </div>
                             <div className="grid sm:grid-cols-2 gap-3 items-end mt-3">
@@ -296,7 +338,11 @@ const UserBotsPage : FC<IProps> = ({bots, error}) => {
                                     maxLength={50}
                                 />
                             </div>
-                            {err?.length != 0 && <div className="mt-2 ml-2 text-whit fs-12 text-center text-warning"><p >{err?.replace("tuned:", "")}</p></div>}
+                            {err?.length != 0 && (
+                                <div className="mt-2 ml-2 text-whit fs-12 text-center text-warning">
+                                    <p>{err?.replace("tuned:", "")}</p>
+                                </div>
+                            )}
                             <div className="form-group mt-2">
                                 <Button
                                     type="submit"
@@ -312,6 +358,6 @@ const UserBotsPage : FC<IProps> = ({bots, error}) => {
             </div>
         </>
     );
-}
+};
 
-export default UserBotsPage
+export default UserBotsPage;

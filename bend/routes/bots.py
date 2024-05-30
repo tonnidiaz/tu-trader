@@ -1,7 +1,7 @@
 import json
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
-
+from bunnet import PydanticObjectId
 from models.bot_model import Bot
 from models.user_model import User
 from utils.funcs.auth import validate
@@ -72,6 +72,20 @@ def get_apps_route():
         bots = map(lambda x: json.loads(x.model_dump_json()), bots )
         bots = list(bots)
         return bots
+    except Exception as e:
+        err_handler(e)
+        return tuned_err()
+
+@router.post("/<id>/edit")
+def edit_bot_route(id):
+    try:
+        bot = Bot.find_one(Bot.id == PydanticObjectId(id)).run()
+        if not bot:
+            return tuned_err(404, "Bot not found")
+        
+        fd = request.json
+        bot.set({fd.get('key'): fd.get('val')})
+        return json.loads(bot.model_dump_json())
     except Exception as e:
         err_handler(e)
         return tuned_err()
