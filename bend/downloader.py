@@ -6,7 +6,7 @@ import os
 # ETH -> 2021 -> 2022
 # BTC -> 2022
 symbols = ['SOLUSDT']
-years = [ 2022, 2023]
+years = [ 2020, 2023]
 intervals = [15]
 
 

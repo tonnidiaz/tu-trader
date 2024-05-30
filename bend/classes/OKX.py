@@ -14,15 +14,14 @@ class OKX:
     ws_url = "wss://wspap.okx.com:8443/ws/v5/business?brokerId=9999" 
     ws_url_private = "wss://wspap.okx.com:8443/ws/v5/private?brokerId=9999"
     inst = None
-    def __init__(self) -> None:
+    def __init__(self, bot: Bot) -> None:
 
         print("INITIALIZE OKX")
         print(os.getenv("OKX_PASSPHRASE"))
-        return
-        self.app = get_app()
-        self.flag = "1" if self.app.demo else "0"  # Production trading:0 , demo trading:1
-        self.api_key = os.getenv("OKX_API_KEY_DEV" if self.app.demo else "OKX_API_KEY")
-        self.api_secret = os.getenv("OKX_API_SECRET_DEV" if self.app.demo else "OKX_API_SECRET")
+        self.bot = bot
+        self.flag = "1" if self.bot.demo else "0"  # Production trading:0 , demo trading:1
+        self.api_key = os.getenv("OKX_API_KEY_DEV" if self.bot.demo else "OKX_API_KEY")
+        self.api_secret = os.getenv("OKX_API_SECRET_DEV" if self.bot.demo else "OKX_API_SECRET")
         self.passphrase = os.getenv('OKX_PASSPHRASE')
         api_key, api_secret, passphrase = self.api_key, self.api_secret, self.passphrase
 
@@ -37,7 +36,7 @@ class OKX:
         klines = []
         print('GETTING OKX KLINES...')
         end = end if end else  round(datetime.now().timestamp() * 1000)
-        res = self.market_data_api.get_index_candlesticks(instId=self.get_symbol(), bar=f"{self.app.interval}m", after=end)
+        res = self.market_data_api.get_index_candlesticks(instId=self.get_symbol(), bar=f"{self.bot.interval}m", after=end)
         data = res['data']
         klines = [*klines,*data]
         d =klines.copy()
@@ -58,7 +57,7 @@ class OKX:
             err_handler(e)
 
     def get_symbol(self):
-        app = self.app
+        app = self.bot
         return f'{app.base}-{app.ccy}'
     
     def place_order(self, amt, tp = None, sl = None, side = 'buy', price = 0):

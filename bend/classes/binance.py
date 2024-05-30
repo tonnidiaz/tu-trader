@@ -3,22 +3,23 @@ import json
 import os
 
 import requests
+from models.bot_model import Bot
 from utils.functions import err_handler, get_app
 from binance.client import Client
 
 class Binance:
 
     inst = None
-    def __init__(self) -> None:
+    def __init__(self,  bot: Bot) -> None:
         print("INIT BINANCE...")
-        self.app = get_app()
+        self.bot = bot
 
     def get_klines(self, symbol = None, start = None, end = None, interval = None, save_fp = None):
         try:
             cnt = 0
             klines = []
             symbol = symbol if symbol else self.get_symbol()
-            interval = interval if interval else self.app.interval
+            interval = interval if interval else self.bot.interval
             interval = int(interval)
             end = end if end is not None else int(datetime.now().timestamp() * 1000)
             parsed_interval = f"{interval}m" if interval < 60 else f"{int(interval/ 60)}h"
@@ -56,5 +57,5 @@ class Binance:
             err_handler(e)
             
     def get_symbol(self):
-        app = self.app
+        app = self.bot
         return f'{app.base}{app.ccy}'
