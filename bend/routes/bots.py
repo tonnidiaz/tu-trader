@@ -77,6 +77,7 @@ def get_apps_route():
         return tuned_err()
 
 @router.post("/<id>/edit")
+@jwt_required()
 def edit_bot_route(id):
     try:
         bot = Bot.find_one(Bot.id == PydanticObjectId(id)).run()
@@ -85,6 +86,18 @@ def edit_bot_route(id):
         
         fd = request.json
         bot.set({fd.get('key'): fd.get('val')})
+        return json.loads(bot.model_dump_json())
+    except Exception as e:
+        err_handler(e)
+        return tuned_err()
+    
+@router.get('/<id>')
+def get_bot_by_id(id):
+
+    try:
+        bot = Bot.find_one(Bot.id == PydanticObjectId(id)).run()
+        if not bot:
+            return tuned_err(404, "Bot not found")
         return json.loads(bot.model_dump_json())
     except Exception as e:
         err_handler(e)

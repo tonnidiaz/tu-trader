@@ -71,13 +71,10 @@ interface IProps {
 
 export const getServerSideProps = (async ({ query }: { query: IObj }) => {
     try {
-        // Fetch data from external API
-
-        const res = await api().get("/bots", {
+          const res = await api().get("/bots", {
             params: { user: query.username },
         });
 
-        // Pass data to the page via props
         return { props: { bots: res.data } };
     } catch (e: any) {
         console.log(e);

@@ -18,7 +18,7 @@ const BotCard: React.FC<IProps> = ({ bot, updateBot }) => {
             
             el.innerHTML = `<span class="loading loading-dots loading-sm m-auto"></span>`
             const val = !bot.active;
-            const res = await api().post(`/bots/${bot.id}/edit`, {
+            const res = await api(true).post(`/bots/${bot.id}/edit`, {
                 key: "active",
                 val: val,
             });
