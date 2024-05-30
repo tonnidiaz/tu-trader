@@ -1,6 +1,7 @@
 import BotCard from "@/src/components/BotCard";
 import TuMeta from "@/src/components/TuMeta";
 import TuSelect from "@/src/components/TuSelect";
+import { CtxTeleport } from "@/src/layouts/Default";
 import { setApps as setBots } from "@/src/redux/reducers/user";
 import { RootState } from "@/src/redux/store";
 import { SITE, api, symbols } from "@/src/utils/constants";
@@ -168,7 +169,7 @@ const UserBotsPage : FC<IProps> = ({bots, error}) => {
                 <h1 className="text-xl text-gray-200">My bots</h1>
                 <div className="mt-5">
                     {userStore.bots.length ? <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
-                        {userStore.bots?.map((e, i) => (
+                        {userStore.bots.slice(0).map((e, i) => (
                             <BotCard bot={e} key={`item-${i * 1}`} />
                         ))}
                     </div> : 
@@ -179,6 +180,7 @@ const UserBotsPage : FC<IProps> = ({bots, error}) => {
                     </div>
                     }
                 </div>
+                <CtxTeleport.Source><h4>Hello there</h4></CtxTeleport.Source>
                 <button
                     onClick={showNewBotModal}
                     className="btn btn-md btn-primary btn-circle fab"

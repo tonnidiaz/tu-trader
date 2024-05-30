@@ -2,47 +2,48 @@
 @import "./colors";
 @import "./forms";
 
-.params-area{
+.params-area {
     position: fixed;
     z-index: 100;
     bottom: 0;
     right: 0px;
-    transition: all .1s linear;
+    transition: all 0.1s linear;
     box-shadow: -3px -3px 5px rgba(0, 0, 0, 0.199);
     max-height: 90vh;
     padding: 0;
     margin: 0 1rem;
-   .mb-2{
-    margin-bottom: 0;
-   }
-    .content{
+    .mb-2 {
+        margin-bottom: 0;
+    }
+    .content {
         display: none;
     }
-    .ctrl-btn{
+    .ctrl-btn {
         transform: rotate(180deg);
     }
-    &.open{
-        bottom: 0; overflow-y: scroll;
+    &.open {
+        bottom: 0;
+        overflow-y: scroll;
         padding: 1rem;
-        .mb-2{
-            margin-bottom: .5rem;
+        .mb-2 {
+            margin-bottom: 0.5rem;
         }
-        .content{
+        .content {
             display: unset;
         }
-        .ctrl-btn{
+        .ctrl-btn {
             transform: rotate(0deg);
         }
     }
-    .ctrl-btn{
-        float: right
+    .ctrl-btn {
+        float: right;
     }
 }
 @media screen and (max-width: 767px) {
-    .params-area, .fab{
-        bottom: calc($sidenav-w + 20px) !important
-    } 
-    
+    .params-area,
+    .fab {
+        bottom: calc($sidenav-w + 20px) !important;
+    }
 }
 
 @media screen and (max-width: 767px) {
@@ -51,7 +52,7 @@
         flex-direction: row !important;
         padding: 0 4px;
         flex-wrap: nowrap;
-        box-shadow: $shadow; 
+        box-shadow: $shadow;
 
         position: fixed !important;
         width: calc(100% - 20px) !important;
@@ -62,32 +63,47 @@
         top: unset !important;
         align-items: center !important;
         justify-content: space-around;
-        border: 1px solid $on-bg-tb; 
+        border: 1px solid $on-bg-tb;
     }
-    main{
+    main {
         margin-bottom: $sidenav-w;
     }
 }
 
-.pointer {cursor: pointer;}
-.avatar.online:before{
-    width: 27% !important;
-    height: 27% !important;
-    top: 0;
-    right: -0%;
+.pointer {
+    cursor: pointer;
+}
+.avatar.online,
+.avatar.offline {
+    &:before {
+        width: 27% !important;
+        height: 27% !important;
+        top: 0;
+        right: -0%;
+    }
+}
+.avatar.offline{
+    &:before{@apply bg-warning}
 }
 
-.bot-card{
-    transition: .1s ease-in-out;
-    &:hover{
+.bot-card {
+    transition: 0.1s ease-in-out;
+    &:hover {
         transform: scale(1.04);
     }
 }
 
-.fab{
-   position: fixed;
-   z-index: 10;
-   right: 15px;
-   bottom: 15px;
+.fab {
+    position: fixed;
+    z-index: 10;
+    right: 15px;
+    bottom: 15px;
     box-shadow: $shadow;
+}
+
+
+#ctx-overlay{
+    z-index: 90;
+    position: fixed;
+    //width: 100vw; height: 100vh; background-color: var(--fallback-b1,oklch(var(--b1)/.5));  top: 0; left: 0;
 }

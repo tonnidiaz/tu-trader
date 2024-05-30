@@ -2,7 +2,6 @@ import { createTeleporter } from "react-teleporter";
 import TuMeta from "../components/TuMeta";
 import {Head, Html, Main, NextScript} from 'next/document'
 
-const HeadTeleport = createTeleporter()
 
 const Doc = () => {
     return (
@@ -12,7 +11,6 @@ const Doc = () => {
             <body>
                 <Main/>
                 <div id="click-me"></div>
-                
                 <NextScript/>
             </body>
         </Html>
