@@ -149,7 +149,7 @@ def strategies_route():
     return data
 
 scheduler.start()
-socketio.run( app, debug=False, port=8080)
+socketio.run( app, debug=False, port=8000)
 if __name__ == '__main__':
     #socketio.run( app, debug=False, port=8000) #TODO change debug to false
     pass
