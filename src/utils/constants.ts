@@ -95,8 +95,16 @@ export const symbols =[
     ["STETH", "ETH"],
     ["TRX", "ETH"]
 ]
+export const intervals = [5, 15, 30, 60]
+export const selectIntervals = intervals.map((e) => ({
+    label: `${e}m`,
+    value: e,
+}))
 
-
+export const selectSymbols = symbols.map((e) => ({
+    label: e.join("/"),
+    value: e,
+}))
 export const api = (auth = false) => axios.create({ baseURL: BEND_URL, headers: {
     Authorization: auth ? `Bearer ${localStorage.getItem(STORAGE_KEYS.authTkn)}` : null, "Content-Type": "application/json"
 },  });

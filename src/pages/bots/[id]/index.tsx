@@ -1,12 +1,15 @@
+import BotFormModal from "@/src/components/BotFormModal";
 import TuMeta from "@/src/components/TuMeta";
 import TuStat from "@/src/components/TuStat";
-import { SITE, api } from "@/src/utils/constants";
-import { activateBot } from "@/src/utils/funcs";
+import { RootState } from "@/src/redux/store";
+import { SITE, api, selectIntervals, selectSymbols } from "@/src/utils/constants";
+import { activateBot, toSelectStrategies } from "@/src/utils/funcs";
 import { IObj } from "@/src/utils/interfaces";
 import Error from "next/error";
 import { FC, useEffect, useState } from "react";
 import { Checkbox, Stats, Textarea } from "react-daisyui";
 import { JSONTree } from "react-json-tree";
+import { useSelector } from "react-redux";
 
 interface IProps {
     bot: IObj;
@@ -49,26 +52,30 @@ export const getServerSideProps = async ({ query }: { query: IObj }) => {
     }
 };
 
-const testOrders = [
-    { name: "Order 1", filed: false },
-    { name: "Order 2", filed: false },
-    { name: "Order 3", filed: true },
-    { name: "Order 4", filed: false },
-];
 const BotPage: FC<IProps> = ({ bot, err }) => {
-const [_bot, setBot] = useState<IObj>({})
+    const [_bot, setBot] = useState<IObj>({});
+    const [botModal, setBotModal] = useState<HTMLDialogElement>();
 
-useEffect(()=>{
-    if (bot) setBot(bot)
-}, [bot])
+    const appStore = useSelector((state: RootState) => state.app);
 
+    useEffect(() => {
+        if (bot) setBot(bot);
+    }, [bot]);
+
+    useEffect(() => {
+        console.log(
+            toSelectStrategies(appStore.strategies).find(
+                (el) => el.value == bot.strategy
+            )
+        );
+    }, []);
     return err ? (
         <Error statusCode={err.code} title={err.msg} />
     ) : (
-        <div className="p-5">
+        <div className="md:p-5 p-1">
             <TuMeta title={`Bot: ${_bot.name} - ${SITE}`} />
 
-            <fieldset className="formset border-card border-1 p-4">
+            <fieldset className="formset border-card border-1 p-2 md:p-4">
                 <legend>
                     <h1 className="text-gray-200">{_bot.name}</h1>
                 </legend>
@@ -83,8 +90,23 @@ useEffect(()=>{
                     )}
                 </div>
                 <div className="flex gap-4 justify-center mt-3 items-center">
-                    <button onClick={e=> activateBot(e.currentTarget, _bot, setBot )} className="btn btn-primary btn-sm">{_bot.active ? 'Deactivate' :'Activate'}</button>
-                    <button className="btn btn-sm btn-rounded btn-neutral" title="Modify"><span><i className="fi fi-br-pencil"></i></span></button>
+                    <button
+                        onClick={(e) =>
+                            activateBot(e.currentTarget, _bot, setBot)
+                        }
+                        className="btn btn-neutral btn-sm"
+                    >
+                        {_bot.active ? "Deactivate" : "Activate"}
+                    </button>
+                    <button
+                        className="btn btn-sm btn-rounded btn-neutral"
+                        title="Modify"
+                        onClick={(_) => botModal?.showModal()}
+                    >
+                        <span>
+                            <i className="fi fi-br-pencil"></i>
+                        </span>
+                    </button>
                 </div>
                 <div className="mt-">
                     <div className="stats text-center flex">
@@ -102,8 +124,14 @@ useEffect(()=>{
                             </summary>
                             <div className="collapse-content">
                                 <div className="form-group flex items-center gap-3 justify-center">
-                                    <label htmlFor="demo" className="label">Demo mode</label>
-                                    <Checkbox id="demo" checked={_bot.demo} readOnly/>
+                                    <label htmlFor="demo" className="label">
+                                        Demo mode
+                                    </label>
+                                    <Checkbox
+                                        id="demo"
+                                        checked={_bot.demo}
+                                        readOnly
+                                    />
                                 </div>
                                 <div className="shadow grid grid-cols-2">
                                     <TuStat
@@ -124,7 +152,11 @@ useEffect(()=>{
                                     />
                                 </div>
                                 <div className="mt-1">
-                                    <Textarea placeholder="Description..." readOnly value={_bot.desc}/>
+                                    <Textarea
+                                        placeholder="Description..."
+                                        readOnly
+                                        value={_bot.desc}
+                                    />
                                 </div>
                             </div>
                         </details>
@@ -148,6 +180,30 @@ useEffect(()=>{
                     </fieldset>
                 </div>
             </fieldset>
+
+            <BotFormModal
+                fd={{
+                    name: bot.name,
+                    desc: bot.desc,
+                    demo: bot.demo,
+                    id: bot.id,
+                    pair: selectSymbols.find(
+                        (el) =>
+                            el.value.toString() ==
+                            [bot.base, bot.ccy].toString()
+                    ),
+                    strategy: toSelectStrategies(appStore.strategies).find(
+                        (el) => el.value == bot.strategy
+                    ),
+                    interval: selectIntervals.find(
+                        (el) => el.value == bot.interval
+                    ),
+                
+                }}
+                setRef={setBotModal}
+                mode="Edit"
+                onDone={(bot) => setBot(bot)}
+            />
         </div>
     );
 };

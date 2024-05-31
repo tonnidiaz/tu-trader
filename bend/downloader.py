@@ -1,3 +1,4 @@
+import json
 from classes.binance import Binance
 from utils.constants import dfs_dir, klines_dir
 from utils.functions import chandelier_exit, date_str_to_timestamp, heikin_ashi, parse_klines, tu_path
@@ -48,5 +49,29 @@ def main():
 
     print("DOWNLOADER FINISHED")
 
+def create_dfs(year, interval, symb):
+     fname = f"{symb}_{interval}m"
+     k_fp = f"{klines_dir}/{year}/{fname}.json"
+     fp = f"{dfs_dir}/{year}"
+     print(f"Begin: {year}, {interval}m, {symb}\n")
+     if os.path.exists(k_fp):
+         if not os.path.exists(fp):
+            os.mkdir(tu_path(fp))
+         fp = f"{fp}/{fname}.csv"
+         with open(k_fp) as f:
+             klines = json.load(f)
+         df = chandelier_exit(heikin_ashi(parse_klines(klines)))
+         df.to_csv(fp)
+         print(f"DONE with: {year}, {interval}m, {symb}\n")
 
-main()
+def create():
+    years = [2020,2022,2023]
+    intervals = [15]
+    symb = ["SOLUSDT"]
+
+    for year in years:
+        for symb in symbols:
+            for interval in intervals:
+                create_dfs(year, interval, symb)
+
+create()

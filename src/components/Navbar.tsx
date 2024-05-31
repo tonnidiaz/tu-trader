@@ -6,17 +6,21 @@ import { RootState } from "../redux/store";
 import { Avatar, Dropdown, Navbar as NB } from "react-daisyui";
 import { sleep } from "../utils/funcs";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const Navbar = () => {
     const userStore = useSelector((state: RootState) => state.user);
     const router = useRouter();
+
+    useEffect(()=>{
+    },[])
     return (
         <NB className=" pr-5">
-            <NB.Start>{/* <TuDropdownBtn /> */}</NB.Start>
+            <NB.Start>{/* {<TuDropdownBtn /> } */}</NB.Start>
             <NB.Center>
-                {/*    <a href="/" className="btn btn-ghost normal-case text-xl">
+                 <a href="/" className="btn btn-ghost normal-case text-xl">
                     {SITE}
-                </a> */}
+                </a>
             </NB.Center>
             <NB.End>
                 <button tabIndex={0} className="btn btn-ghost btn-circle">
@@ -105,7 +109,7 @@ const Navbar = () => {
                     />
                 ) : (
                     <NextLink
-                        href={`/auth/login?red=${router.pathname}`}
+                        href={`/auth/login?red=${router.asPath}`}
                         className="btn btn-sm btn-outline btn-primary"
                     >
                         Login
