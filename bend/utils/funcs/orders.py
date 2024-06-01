@@ -7,7 +7,7 @@ from utils.constants import scheduler
 from utils.functions import chandelier_exit, heikin_ashi, is_dev, parse_klines
 from strategies.main import strategies
 
-test = True
+test = False
 
 def update_order(bot:Bot, orders: list[Order]):
 
