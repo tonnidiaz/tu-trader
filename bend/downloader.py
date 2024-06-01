@@ -7,8 +7,8 @@ import os
 
 # ETH -> 2021 -> 2022
 # BTC -> 2022
-symbols = ['DOGEUSDT', 'ETHUSDT']
-years = [ 2023 ]
+symbols = ['EURUSDT', 'USDTZAR']
+years = [ 2021 ]
 intervals = [15]
 
 
