@@ -7,6 +7,7 @@ import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import $ from 'jquery'
 import TuSelect from "@/src/components/TuSelect";
+import TuStat from "@/src/components/TuStat";
 
 const initRes = { data: {} };
 
@@ -80,34 +81,13 @@ const Backtest = () => {
                 <div className="md:p-4 p-2 my-2 border-md border-card border-1 br-10 flex-1 overflow-y-scroll max-h-80vh">
                     <h2 className="font-bold fs-20">RESULTS</h2>
                     <div className="my-2 flex gap-10">
-                        <div>
-                            <p>
-                                Total trades:{" "}
-                                <span className="text-whit font-bold">
-                                    {res.trades ?? 0}
-                                </span>
-                            </p>
-                            <p>
-                                Profit:{" "}
-                                <span className="text-whit font-bold">
-                                    {res.ccy} {res.profit ?? 0}
-                                </span>
-                            </p>
+                        <div className="stats shadow">
+                            <TuStat title="Trades" value={res.trades ?? 0}/>
+                            <TuStat title="Profit" value={`${res.ccy ?? ""} ${res.profit ?? 0}`}/>
+                            <TuStat title="G" value={`${res.gain ?? 0}%`}/>
+                            <TuStat title="L" value={`${res.loss ?? 0}%`}/>
                         </div>
-                        <div>
-                            <p>
-                                P:{" "}
-                                <span className="text-whit font-bold">
-                                    {res.gain ?? 0}%
-                                </span>
-                            </p>
-                            <p>
-                                L:{" "}
-                                <span className="text-whit font-bold">
-                                    {res.loss ?? 0}%
-                                </span>
-                            </p>
-                        </div>
+                  
                     </div>
                     <div className="mt-4 overflow-y-scroll">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

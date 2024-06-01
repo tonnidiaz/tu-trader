@@ -99,6 +99,17 @@ const Navbar = () => {
                                 ),
                             },
                             {
+                                onTap: () => {},
+                                child: (
+                                    <NextLink href="/backtest">
+                                        <span className="mr-2 relative top-1">
+                                            <i className="fi fi-rr-sign-out-alt"></i>
+                                        </span>
+                                        RF
+                                    </NextLink>
+                                ),
+                            },
+                            {
                                 onTap: async () => {
                                     await sleep(1500);
                                     return true;

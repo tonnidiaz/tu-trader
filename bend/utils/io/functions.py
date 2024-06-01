@@ -4,6 +4,7 @@ import os
 
 from flask_socketio import emit
 import pandas as pd
+from classes.test_bin import TestBinance
 from models.user_model import User
 from utils.io.io import socketio
 from classes.binance import Binance
@@ -21,7 +22,7 @@ def on_backtest(body):
             emit('backtest', {'err': 'Not authenticated'})
             return """
         
-        _bin: Binance = Binance.inst
+       
         symbol = body.get('symbol')
         base_ccy = symbol
         symbol = "".join(base_ccy)
@@ -56,6 +57,7 @@ def on_backtest(body):
 
             
         else:
+            _bin = TestBinance()
             klines = _bin.get_klines(symbol, interval=interval, start=start_ts, end=end_ts, save_fp=fp)
 
         emit('backtest', 'Analizing data...')

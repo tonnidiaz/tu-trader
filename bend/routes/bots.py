@@ -9,17 +9,11 @@ from utils.funcs.orders import OrderPlacer
 from utils.functions import err_handler, tuned_err
 from utils.constants import scheduler
 from models.order_model import Order
+from utils.functions2 import add_bot_job
 
 router = Blueprint("bots", __name__, url_prefix="/bots")
 
 cnt = 0
-def tu_job(op: OrderPlacer, bot: Bot, id):
-    with scheduler.app.app_context():
-        """ print(f"JOB: {id}, RUN {op.cnt}")
-        if op.cnt >= 10:
-            scheduler.pause_job(id) """
-        op.check_n_place_orders(bot)
-        op.set_cnt(op.cnt + 1)
 
 @router.post('/create')
 @jwt_required()
@@ -51,7 +45,7 @@ def create_bot_route():
         user.save()
         print("USER SAVED")
         
-        scheduler.add_job(str(bot.id), lambda : tu_job(str(bot.id)), trigger="interval", seconds = 1)
+        add_bot_job(bot)
         if not bot.active:
             scheduler.pause_job(str(bot.id))
         print("JOB ADDED")
@@ -107,8 +101,7 @@ def edit_bot_route(id):
                 print("\nResuming jon\n")
                 if not bl:
                     # Add job if it does not exist already
-                    op = OrderPlacer()
-                    scheduler.add_job(job_id, lambda : tu_job( op, bot, job_id) , trigger="interval", seconds= 1)
+                    add_bot_job(bot)
                 else:
                     scheduler.resume_job(job_id)
 

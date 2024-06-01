@@ -13,55 +13,25 @@ import re
 from classes.OKX import OKX
 from models.bot_model import Bot
 from models.order_model import Order
+from utils.funcs.orders import OrderPlacer
+from utils.constants import scheduler
 
-def update_order(bot:Bot, orders: list[Order]):
-
-    is_closed = True
-    last_order = None
-    okx = OKX(bot)
-    if len(orders) and not orders[-1].is_closed:
-        last_order = orders[-1]
-        print(f"LAST_ORDER: {last_order}\n")
-        is_closed = last_order.is_closed
-        is_sell_order = len(last_order.order_id) >0
-
-        oid = last_order.order_id if is_sell_order else last_order.buy_order_id
-        res = okx.get_order_by_id(oid)
-        
-        _is_closed = res["state"] != "live"
-
-        if is_sell_order:
-            print("IS SELL ORDER\n")
-            
-            if _is_closed:
-                
-                last_order.sell_price = float(res["fillPx"])
-                last_order.is_closed = _is_closed
-                last_order.sell_fee = float(res["fee"])
-
-                bal = last_order.base_amt * last_order.sell_price
-                print(f'\nNEW_BALANCE: {bal}\n')
-
-                profit = (
-                    bal - last_order.ccy_amt
-                ) / last_order.ccy_amt * 100
-                last_order.profit = profit
-                is_closed = _is_closed
-            print('')
-
-        else:
-            print("IS BUY ORDER\n")
-        
-            if _is_closed:
-                last_order.buy_price = float(res["fillPx"])
-                last_order.buy_fee = float(res["fee"])
-                last_order.base_amt = float(res["fillSz"])
-                last_order.side = "sell"
-
-        last_order.save()
-
-    return is_closed, last_order
 
 def is_email(text):
     return re.fullmatch(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b',
 				 text)
+
+def tu_job(op: OrderPlacer, bot: Bot, id):
+    with scheduler.app.app_context():
+        """ print(f"JOB: {id}, RUN {op.cnt}")
+        if op.cnt >= 10:
+            scheduler.pause_job(id) """
+        op.check_n_place_orders(bot)
+        op.set_cnt(op.cnt + 1)
+
+
+def add_bot_job(bot: Bot):
+    op = OrderPlacer()
+    job_id = str(bot.id)
+    print(f"\nAdding job for bot: {bot.name}\n")
+    scheduler.add_job(job_id, lambda : tu_job( op, bot, job_id) , trigger="interval", seconds= 1)

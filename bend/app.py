@@ -21,7 +21,7 @@ from flask_cors import CORS
 from flask_apscheduler import APScheduler
 from flask_socketio import SocketIO
 from utils.functions import chandelier_exit, get_app, heikin_ashi, is_dev, parse_klines
-from utils.functions2 import update_order
+from utils.functions2 import add_bot_job
 from utils.io.functions import on_backtest
 from utils.mongo import TuMongo
 from utils.io.io import socketio
@@ -150,6 +150,14 @@ def strategies_route():
 
 scheduler.start()
 
+
+def main():
+    # Check for active bots and add jobs for 'em
+    active_bots = Bot.find(Bot.active == True).run()
+    for bot in active_bots:
+        add_bot_job(bot)
+
+main()
 if __name__ == '__main__':
     socketio.run( app, debug=False, port=8000) #TODO change debug to false
     

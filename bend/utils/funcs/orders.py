@@ -5,10 +5,58 @@ from classes.binance import Binance
 from models.order_model import Order
 from utils.constants import scheduler
 from utils.functions import chandelier_exit, heikin_ashi, is_dev, parse_klines
-from utils.functions2 import update_order
 from strategies.main import strategies
 
 test = True
+
+def update_order(bot:Bot, orders: list[Order]):
+
+    is_closed = True
+    last_order = None
+    okx = OKX(bot)
+    if len(orders) and not orders[-1].is_closed:
+        last_order = orders[-1]
+        print(f"LAST_ORDER: {last_order}\n")
+        is_closed = last_order.is_closed
+        is_sell_order = len(last_order.order_id) >0
+
+        oid = last_order.order_id if is_sell_order else last_order.buy_order_id
+        res = okx.get_order_by_id(oid)
+        
+        _is_closed = res["state"] != "live"
+
+        if is_sell_order:
+            print("IS SELL ORDER\n")
+            
+            if _is_closed:
+                
+                last_order.sell_price = float(res["fillPx"])
+                last_order.is_closed = _is_closed
+                last_order.sell_fee = float(res["fee"])
+
+                bal = last_order.base_amt * last_order.sell_price
+                print(f'\nNEW_BALANCE: {bal}\n')
+
+                profit = (
+                    bal - last_order.ccy_amt
+                ) / last_order.ccy_amt * 100
+                last_order.profit = profit
+                is_closed = _is_closed
+            print('')
+
+        else:
+            print("IS BUY ORDER\n")
+        
+            if _is_closed:
+                last_order.buy_price = float(res["fillPx"])
+                last_order.buy_fee = float(res["fee"])
+                last_order.base_amt = float(res["fillSz"])
+                last_order.side = "sell"
+
+        last_order.save()
+
+    return is_closed, last_order
+
 
 def place_trade(bot: Bot, amt: float | None = None, ts=None, price: float = 0, side="buy"):
 
@@ -17,12 +65,12 @@ def place_trade(bot: Bot, amt: float | None = None, ts=None, price: float = 0, s
 
     if amt is None:
         # GET THE USDT BALANCE AND USE 75 IF THIS IS FIRST ORDER
-        print('\nFIRST ORDER\n')
+        print(f'\n[ {bot.name} ]\tFIRST ORDER\n')
         amt = okx.get_bal(ccy=bot.ccy)
-    print(f"Avail amt: {amt}\n")
+    print(f"[ {bot.name} ]\tAvail amt: {amt}\n")
 
     if not amt:
-        raise Exception("Amount not avail")
+        raise Exception(f"[ {bot.name} ]\tAmount not avail")
 
     # Trade half assets
     if side == "buy":
@@ -36,11 +84,11 @@ def place_trade(bot: Bot, amt: float | None = None, ts=None, price: float = 0, s
         # Sell all previously traded
         amt = orders[-1].base_amt
 
-    print(f"PLACING A {side} order FOR [{amt}]\n")
+    print(f"[ {bot.name} ]\tPLACING A {side} order FOR [{amt}]\n")
     order_id = okx.place_order(amt, side=side, price=price)
 
     if not order_id:
-        print("FAILED TO PLACE ORDER")
+        print(f"[ {bot.name} ]\tFAILED TO PLACE ORDER")
         return
     m_order = okx.get_order_by_id(order_id=order_id)
 
@@ -58,7 +106,7 @@ def place_trade(bot: Bot, amt: float | None = None, ts=None, price: float = 0, s
 
         
         bot.save()
-        print("\nBuy order placed, Bot updated\n")
+        print(f"\n[ {bot.name} ]\tBuy order placed, Bot updated\n")
     else:
         order = orders[-1]
         order.order_id = order_id
@@ -71,14 +119,14 @@ def place_trade(bot: Bot, amt: float | None = None, ts=None, price: float = 0, s
     order.save()
     if side == "buy":
         bot.orders.append(order.id)
-    print("DB UPDATED\n")
+    print(f"[ {bot.name} ]\tDB UPDATED\n")
 
 
 class OrderPlacer:
     cnt = 0
     last_check_at: datetime | None = None
     def __init__(self) -> None:
-        print("\nInit OrderPlacer...\n")
+        print(f"\nnit OrderPlacer...\n")
     def set_cnt(self, val):
         self.cnt = val
     
@@ -93,7 +141,7 @@ class OrderPlacer:
 
         m_test = test and len(Order.find(Order.bot == bot.id).run()) <= 2
         if test:
-            print(f"CURR_MIN: [{curr_min}]\tTEST: {m_test}\n")
+            print(f"[ {bot.name} ]\tCURR_MIN: [{curr_min}]\tTEST: {m_test}\n")
 
         prod_time_condition = (
             bot.active
@@ -121,7 +169,7 @@ class OrderPlacer:
                 df.to_csv("data/df.csv")
                 print("DF SAVED TO CSV FILE")
 
-            print("CHECKING SIGNALS...\n")
+            print(f"[ {bot.name} ]\tCHECKING SIGNALS...\n")
 
             for i, row in df.tail(1).iterrows():
                 obj = {'ts': row['timestamp'], 'buy_signal' : row['buy_signal'], 'sell_signal': row["sell_signal"], 'sma_20': row['sma_20'], 'sma_50': row['sma_50']}
@@ -130,7 +178,7 @@ class OrderPlacer:
                     row["buy_signal"] == 1 and (row["sma_20"] > row["sma_50"]) or m_test
                 ):
 
-                    print(f"HAS BUY SIGNAL > GOING IN: {last_order}")
+                    print(f"[ {bot.name} ]\tHAS BUY SIGNAL > GOING IN: {last_order}")
                     amt = last_order.ccy_amt * (1 +  last_order.ccy_amt * last_order.profit / 100) if last_order is not None else None
                     place_trade(bot= bot,   ts=row["timestamp"], amt=amt)
 
@@ -138,9 +186,9 @@ class OrderPlacer:
                     
                     entry = last_order.buy_price
                     if  strategies[bot.strategy - 1].sell_cond(row, entry) or m_test:
-                        print("HAS SELL SIGNAL > GOING OUT")
+                        print(f"[ {bot.name} ]\tHAS SELL SIGNAL > GOING OUT")
                         amt = last_order.base_amt
                         place_trade(bot=bot, ts=row["timestamp"], price=row["close"], side="sell", amt=amt)
                         
-            print("RESUME JOB")
+            print(f"[ {bot.name} ]\tRESUME JOB")
             scheduler.resume_job(str(bot.id))

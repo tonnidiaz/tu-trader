@@ -1,5 +1,6 @@
 import json
 from classes.binance import Binance
+from classes.test_bin import TestBinance
 from utils.constants import dfs_dir, klines_dir
 from utils.functions import chandelier_exit, date_str_to_timestamp, heikin_ashi, parse_klines, tu_path
 import os
@@ -7,13 +8,13 @@ import os
 # ETH -> 2021 -> 2022
 # BTC -> 2022
 symbols = ['SOLUSDT']
-years = [ 2020, 2023]
-intervals = [15]
+years = [ 2022 ]
+intervals = [5]
 
 
-def main():
+def dld(parse = False):
     print("Begin download...")
-    _bin: Binance = Binance()
+    _bin = TestBinance()
 
     for year in years:
         print(f'\nYear {year}')
@@ -39,8 +40,10 @@ def main():
 
                 klines = _bin.get_klines(symb, start=date_str_to_timestamp(
                     f"{year}-01-01 00:00:00"), end=date_str_to_timestamp(f"{year}-12-31 23:59:00"), interval=interval, save_fp=klines_fp)
-                #df = chandelier_exit(heikin_ashi(parse_klines(klines)))
-                #df.to_csv(fp)
+                
+                if parse:
+                    df = chandelier_exit(heikin_ashi(parse_klines(klines)))
+                    df.to_csv(fp)
                 print(f"DONE interval: {interval}\n")
 
             print(f"DONE SYMB: {symb}\n")
@@ -74,4 +77,4 @@ def create():
             for interval in intervals:
                 create_dfs(year, interval, symb)
 
-create()
+dld(True)

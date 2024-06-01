@@ -1,10 +1,10 @@
 import NextLink from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { IDropdownMenuItem } from "../utils/interfaces";
 import { sleep } from "../utils/funcs";
 import { Dropdown, DropdownProps } from "react-daisyui";
 import $ from "jquery";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import { CtxTeleport } from "../layouts/Default";
 import { Root, createRoot } from "react-dom/client";
 
@@ -17,6 +17,50 @@ interface IProps extends DropdownProps {
 let theMenu : any = null
 let root: Root;
 let menuId: string | null
+
+interface IMenuProps {x?: number, y?: number, items: IDropdownMenuItem[]; setIsOpen: (val: boolean)=> void, router: NextRouter}
+
+const MenuJSX: FC<IMenuProps> = ({x, y, items, setIsOpen, router}) => {
+
+    const ref = useRef<HTMLUListElement>(null)
+
+
+    useEffect(()=>{
+
+        const anchors = ref.current?.querySelectorAll("a")
+        anchors?.forEach(a=>{
+            const href = a.href
+            a.addEventListener("click", e=>{
+                e.preventDefault()
+                e.stopPropagation()
+                router.push(href)
+            })
+        })
+    }, [ref.current])
+    return ( <ul ref={ref}
+        style={{
+            top: y ?? 0,
+            left: x ?? x,
+            //display: isOpen ? "unset" : "none",
+        }}
+        className="dropdown-content menu p-2 rounded-box fixed z-[10] w-25 bg-base-200 shadow-md border-card border-1 br-6"
+        >
+        {items.map((item, i) => (
+            <li key={`item-${i*1}`}
+                onClick={async (e) => {
+                    const ret = await item.onTap(e);
+                    if (ret) {
+                        setIsOpen(false);
+                        $("#click-me").trigger("click");
+                    }
+                }}
+            >
+                {item.child}
+            </li>
+        ))}
+        </ul>  );
+}
+ 
 
 const TuDropdownBtn: React.FC<IProps> = ({ toggler, items, ...args }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -59,30 +103,10 @@ const TuDropdownBtn: React.FC<IProps> = ({ toggler, items, ...args }) => {
     }
    
 
-    const menuJSX = (x?: any, y?: any)=><div
-    style={{
-        top: y ?? pos.y,
-        left: x ?? pos.x,
-        //display: isOpen ? "unset" : "none",
-    }}
-    className="dropdown-content menu p-2 rounded-box fixed z-[10] w-25 bg-base-200 shadow-md border-card border-1 br-6"
->
-    {items.map((item, i) => (
-        <li key={`item-${i*1}`}
-            onClick={async (e) => {
-                const ret = await item.onTap(e);
-                if (ret) {
-                    setIsOpen(false);
-                    $("#click-me").trigger("click");
-                }
-            }}
-        >
-            {item.child}
-        </li>
-    ))}
-</div> 
+   
 
 const toggleDropdown = (e: any) => {
+    
         e.preventDefault()
         e.stopPropagation()
         let menu : HTMLDivElement= menuRef.current
@@ -113,8 +137,7 @@ const toggleDropdown = (e: any) => {
        root = createRoot($("#ctx-overlay")[0])
         //theMenu = menuClone
         menuId = `menu-${Date.now()}`
-
-        root.render( <div id={menuId}>{ menuJSX(_pos.x, _pos.y)}</div>)
+        root.render( <div id={menuId}><MenuJSX router={router} x={_pos.x} y={_pos.y} setIsOpen={setIsOpen} items={items}/></div>)
         updateListener()
     };
     return (
@@ -122,7 +145,7 @@ const toggleDropdown = (e: any) => {
             <div className="toggler pointer" onClick={toggleDropdown}>
                 {toggler}
             </div>
-          <div style={{position: "absolute", visibility: 'hidden', display: 'block'}} className="" ref={menuRef}>{menuJSX()}</div> 
+          <div style={{position: "absolute", visibility: 'hidden', display: 'block'}} className="" ref={menuRef}><MenuJSX router={router} x={pos.x} y={pos.y} setIsOpen={setIsOpen} items={items}/></div> 
             
         </div>
     );

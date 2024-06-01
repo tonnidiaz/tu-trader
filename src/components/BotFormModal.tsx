@@ -24,7 +24,7 @@ interface IProps extends ModalProps {
 const BotFormModal: FC<IProps> = ({
     onDone,
     setRef,
-    mode = "create",
+    mode = "Create",
     ...props
 }) => {
     const [err, setErr] = useState("");
