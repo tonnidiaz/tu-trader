@@ -8,7 +8,7 @@ class Binance:
 
     inst = None
     def __init__(self,  bot: Bot) -> None:
-        print(f"{bot.name}\tINIT BINANCE...")
+        #print(f"{bot.name}\tINIT BINANCE...")
         self.bot = bot
 
     def get_klines(self, symbol = None, start = None, end = None, interval = None, save_fp = None):

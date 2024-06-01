@@ -7,9 +7,9 @@ import os
 
 # ETH -> 2021 -> 2022
 # BTC -> 2022
-symbols = ['SOLUSDT']
-years = [ 2022 ]
-intervals = [5]
+symbols = ['DOGEUSDT', 'ETHUSDT']
+years = [ 2023 ]
+intervals = [15]
 
 
 def dld(parse = False):
