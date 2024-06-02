@@ -86,8 +86,8 @@ socketio = SocketIO(app)
 socketio.init_app(app, cors_allowed_origins="*", logger=False, engineio_logger=False)
 
 @socketio.on('connect')
-def test_connect(msg):
-    print(f'Connected: {msg}')
+def test_connect():
+    print(f'Connected')
     return
     if msg:
         uname = msg.get('username')
@@ -102,8 +102,8 @@ def test_connect(msg):
         
 
 @socketio.on('disconnect')
-def test_disconnect(msg):
-    print('Client disconnected: ', msg)
+def test_disconnect():
+    print('Client disconnected: ')
 
 @socketio.on('backtest')
 def _on_backtest(data):

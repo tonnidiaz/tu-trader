@@ -16,7 +16,7 @@ const BotCard: React.FC<IProps> = ({ bot, updateBot }) => {
 
     return (
         <NextLink
-            href={`/bots/${bot.id}`}
+            href={`/bots/${bot._id}`}
             className="border-1 border-card bg-base-200 p-4 br-10 bot-card"
         >
             <div className="flex gap- justify-between">

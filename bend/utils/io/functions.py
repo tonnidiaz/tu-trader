@@ -14,7 +14,7 @@ from strategies.ce_sma_strategies import strategies as ce_sma_strategies
 from utils.constants import klines_dir, dfs_dir
 
 test = False
-
+ 
 def on_backtest(body):
     try:
         """ username = body.get('username')

@@ -3,7 +3,7 @@ from classes.strategy import Strategy
 
 class Str_1(Strategy):
     
-    def __init__(self):
+    def __init__(self): 
         self.name = "Strategy 1"
         self.desc = """Exists when SMA_20 > SMA_50 and also there is a sell signal """
     

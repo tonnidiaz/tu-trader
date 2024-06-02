@@ -77,4 +77,11 @@ def create():
             for interval in intervals:
                 create_dfs(year, interval, symb)
 
-dld(True)
+symb = "BTCUSDT"
+def fun(symb: str, start: str, end: str):
+    _bin = TestBinance()
+    klines = _bin.get_klines(symb, start=date_str_to_timestamp(
+                    f"{start}"), end=date_str_to_timestamp(f"{end}"), interval=15, save_fp=f'data/{symb}.json')
+    print("DONE")
+
+fun(symb, "2024-04-02 00:00:00", "2024-06-01 23:59:00")

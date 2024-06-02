@@ -11,13 +11,16 @@ export const sleep = async (ms: number) => {
 };
 export const activateBot = async (el: any, bot: IObj, updateBot?: any) => {
     try {
+        console.log(bot);
         el.innerHTML = `<span class="loading loading-dots loading-sm m-auto"></span>`;
         const val = !bot.active;
-        const res = await api(true).post(`/bots/${bot.id}/edit`, {
+        const res = await api(true).post(`/bots/${bot._id}/edit`, {
             key: "active",
             val: val,
-        });
+        }); 
+        console.log(res.data);
         if (updateBot) updateBot(res.data);
+        el.innerHTML = `<span>${res.data.active ? "Deactivate" : "Activate"}</span>`;
         return true;
     } catch (err) {
         console.log(err);

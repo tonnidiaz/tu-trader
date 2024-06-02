@@ -343,13 +343,13 @@ const Backtest = () => {
                                     </div>
                                 )}
                                 <button
-                                    disabled={
+                                    disabled={ 
                                         !(
                                             formData.bal > 0 &&
                                             formData.symbol != null
                                         ) ||
-                                        (Object.keys(msg).length > 0 &&
-                                            !msg.err)
+                                        ((Object.keys(msg).length > 0 &&
+                                            !msg.err))
                                     }
                                     className="btn btn-primary w-full"
                                     type="submit"

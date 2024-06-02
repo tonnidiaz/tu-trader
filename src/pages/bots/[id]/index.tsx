@@ -63,11 +63,7 @@ const BotPage: FC<IProps> = ({ bot, err }) => {
     }, [bot]);
 
     useEffect(() => {
-        console.log(
-            toSelectStrategies(appStore.strategies).find(
-                (el) => el.value == bot.strategy
-            )
-        );
+        
     }, []);
     return err ? (
         <Error statusCode={err.code} title={err.msg} />

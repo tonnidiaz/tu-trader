@@ -1,20 +1,19 @@
 {
 	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "bend"
-		},
-		{
-			"path": "../../../Python/Bots/ENV/1"
-		},
-		{
-			"path": "../../../../GitHub/tunedstreamz"
-		},
-		{
-			"path": "../../../../GitHub/tunedbass"
-		}
-	],
-    "settings": {}
+        {
+            "path": "."
+        },
+        {
+            "path": "bend"
+        },
+        {
+            "path": "../../../../GitHub/tunedbass"
+        },
+        {
+            "path": "bend-express"
+        }
+    ],
+    "settings": {
+        "liveServer.settings.multiRootWorkspaceName": "tu-trader-next"
+    }
 }

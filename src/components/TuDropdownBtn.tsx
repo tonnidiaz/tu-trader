@@ -31,9 +31,10 @@ const MenuJSX: FC<IMenuProps> = ({x, y, items, setIsOpen, router}) => {
         anchors?.forEach(a=>{
             const href = a.href
             a.addEventListener("click", e=>{
+                console.log(e.target, href);
                 e.preventDefault()
                 e.stopPropagation()
-                router.push(href)
+                router.push(href,)
             })
         })
     }, [ref.current])
