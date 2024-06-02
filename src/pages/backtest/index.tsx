@@ -135,7 +135,7 @@ const Backtest = () => {
                                                     {data["side"].toUpperCase()}
                                                 </td>
                                                 <td className="px-6 py-4 text-gray-300">
-                                                    {res.ccy} {data["close"]}
+                                                    {res.ccy} {data["close"] ?? data.c}
                                                 </td>
                                                 <td className="px-6 py-4 text-gray-300">
                                                     {data["side"] == "buy"
