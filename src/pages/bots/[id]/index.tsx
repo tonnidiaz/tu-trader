@@ -60,6 +60,7 @@ const BotPage: FC<IProps> = ({ bot, err }) => {
 
     useEffect(() => {
         if (bot) setBot(bot);
+        console.log(bot);
     }, [bot]);
 
     useEffect(() => {
@@ -182,7 +183,7 @@ const BotPage: FC<IProps> = ({ bot, err }) => {
                     name: bot.name,
                     desc: bot.desc,
                     demo: bot.demo,
-                    id: bot.id,
+                    id: bot._id,
                     pair: selectSymbols.find(
                         (el) =>
                             el.value.toString() ==
