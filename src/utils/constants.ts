@@ -24,6 +24,7 @@ export const symbols =[
     ["OKB", "USDT"],
     ["MATIC", "USDT"],
     ["XRP", "USDT"],
+    ["BNB", "USDC"],
     ["PEPE", "USDT"],
     ["CEL", "USDT"],
     ["PEOPLE", "USDT"],
