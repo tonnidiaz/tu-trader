@@ -146,7 +146,7 @@ const BotPage: FC<IProps> = ({ bot, err }) => {
                                     <TuStat
                                         title="Strategy"
                                         valClasses="wp-wrap"
-                                        value={appStore.strategies[_bot.strategy]?.name}
+                                        value={appStore.strategies[_bot.strategy - 1]?.name}
                                     />
                                 </div>
                                 <div className="mt-1">
