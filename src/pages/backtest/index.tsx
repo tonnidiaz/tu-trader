@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import $ from 'jquery'
 import TuSelect from "@/src/components/TuSelect";
 import TuStat from "@/src/components/TuStat";
+import { formatter } from "@/src/utils/funcs";
 
 const initRes = { data: {} };
 
@@ -83,7 +84,7 @@ const Backtest = () => {
                     <div className="my-2 flex gap-10">
                         <div className="stats shadow">
                             <TuStat title="Trades" value={res.trades ?? 0}/>
-                            <TuStat title="Profit" value={`${res.ccy ?? ""} ${res.profit ?? 0}`}/>
+                            <TuStat title="Profit" value={`${res.ccy ?? ""} ${formatter.format(res.profit ?? 0).replace('$', '')}`}/>
                             <TuStat title="G" value={`${res.gain ?? 0}%`}/>
                             <TuStat title="L" value={`${res.loss ?? 0}%`}/>
                         </div>

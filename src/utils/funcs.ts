@@ -1,6 +1,13 @@
 import $ from "jquery";
 import { api } from "./constants";
 import { IObj } from "./interfaces";
+
+ export const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+  })
+
 export function openDrawer() {
     const drawer = $(".drawer");
     drawer.addClass("open");
