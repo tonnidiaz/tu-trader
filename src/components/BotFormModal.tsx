@@ -202,7 +202,6 @@ const BotFormModal: FC<IProps> = ({
                             id="desc"
                             name="desc"
                             placeholder="Write short description for your bot..."
-                            maxLength={50}
                             value={fd.desc}
                             onChange={e=>{setFD({...fd, desc: e.target.value})}}
                         />
