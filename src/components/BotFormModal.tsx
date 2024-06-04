@@ -54,7 +54,7 @@ const BotFormModal: FC<IProps> = ({
         try {
             
             setErr("");
-            let data : IObj= { ...fd, amt: Number(fd.amt ?? 0),interval: Number(fd.interval.value), pair: fd.pair.value, strategy: Number(fd.strategy.value), };
+            let data : IObj= { ...fd, start_amt: Number(fd.start_amt ?? 0),interval: Number(fd.interval.value), pair: fd.pair.value, strategy: Number(fd.strategy.value), };
 
             data = mode == "Create" ? {...data,  user: userStore.user?.username} : {key: "multi", val: data} 
             console.log(data);
@@ -116,19 +116,19 @@ const BotFormModal: FC<IProps> = ({
                         </div>
                     </div>
                    {mode == "Create" &&   <div className="form-group">
-                        <label className="label" htmlFor="amt">
+                        <label className="label" htmlFor="start_amt">
                             <span className="label-text">Start amount</span>
                         </label>
                       <Input
-                            id="amt"
+                            id="start_amt"
                             required
-                            value={fd.amt}
+                            value={fd.start_amt}
                             onChange={(e) => {
                                 const val: any = e.target.value;
                                 if (isNaN(val)) return;
                                 setFD({
                                     ...fd,
-                                    amt: e.target.value,
+                                    start_amt: e.target.value,
                                 });
                             }}
                             placeholder="Enter start amount..."
