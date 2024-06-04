@@ -36,8 +36,10 @@ const DefaultLayout = ({
 
     const getStrategies = async () => {
         try {
+            console.log("GETTING STRATEGIES...");
             const res = await api().get("/strategies");
             dispatch(setStrategies(res.data));
+            console.log("GOT THE STRATEGIES");
         } catch (error) {
             console.log(error);
         }
