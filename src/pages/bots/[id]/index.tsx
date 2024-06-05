@@ -137,7 +137,7 @@ const BotPage: FC<IProps> = ({ bot, err }) => {
                                     />
                                     <TuStat
                                         title="Current amount"
-                                        value={_bot.curr_amt ?? 0}
+                                        value={`${(_bot.curr_amt ?? 0).toFixed(2)}`}
                                     />
                                     <TuStat
                                         title="Interval"
