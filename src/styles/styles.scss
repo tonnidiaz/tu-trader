@@ -65,7 +65,7 @@ body,
    background-color: var(--fallback-b1,oklch(var(--b1)/1));
     * {
         &::-webkit-scrollbar-track {
-            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            -webkit-box-shadow: inset 0 0 6px var(--p);//rgba(0, 0, 0, 0.3);
             //background-color: #6666;
             height: 2px !important;
             width: 2px !important;
