@@ -64,9 +64,10 @@ const UserBotsPage: FC<IProps> = ({ bots, error }) => {
     };
 
     const updateBots = (val: IObj) => {
-        const bots = userStore.bots.map((el) => {
-            return el.id == val.id ? val : el;
-        });
+        let bots = [...userStore.bots]
+        const botIndex = bots.findIndex(el=> el._id == val._id)
+        console.log(botIndex);
+        bots[botIndex] = val
         dispatch(setBots(bots));
     };
     return error ? (
