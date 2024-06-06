@@ -4,13 +4,10 @@
             "path": "."
         },
         {
-            "path": "bend"
-        },
-        {
-            "path": "../../../../GitHub/tunedbass"
-        },
-        {
             "path": "bend-express"
+        },
+        {
+            "path": "../../../Python/Bots/scraper"
         }
     ],
     "settings": {

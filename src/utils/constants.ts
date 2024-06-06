@@ -1,4 +1,5 @@
 import axios from "axios";
+import bybit_coins from "../data/bybit_coins.json"
 import { io } from "socket.io-client";
 const SITE = "TuTrader";
 const __DEV__ = process.env.NODE_ENV == "development";
@@ -14,7 +15,7 @@ export { SITE, __DEV__, ROOT };
 
 export const STORAGE_KEYS = {authTkn: "TB_AUTH_TOKEN"}
 
-export const symbols =[
+export const symbols =true ? bybit_coins:[
     ["BTC", "USDT"],
     ["ETH", "USDT"],
     ["SOL", "USDT"],
