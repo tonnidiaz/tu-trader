@@ -120,7 +120,7 @@ const Backtest = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {Object.keys(res.data).slice(0, 500).map(
+                                {Object.keys(res.data).slice(0,).map(
                                     (ts: any, i: any) => {
                                         const data = res.data[ts];
                                         return (
