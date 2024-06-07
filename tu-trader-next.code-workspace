@@ -8,6 +8,9 @@
         },
         {
             "path": "../../../Python/Bots/scraper"
+        },
+        {
+            "path": "../../../Express/tu-trader-express"
         }
     ],
     "settings": {

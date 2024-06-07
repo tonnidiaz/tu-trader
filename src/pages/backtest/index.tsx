@@ -64,9 +64,9 @@ const Backtest = () => {
         try {
             const data = formData;
             const start = data.start
-                ? data.start.split("T").join(" ") + ":00"
+                ? data.start.split("T").join(" ") + ":00 GMT+2"
                 : null;
-            const end = data.end ? data.end.split("T").join(" ") + ":00" : null;
+            const end = data.end ? data.end.split("T").join(" ") + ":00 GMT+2" : null;
             const fd = { ...data, start, end, username: "tonnidiaz", symbol: data.symbol.value };
             console.log(fd);
             setRes(initRes);
