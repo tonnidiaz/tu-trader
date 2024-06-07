@@ -2,7 +2,12 @@ import BotFormModal from "@/src/components/BotFormModal";
 import TuMeta from "@/src/components/TuMeta";
 import TuStat from "@/src/components/TuStat";
 import { RootState } from "@/src/redux/store";
-import { SITE, api, selectIntervals, selectSymbols } from "@/src/utils/constants";
+import {
+    SITE,
+    api,
+    selectIntervals,
+    selectSymbols,
+} from "@/src/utils/constants";
 import { activateBot, toSelectStrategies } from "@/src/utils/funcs";
 import { IObj } from "@/src/utils/interfaces";
 import Error from "next/error";
@@ -52,20 +57,27 @@ export const getServerSideProps = async ({ query }: { query: IObj }) => {
     }
 };
 
+enum EOrder {all, win, lose}
 const BotPage: FC<IProps> = ({ bot, err }) => {
     const [_bot, setBot] = useState<IObj>({});
     const [botModal, setBotModal] = useState<HTMLDialogElement>();
-
+    const [orders, setOrders] = useState<IObj[]>([]);
+    const [orderType, setOrderType] = useState<EOrder>(EOrder.all)
     const appStore = useSelector((state: RootState) => state.app);
 
     useEffect(() => {
-        if (bot) setBot(bot);
-        console.log(bot);
+        if (bot) {
+            setBot(bot);
+            //setOrders(bot.orders);
+            setOrders(bot.orders.filter(el=> orderType == EOrder.win ? el.prifit > 0 : orderType == EOrder.lose ? el.profit < 0 : true ))
+        }
     }, [bot]);
 
     useEffect(() => {
-        
-    }, []);
+        setOrders(bot.orders.filter(el=> orderType == EOrder.win ? el.prifit > 0 : orderType == EOrder.lose ? el.profit < 0 : true ))
+
+    }, [orderType]);
+
     return err ? (
         <Error statusCode={err.code} title={err.msg} />
     ) : (
@@ -107,12 +119,31 @@ const BotPage: FC<IProps> = ({ bot, err }) => {
                 </div>
                 <div className="mt-">
                     <div className="stats text-center flex">
-                        <div className="stat m-auto">
-                            <span className="stat-title">Total orders:</span>
-                            <span className="stat-value">
-                                {_bot.orders?.length ?? 0}
-                            </span>
-                        </div>
+                        <TuStat
+                            value={
+                                _bot.orders?.filter((el) => el.profit < 0)
+                                    ?.length ?? 0
+                            }
+                            titleClasses={orderType == EOrder.lose ?"text-white": ""}
+                            valClasses={orderType == EOrder.lose ?"text-white": ""}
+                            onClick={()=>setOrderType(EOrder.lose)}
+                            title="L:"
+                        />
+                        <TuStat
+                            value={_bot.orders?.length ?? 0}
+                            title="Total orders:"
+                            onClick={()=>setOrderType(EOrder.all)}
+                        />
+                        <TuStat
+                            value={
+                                _bot.orders?.filter((el) => el.profit > 0)
+                                    ?.length ?? 0
+                            }
+                            titleClasses={orderType == EOrder.win ?"text-white": ""}
+                            valClasses={orderType == EOrder.win ?"text-white": ""}
+                            onClick={()=>setOrderType(EOrder.win)}
+                            title="W:"
+                        />
                     </div>
                     <div>
                         <details className="collapse collapse-arrow border border-card bg-base-100">
@@ -137,7 +168,9 @@ const BotPage: FC<IProps> = ({ bot, err }) => {
                                     />
                                     <TuStat
                                         title="Current amount"
-                                        value={`${(_bot.curr_amt ?? 0).toFixed(2)}`}
+                                        value={`${(_bot.curr_amt ?? 0).toFixed(
+                                            2
+                                        )}`}
                                     />
                                     <TuStat
                                         title="Interval"
@@ -146,7 +179,11 @@ const BotPage: FC<IProps> = ({ bot, err }) => {
                                     <TuStat
                                         title="Strategy"
                                         valClasses="wp-wrap"
-                                        value={appStore.strategies[_bot.strategy - 1]?.name}
+                                        value={
+                                            appStore.strategies[
+                                                _bot.strategy - 1
+                                            ]?.name
+                                        }
                                     />
                                 </div>
                                 <div className="mt-1">
@@ -162,7 +199,7 @@ const BotPage: FC<IProps> = ({ bot, err }) => {
                     <fieldset className="formset border-1 border-card  p-2 mt-2">
                         <legend>Orders</legend>
                         <div className="mt-2 overflow-y-scroll">
-                            {_bot.orders?.map((el: IObj, i: number) => (
+                            {orders.map((el: IObj, i: number) => (
                                 <div key={`item-${i * 1}`}>
                                     <JSONTree
                                         theme={theme}
@@ -196,7 +233,6 @@ const BotPage: FC<IProps> = ({ bot, err }) => {
                     interval: selectIntervals.find(
                         (el) => el.value == bot.interval
                     ),
-                
                 }}
                 setRef={setBotModal}
                 mode="Edit"
