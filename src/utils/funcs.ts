@@ -35,6 +35,22 @@ export const activateBot = async (el: any, bot: IObj, updateBot?: any) => {
         return false;
     }
 };
+export const clearBotOrders = async (el: any, bot: IObj, updateBot?: any) => {
+    try {
+        console.log(bot);
+        el.innerHTML = `<span class="loading loading-dots loading-sm m-auto"></span>`;
+        const res = await api(true).post(`/bots/${bot._id}/clear-orders`)
+
+        if (updateBot) updateBot(res.data);
+        el.innerHTML = `<span>Clear orders}</span>`;
+        return true;
+    } catch (err) {
+        console.log(err);
+        el.innerHTML = `<span>Clear orders</span>`;
+        return false;
+    }
+
+};
 
 export const toSelectStrategies = (strategies: IObj[]) =>
     strategies.map((e, i) => ({

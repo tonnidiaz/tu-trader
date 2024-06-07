@@ -13,6 +13,7 @@ import { Root, createRoot } from "react-dom/client";
 interface IProps extends DropdownProps {
     toggler: React.ReactElement;
     items: IDropdownMenuItem[];
+    
 }
 let theMenu : any = null
 let root: Root;
@@ -47,7 +48,8 @@ const MenuJSX: FC<IMenuProps> = ({x, y, items, setIsOpen, router}) => {
         className="dropdown-content menu p-2 rounded-box fixed z-[10] w-25 bg-base-200 shadow-md border-card border-1 br-6"
         >
         {items.map((item, i) => (
-            <li key={`item-${i*1}`}
+            <li key={`item-${i*1}`} 
+                className={item.disabled ? "disabled" : ""}
                 onClick={async (e) => {
                     const ret = await item.onTap(e);
                     if (ret) {

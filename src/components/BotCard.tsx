@@ -4,7 +4,7 @@ import React from "react";
 import NextLink from "next/link";
 import TuDropdownBtn from "./TuDropdownBtn";
 import { api } from "../utils/constants";
-import { activateBot, sleep } from "../utils/funcs";
+import { activateBot, clearBotOrders, sleep } from "../utils/funcs";
 interface IProps {
     bot: IObj;
     updateBot?: (bot: IObj) => void;
@@ -72,7 +72,7 @@ const BotCard: React.FC<IProps> = ({ bot, updateBot }) => {
                                 ),
                                 onTap: async (e)=> await activateBot(e.target.parentElement, bot, updateBot),
                             },
-                            {child: <span>Hellow world!</span>, onTap: (e)=>{}}
+                            {child: <span >Clear orders</span>, onTap: async (e)=> await clearBotOrders(e.target.parentElement, bot, updateBot), disabled: !bot.orders.length}
                         ]}
                     />
                 </div>
