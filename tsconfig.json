@@ -24,6 +24,6 @@
       }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-    "exclude": ["node_modules", "bend", "bend-express", "node_modules_*", ]
+    "exclude": ["node_modules", "bend", "bend-express", "node_modules_*", "src/pgs"]
   }
   
