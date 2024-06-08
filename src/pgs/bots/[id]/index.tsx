@@ -69,12 +69,13 @@ const BotPage: FC<IProps> = ({ bot, err }) => {
         if (bot) {
             setBot(bot);
             //setOrders(bot.orders);
+            if(bot.orders)
             setOrders(bot.orders.filter(el=> orderType == EOrder.win ? el.prifit > 0 : orderType == EOrder.lose ? el.profit < 0 : true ))
         }
     }, [bot]);
 
     useEffect(() => {
-        setOrders(bot.orders.filter(el=> orderType == EOrder.win ? el.prifit > 0 : orderType == EOrder.lose ? el.profit < 0 : true ))
+        setOrders(bot.orders.filter(el=> orderType == EOrder.win ? el.profit > 0 : orderType == EOrder.lose ? el.profit < 0 : true ))
 
     }, [orderType]);
 

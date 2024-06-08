@@ -21,7 +21,7 @@ const TuMeta: React.FC<IProps> = ({
     const _description = `${SITE} is an automated trading bot from TunedBass`;
 
     return (
-        <Head>
+        <>
             <title>{title}</title>
             <meta name="description" content={`${desc}\n${_description}`} />
             <meta name="keywords" content={`${_keywords},${keywords}`} />
@@ -46,7 +46,7 @@ const TuMeta: React.FC<IProps> = ({
             <meta name="author" content="Tonni DIaz" />
             <meta name="publisher" content="Tonni DIaz" />
             <meta name="copyright" content="Tunedbass" />
-        </Head>
+        </>
     );
 };
 

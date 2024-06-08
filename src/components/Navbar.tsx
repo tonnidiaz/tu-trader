@@ -5,12 +5,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Avatar, Dropdown, Navbar as NB } from "react-daisyui";
 import { sleep } from "../utils/funcs";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 const Navbar = () => {
     const userStore = useSelector((state: RootState) => state.user);
-    const router = useRouter();
+    const pathname = usePathname();
 
     useEffect(()=>{
     },[])
@@ -120,7 +120,7 @@ const Navbar = () => {
                     />
                 ) : (
                     <NextLink
-                        href={`/auth/login?red=${router.asPath}`}
+                        href={`/auth/login?red=${location.href.replace(location.origin, "")}`}
                         className="btn btn-sm btn-outline btn-primary"
                     >
                         Login

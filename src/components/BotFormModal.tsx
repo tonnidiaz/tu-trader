@@ -37,9 +37,13 @@ const BotFormModal: FC<IProps> = ({
 
     useEffect(() => {
         if (ref.current) setRef(ref.current);
+        
     }, [ref.current]);
 
-
+useEffect(()=>{
+    if (props.fd)
+    setFD(props.fd)
+}, [props.fd])
 
     const createNewApp = async (e: any) => {
         e.preventDefault();

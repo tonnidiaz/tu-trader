@@ -14,7 +14,7 @@ export const SITE_SLOGAN = "A Tunedbass site";
 export { SITE, __DEV__, ROOT };
 
 export const STORAGE_KEYS = {authTkn: "TB_AUTH_TOKEN"}
-
+export const pagesWithLayout : string[] = ["/auth/login", "/auth/logout", "/auth/signup"]
 export const symbols =true ? bybit_coins:[
     ["BTC", "USDT"],
     ["ETH", "USDT"],

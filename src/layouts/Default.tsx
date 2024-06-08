@@ -1,7 +1,8 @@
+"use client"
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import { api } from "../utils/constants";
+import { api, pagesWithLayout } from "../utils/constants";
 import { useEffect } from "react";
 import { setUser } from "../redux/reducers/user";
 import { createTeleporter } from "react-teleporter";
@@ -46,6 +47,7 @@ const DefaultLayout = ({
     };
 
     const init = async () => {
+        console.log(pagesWithLayout.indexOf(location.pathname ) == -1 );
         await getUser();
         await getStrategies();
         dispatch(setReady(true));
@@ -54,11 +56,11 @@ const DefaultLayout = ({
       <Loader/>
     ) : (
         <>
-            <Navbar></Navbar>
-            <div className="tu-app">
-                <Sidebar></Sidebar>
+            { pagesWithLayout.indexOf(location.pathname ) == -1 && <Navbar></Navbar>}
+            <div className={pagesWithLayout.indexOf(location.pathname ) == -1 ? "tu-app" : ""}>
+            { pagesWithLayout.indexOf(location.pathname ) == -1 && <Sidebar></Sidebar>}
                 <main>{children}</main>
-            </div>{" "}
+            </div>
             <div id="ctx-overlay"></div>
         </>
     );

@@ -4,9 +4,10 @@ import { IDropdownMenuItem } from "../utils/interfaces";
 import { sleep } from "../utils/funcs";
 import { Dropdown, DropdownProps } from "react-daisyui";
 import $ from "jquery";
-import { NextRouter, useRouter } from "next/router";
+import { useRouter, usePathname } from "next/navigation";
 import { CtxTeleport } from "../layouts/Default";
 import { Root, createRoot } from "react-dom/client";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 
 
@@ -19,7 +20,7 @@ let theMenu : any = null
 let root: Root;
 let menuId: string | null
 
-interface IMenuProps {x?: number, y?: number, items: IDropdownMenuItem[]; setIsOpen: (val: boolean)=> void, router: NextRouter}
+interface IMenuProps {x?: number, y?: number, items: IDropdownMenuItem[]; setIsOpen: (val: boolean)=> void, router: AppRouterInstance}
 
 const MenuJSX: FC<IMenuProps> = ({x, y, items, setIsOpen, router}) => {
 
@@ -73,6 +74,7 @@ const TuDropdownBtn: React.FC<IProps> = ({ toggler, items, ...args }) => {
     const testRef = useRef<HTMLDivElement>(null);
 
     const router = useRouter();
+    const pathname = usePathname()
 
     
     useEffect(() => {
@@ -85,7 +87,7 @@ const TuDropdownBtn: React.FC<IProps> = ({ toggler, items, ...args }) => {
 
     useEffect(() => {
         setIsOpen(false);
-    }, [router.pathname]);
+    }, [pathname]);
 
     useEffect(()=>{
         if (!isOpen && root) {

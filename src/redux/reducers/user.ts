@@ -11,11 +11,11 @@ const userSlice = createSlice({
         setUser: (state, {payload}) =>{
             state.user = payload
         },
-        setApps: (state, {payload}) =>{
+        setBots: (state, {payload}) =>{
             state.bots = payload
         }
     }
 })
 
-export const {setUser, setApps} = userSlice.actions
+export const {setUser, setBots} = userSlice.actions
 export default userSlice.reducer
