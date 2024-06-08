@@ -49,7 +49,7 @@
                         ></span>
                     </div>
                 </button>
-                       <CtxMenu :open="menuOpen" :set-is-open="(val : boolean) =>menuOpen = val">
+                       <CtxMenu v-if="user" :open="menuOpen" :set-is-open="(val : boolean) =>menuOpen = val">
                         <template v-slot:toggler>
                         <div class="avatar btn btn-sm btn-circle ml-4">
                             <div class="w-25px h-25px rounded-full ring text-center"> <span class="text-xl fw-7">T</span></div>
@@ -63,10 +63,19 @@
                     </template>
                         
                     </CtxMenu>
+                    <NuxtLink v-else
+                        :to="`/auth/login?red=${$route.fullPath}`"
+                        class="btn btn-sm btn-outline btn-primary"
+                    >
+                        Login
+                    </NuxtLink>
             </div>
         </div>
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '~/src/stores/user';
+
     const menuOpen = ref(false)
+    const { user } = storeToRefs(useUserStore())
 </script>

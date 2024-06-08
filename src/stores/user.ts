@@ -6,7 +6,7 @@ export const useUserStore = defineStore("user", {
     actions: {
         setUser(val : any){
             this.user = val
-        }
+        },
         setBots(val : any){
             this.bots = val
         }

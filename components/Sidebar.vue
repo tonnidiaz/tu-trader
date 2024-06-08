@@ -8,12 +8,12 @@
         <i class="fi fi-rr-home"></i>
        </NuxtLink>
    </li>
-   <li class="tooltip tooltip-right" data-tip="Apps">
-       <NuxtLink to="/apps">
-        <i class="fi fi-rr-apps"></i>
+   <li class="tooltip tooltip-right" data-tip="Backtest">
+       <NuxtLink to="/backtest">
+        <i class="fi fi-rr-blood-test-tube-alt"></i>
        </NuxtLink>
    </li>
-   <li class="tooltip tooltip-right" data-tip="Contact us">
+<!--    <li class="tooltip tooltip-right" data-tip="Contact us">
        <NuxtLink to="/contact">
         <i class="fi fi-rr-envelope"></i>
        </NuxtLink>
@@ -22,7 +22,7 @@
        <NuxtLink to="/about">
         <i class="fi fi-rr-info"></i>
        </NuxtLink>
-   </li>
+   </li> -->
 </ul>
     </aside>
 </template>
