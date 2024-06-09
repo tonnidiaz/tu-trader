@@ -13,7 +13,7 @@ export default {
     },
 
     darkMode: true,
-    daisyui: {
+    /* daisyui: {
         themes: [
             {
                 tb: {
@@ -38,7 +38,7 @@ export default {
             "night",
             "dracula",
         ],
-    },
-    plugins: [require("daisyui")],
+    }, */
+    //plugins: [require("daisyui")],
 };
  

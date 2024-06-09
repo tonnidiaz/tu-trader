@@ -83,7 +83,7 @@
     }
 }
 .avatar.offline{
-    &:before{@apply bg-warning}
+    //&:before{@apply bg-warning} TODO: Apply warning color
 }
 
 .bot-card {

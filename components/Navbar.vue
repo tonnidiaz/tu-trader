@@ -1,7 +1,7 @@
 <template>
-       <div class="navbar">
+       <div class="navbar flex -tems-center justify-between p-4 w-full">
             <div class="navbar-start">
-                <div class="dropdown">
+                <div class="dropdown hidden">
                     <label tabindex="0" class="btn btn-ghost btn-circle">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -33,22 +33,22 @@
                     </ul>
                 </div>
             </div>
-            <div class="navbar-center">
+            <div class="navbar-center flex">
                 <a href="/" class="btn btn-ghost normal-case text-xl">{{SITE}}</a>
             </div>
-            <div class="navbar-end">
+            <div class="navbar-end flex">
              
-            <button tabindex="0" class="btn btn-ghost btn-circle">
+            <UButton :ui="{rounded: 'rounded-full'}" color="black" tabindex="0" variant="ghost">
                     <i class="fi fi-rr-search"></i>
-                </button>
-                <button class="btn btn-ghost btn-circle">
+                </UButton>
+                <UButton :ui="{rounded: 'rounded-full'}" variant="ghost" color="black">
                     <div class="indicator">
                         <span><i class="fi fi-rr-bell"></i></span>
                         <span
                             class="badge badge-xs badge-primary indicator-item"
                         ></span>
                     </div>
-                </button>
+                </UButton>
                        <CtxMenu v-if="user" :open="menuOpen" :set-is-open="(val : boolean) =>menuOpen = val">
                         <template v-slot:toggler>
                         <div class="avatar btn btn-sm btn-circle ml-4">

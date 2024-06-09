@@ -15,6 +15,8 @@
     "@nuxt/ui": "^2.16.0",
     "@pinia/nuxt": "^0.5.1",
     "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
+    "date-fns": "^2.30.0",
     "jquery": "^3.7.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.1",
@@ -22,11 +24,14 @@
     "nuxt": "^3.11.2",
     "pinia": "^2.1.7",
     "socket.io-client": "^4.7.5",
+    "v-calendar": "^3.1.2",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/jquery": "^3.5.30",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/nodemailer": "^6.4.15",
     "@types/vue-select": "^3.16.8",
     "daisyui": "^4.12.2",

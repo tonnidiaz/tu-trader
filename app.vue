@@ -1,5 +1,5 @@
 <template>
-    <Html lang="en" class="dark" data-theme="dark">
+    <Html lang="en" class="dark" data-theme="">
          <TMeta/>
          <NuxtLayout>
  
