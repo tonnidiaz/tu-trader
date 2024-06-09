@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="toggler pointer" @click="toggleMenu">
+        <div ref="togglerRef" class="toggler pointer" @click="toggleMenu">
             <slot name="toggler" />
         </div>
         <ctx-body ref="menuRef" class=" hidden block" v-if="!open" ><slot name="children"/></ctx-body>
@@ -17,7 +17,7 @@ import CtxBody from "./CtxBody.vue";
 const x = ref(0),
     y = ref(0),
     isOpen = ref(false);
-const menuRef = ref<any>(), menuSkeleton = ref<any>();
+const menuRef = ref<any>(), menuSkeleton = ref<any>(), togglerRef = ref<HTMLDivElement>();
 
 interface ICtxMenuItem {
     onTap: (e: any) => Promise<boolean> | void;
@@ -29,13 +29,20 @@ const props = defineProps({
 });
 
 const toggleMenu = (e: any) => {
+    
     e.preventDefault();
     e.stopPropagation();
-
+    
+    const toggler: HTMLDivElement = togglerRef.value!
+    console.log(toggler);
     let _menu: HTMLDivElement = menuSkeleton.value!;
     const size = { w: $(_menu).width()!, h: $(_menu).height()! };
-    const { clientX, clientY } = e;
-    let _pos = { x: clientX, y: clientY };
+    const togglerRect = toggler.getBoundingClientRect()
+    const winSize = {w: window.innerWidth, h: window.innerHeight}
+
+    const clientX = togglerRect.left//winSize.w - (togglerSize.w ?? 0 / 2);
+    const clientY = togglerRect.top //winSize.h - (togglerSize.h ?? 0 / 2);//{ clientX, clientY } = e;
+    let _pos = { x: clientX + togglerRect.width / 2, y: clientY + togglerRect.height / 2 };
     const rightPos = clientX + size.w;
     const bottomPos = clientY + size.h;
 
@@ -51,9 +58,9 @@ const toggleMenu = (e: any) => {
         _pos.y = newTop;
     }
 
-    (x.value = (_pos.x / window.innerWidth) * 100),
-        (y.value = (_pos.y / window.innerHeight) * 100),
-        props.setIsOpen(true);
+    x.value = _pos.x / window.innerWidth * 100
+    y.value = _pos.y / window.innerHeight * 100
+    props.setIsOpen(true);
 };
 
 const updateListener = () => {

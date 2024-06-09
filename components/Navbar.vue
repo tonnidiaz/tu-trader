@@ -49,20 +49,19 @@
                         ></span>
                     </div>
                 </UButton>
-                       <CtxMenu v-if="user" :open="menuOpen" :set-is-open="(val : boolean) =>menuOpen = val">
-                        <template v-slot:toggler>
-                        <div class="avatar btn btn-sm btn-circle ml-4">
-                            <div class="w-25px h-25px rounded-full ring text-center"> <span class="text-xl fw-7">T</span></div>
-                        </div>
-                     </template>
-                     <template v-slot:children>
-                        <li> <span>Item 1</span></li>
-                        <li> <span>Item 1</span></li>
-                        <li> <span>Item 1</span></li>
-             
+                <div v-if="user">
+                <CtxMenu :open="menuOpen" :set-is-open="(val: boolean)=>menuOpen = val">
+                    <template v-slot:toggler><UAvatar class="pointer"><span class="text-md fw-7">{{ user.username.slice(0,1).toUpperCase() }}</span></UAvatar></template>
+                    <template v-slot:children>
+                        <menu-item to="/profile" icon="i-heroicons-user-circle-16-solid">Profile</menu-item>
+                        <menu-item :to="`/@${user.username}/bots`" icon="fi fi-br-user-robot-xmarks">Bots</menu-item>
+                        <menu-item :to="`/auth/logout`" icon="fi fi-br-sign-out-alt">Logout</menu-item>
                     </template>
-                        
-                    </CtxMenu>
+                    
+                </CtxMenu>
+                </div>
+                
+                       
                     <NuxtLink v-else
                         :to="`/auth/login?red=${$route.fullPath}`"
                         class="btn btn-sm btn-outline btn-primary"
@@ -75,7 +74,15 @@
 
 <script setup lang="ts">
 import { useUserStore } from '~/src/stores/user';
+import CtxMenu from './CtxMenu.vue';
 
     const menuOpen = ref(false)
     const { user } = storeToRefs(useUserStore())
+
+    const menuItems = [
+                    [{
+                        label: "Profile",
+                        icon: 'i-heroicons-user-circle-20-solid',
+                    }]
+                    ]
 </script>

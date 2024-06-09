@@ -1,6 +1,6 @@
 <template>
     <ul ref="menu" style="white-space: nowrap;"
-        class="dropdown-content dropdown-open menu p-2 rounded-box fixed z-[10] bg-base-200 shadow-md border-card border-1 br-6"
+        class="dropdown-content dropdown-open menu divide-y divide-gray-100  p-1  fixed z-[10] bg-gray-700 shadow-md border-card border- br-6"
     >
         <slot />
     </ul>

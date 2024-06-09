@@ -9,7 +9,6 @@
      </Html>
  </template>
  <script setup lang="ts">
- import "@/src/styles/globals.css"
  import "@/src/styles/styles.scss";
  import "@/src/styles/styles2.scss";
  </script>

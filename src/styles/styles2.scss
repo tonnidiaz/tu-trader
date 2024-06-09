@@ -119,7 +119,7 @@ body,
     padding: 0;
     margin: 0;
     font-family: Inter, sans-serif;
-   background-color: var(--fallback-b1,oklch(var(--b1)/1));
+    @apply bg-gray-900;
     * {
         &::-webkit-scrollbar-track {
             -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -135,5 +135,18 @@ body,
         &::-webkit-scrollbar-thumb {
             background-color: var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity)))
         }
+    }
+}
+
+
+.menu{
+    font-size: 15px ;
+    li{
+        cursor: pointer;
+        @apply rounded-md px-2 py-1;
+        border: none !important;
+       &:hover {@apply bg-gray-800;};
+       outline: 2px solid transparent;
+    outline-offset: 2px;
     }
 }
