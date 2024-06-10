@@ -1,0 +1,44 @@
+<template>
+    <UPopover :popper="{ placement: 'bottom-start' }">
+        <UButton icon="i-heroicons-calendar-days-20-solid">
+            {{ format(date.start, "d MMM, yyy, hh:mm") }} -
+            {{ format(date.end, "d MMM, yyy, hh:mm") }}
+        </UButton>
+
+        <template #panel="{ close }">
+            <div
+                class="flex items-center sm:divide-x divide-gray-200 dark:divide-gray-800"
+            >
+                <DatePicker v-model="date" @close="close" />
+            </div>
+        </template>
+    </UPopover>
+</template>
+<script setup lang="ts">
+import { format } from "date-fns";
+
+import type {
+    DatePickerDate,
+    DatePickerRangeObject,
+} from "v-calendar/dist/types/src/use/datePicker.js";
+import "v-calendar/dist/style.css";
+
+const props = defineProps({
+    modelValue: {
+        type: [Date, Object] as PropType<
+            DatePickerDate | DatePickerRangeObject | null
+        >,
+        default: null,
+    },
+});
+
+const emit = defineEmits(["update:model-value", "close"]);
+
+const date = computed({
+    get: () => props.modelValue,
+    set: (value) => {
+        emit("update:model-value", value);
+        emit("close");
+    },
+});
+</script>

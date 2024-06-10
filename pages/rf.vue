@@ -10,13 +10,31 @@
             <u-button :ui="{rounded: 'rounded-full'}"><i class="fi fi-rr-circle-ellipsis"></i></u-button>
         </u-dropdown>
         </div>
+  <USelectMenu
+    searchable
+    searchable-placeholder="Search a person..."
+    class="w-full lg:w-48"
+    placeholder="Select a person"
+    :options="strategies"
+    option-attribute="name"
+    :model-value="strategies[6]"
+  />
+
+
        
     </div>
 </template>
 <script setup lang="ts">
+import { useAppStore } from '~/src/stores/app';
+
+const { strategies } = storeToRefs(useAppStore())
 const items = [
     [{
         label: "Item 1"
     }]
 ]
+
+onMounted(()=>{
+    console.log(strategies);
+})
 </script>

@@ -118,9 +118,12 @@ body,
 #__next {
     padding: 0;
     margin: 0;
-    font-family: Inter, sans-serif;
+    font-weight: 500;
+    font-family: Poppins, monospace;//DM Sans, "DM Sans Fallback: Arial",ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;//Inter, sans-serif;
     @apply bg-gray-900;
+    @apply text-gray-300;
     * {
+       &:not(button){ };
         &::-webkit-scrollbar-track {
             -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
             //background-color: #6666;
@@ -133,20 +136,19 @@ body,
             //background-color: #6666;
         }
         &::-webkit-scrollbar-thumb {
-            background-color: var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity)))
+            background-color: rgb(var(--color-primary-400) / var(--tw-bg-opacity))//var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity)))
         }
     }
 }
 
 
-.menu{
-    font-size: 15px ;
-    li{
-        cursor: pointer;
-        @apply rounded-md px-2 py-1;
-        border: none !important;
-       &:hover {@apply bg-gray-800;};
-       outline: 2px solid transparent;
-    outline-offset: 2px;
-    }
+
+
+button{
+    text-align: center !important;
+    display: flex;
+    justify-content: center;
+}
+.navbar{height: $sidenav-w;
+*{align-self: center;}
 }

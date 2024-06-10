@@ -7,20 +7,18 @@
             >
                 <h2 class="font-bold fs-20">RESULTS</h2>
                 <div class="my-2 flex gap-10">
-                    <div class="stats shadow">
-                        <TuStat title="Trades" :value="res.trades ?? 0" />
-                        <TuStat
-                            title="Profit"
-                            :value="`${res.ccy ?? ''} ${formatter
+                    <TuStats :stats="[{title: 'Trades', subtitle: res.trades ?? 0}, {title: 'Profit', subtitle: `${res.ccy ?? ''} ${formatter
                                 .format(res.profit ?? 0)
-                                .replace('$', '')}`"
-                        />
-                        <TuStat title="G" :value="`${res.gain ?? 0}%`" />
-                        <TuStat title="L" :value="`${res.loss ?? 0}%`" />
-                    </div>
+                                .replace('$', '')}`}, {title: 'W', subtitle: `${(res.gain ?? 0).toFixed(2)}%`}, {title: 'L', subtitle: `${(res.loss ?? 0).toFixed(2)}%`}]"/>
+                  
                 </div>
                 <div class="mt-4 overflow-y-scroll">
+                    <BacktestTable
+                        v-if="true"
+                        :rows="parseData(res)"
+                    />
                     <table
+                        v-else
                         class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
                     >
                         <thead
@@ -75,183 +73,108 @@
             </div>
             <div
                 ref="paramsAreaRef"
-                class="p-4 border-1 border-card br-10 params-area bg-base-100 shadow-lg"
+                class="p-4 border- border-card br-10 params-area bg-gray-900 shadow-lg open"
             >
-                <div class="flex justify-between items-center w-100p mb-2">
-                    <span>{{ fd?.symbol?.value.toString() }}</span>
-                    <button
+                <div class="flex justify-between items-center w-100p p-2 gap-2">
+                    <span>{{ formState?.symbol?.value.toString() }}</span>
+                    <UButton
                         @click="onCtrlBtnClick"
                         class="ctrl-btn btn btn-primary mb-2"
                     >
                         <i class="fi fi-rr-angle-down"></i>
-                    </button>
+                    </UButton>
                 </div>
-                <div class="content">
-                    <TuForm :on-submit="handleSubmit">
-                        <div class="flex flex-col items-center">
-                            <div
-                                class="form-field flex items-center flex-col md:flex-row justify-center gap-4"
-                            >
-                                <div class="flex items-center gap-4">
-                                    <select
-                                        name="strategy"
-                                        id="str"
-                                        class="select select-bordered"
-                                        onMouseDown="{getStrategies}"
-                                        title="Click to update strategies"
-                                        @change="(e: any) => { fd = {...fd,strategy: e.target.value }}"
-                                        :value="fd.strategy"
-                                    >
-                                        <option value="" disabled>
-                                            Strategy
-                                        </option>
-                                        {strategies.map((e, i) => (
-                                        <option
-                                            v-for="(e, i) in strategies"
-                                            :value="i + 1"
-                                            :title="e.desc"
-                                        >
-                                            {e.name}
-                                        </option>
-                                        ))}
-                                    </select>
-                                    <select
-                                        class="select select-bordered"
-                                        @change="(e: any) => { fd = {...fd,interval: e.target.value }}"
-                                        :value="fd.interval"
-                                    >
-                                        <option value="" disabled>
-                                            Interval
-                                        </option>
-                                        <option
-                                            v-for="(e, i) in [5, 15, 30, 60]"
-                                            :value="e"
-                                        >
-                                            {{ e }}m
-                                        </option>
-                                    </select>
-                                </div>
 
-                                <div
-                                    class="flex items-center gap-2"
-                                    title="Use previously downloaded data if available"
-                                >
-                                    <label for="offline"> Offline: </label>
-                                    <input
-                                        @change="(e: any) => { fd = {...fd,offline: e.target.checked }}"
-                                        class="checkbox"
-                                        type="checkbox"
-                                        name="offline"
-                                        id="offline"
-                                        :checked="fd.offline"
-                                    />
-                                </div>
-                            </div>
-                            <div
-                                class="form-field m-auto text-center flex items-center md:items-end flex-col md:flex-row justify-center gap-4"
-                            >
-                                <label>
-                                    <div class="label">
-                                        <span class="label-text">
-                                            Initial balance:
-                                        </span>
-                                    </div>
-                                    <input
-                                        type="text"
-                                        class="input input-bordered w-full sm:w-auto"
-                                        placeholder="Enter balance..."
-                                        :value="fd.bal"
-                                        @change="(e: any) => {
-                                                const val: any = e.target.value;
-                                                if (isNaN(val)) return;
-                                                fd = {
-                                                    ...fd,
-                                                    bal: e.target.value,
-                                                }
-                                            }"
-                                    />
-                                </label>
-                                <div class="flex gap-4">
-                                    <select
-                                        class="select select-bordered"
-                                        @change="(e: any) => { fd = {...fd,lev: e.target.value }}"
-                                        default-value=""
-                                    >
-                                        <option value="" disabled>
-                                            Margin
-                                        </option>
-                                        <option
-                                            v-for="(e, i) in [1, 2, 3, 4, 5]"
-                                            :value="e"
-                                        >
-                                            x{{ e }}
-                                        </option>
-                                    </select>
-                                    <TuSelect
-                                        @change="(e: any) => { fd = {...fd,symbol: e.target.value }}"
-                                        :options="selectSymbols"
-                                        :value="fd.symbol"
+                <div class="content">
+                    <UDivider class="mb-7 mt-2" />
+                    <UForm
+                        :state="formState"
+                        class="space-y-5 flex flex-col items-center"
+                        @submit="handleSubmit"
+                    >
+                        <div class="flex items-center gap-4">
+                            <USelectMenu
+                                searchable
+                                searchable-placeholder="Search strategy..."
+                                placeholder="Strategy"
+                                :options="strategies"
+                                option-attribute="name"
+                                v-model="formState.strategy"
+                            />
+                            <USelectMenu
+                                searchable
+                                searchable-placeholder="Search interval..."
+                                placeholder="Interval"
+                                :options="intervals"
+                                option-attribute="label"
+                                v-model="formState.interval"
+                            />
+                            <UFormGroup>
+                                <UCheckbox
+                                    color="primary"
+                                    label="Offline"
+                                    variant="primary
+                                "
+                                    v-model="formState.offline"
+                                />
+                            </UFormGroup>
+                        </div>
+                        <div class="flex items-end justify-center gap-4">
+                            <UFormGroup label="Start balance">
+                                <UInput
+                                    type="text"
+                                    
+                                    placeholder="Enter start balance..."
+                                    required
+                                    v-model="formState.bal"
+                                />
+                            </UFormGroup>
+                            <div class="flex gap-4">
+                                <UFormGroup label="Margin"
+                                    ><USelectMenu
+                                        placeholder="Margin"
+                                        :options="margins"
+                                        option-attribute="label"
+                                        v-model="formState.lev"
+                                    ></USelectMenu
+                                ></UFormGroup>
+                                <UFormGroup label="Pair"
+                                    ><USelectMenu
                                         placeholder="Pair"
-                                    />
-                                </div>
-                            </div>
-                            <div
-                                class="mt-2 flex flex-col md:flex-row justify-center gap-5"
-                            >
-                                <label>
-                                    <div class="label">
-                                        <span class="label-text"> From: </span>
-                                    </div>
-                                    <TuField
-                                        type="datetime-local"
-                                        :default-value="fd.start"
-                                        @change="(e: any) => { fd = {...fd,start: e.target.value }}"
-                                        hint=""
-                                    />
-                                </label>
-                                <label>
-                                    <div class="label">
-                                        <span class="label-text"> To: </span>
-                                    </div>
-                                    <TuField
-                                        type="datetime-local"
-                                        :default-value="fd.end"
-                                        :disabled="!fd.start"
-                                        :min="fd.start ? fd.start : null"
-                                        :max="
-                                            fd.start
-                                                ? fd.start.split('-')[0] +
-                                                  '-12-31T23:59'
-                                                : undefined
-                                        "
-                                        @change="(e: any) => { fd = {...fd,end: e.target.value }}"
-                                        hint=""
-                                    />
-                                </label>
-                            </div>
-                            <div
-                                class="form-field m-auto text-center mt-5 w-full relative"
-                            >
-                                <div
-                                    v-if="msg.msg"
-                                    class="my-2 p-2 bg-base-300 border-card border-1 br-5"
-                                >
-                                    <span>{{ msg.msg }}</span>
-                                </div>
-                                <button
-                                    :disabled="
-                                        !(fd.bal > 0 && fd.symbol != null) ||
-                                        (Object.keys(msg).length > 0 &&
-                                            !msg.err)
-                                    "
-                                    class="btn btn-primary w-full"
-                                    type="submit"
-                                >
-                                    START
-                                </button>
+                                        :options="selectSymbols"
+                                        option-attribute="label"
+                                        v-model="formState.symbol"
+                                        searchable
+                                        searchable-placeholder="Search pair..."
+                                    ></USelectMenu
+                                ></UFormGroup>
                             </div>
                         </div>
-                    </TuForm>
+                        <div class="flex justify-center">
+                            <UFormGroup>
+                                <TuDatePicker v-model="formState.date" />
+                            </UFormGroup>
+                        </div>
+                        <div
+                            v-if="msg.msg"
+                            class="my-2 text-center p-2 bg-base-300 border-card -1 br-5 w-full"
+                        >
+                            <span>{{ msg.msg }}</span>
+                        </div>
+                        <UButton
+                            :disabled="
+                                !(
+                                    formState.bal > 0 &&
+                                    formState.symbol != null
+                                ) ||
+                                (Object.keys(msg).length > 0 && !msg.err)
+                            "
+                            type="submit"
+                            class="w-full"
+                        >
+                            Start
+                        </UButton>
+                    </UForm>
                 </div>
             </div>
         </div>
@@ -259,25 +182,42 @@
 </template>
 
 <script setup lang="ts">
-import $ from "jquery"
-
+import $ from "jquery";
+import TuDatePicker from "~/components/TuDatePicker.vue";
+import { useAppStore } from "~/src/stores/app";
+const appStore = useAppStore();
 const initRes = { data: {} };
 const res = ref<IObj>(initRes);
-const fd = ref<IObj>({
-    strategy: 1,
-    interval: 15,
-    bal: 1000,
-    offline: true,
-    start: "2021-01-01 00:00",
-    end: "2021-10-28 23:59",
-    symbol: selectSymbols.find((el) => el.value.toString() == "SOL,USDT"),
-});
 
+const { strategies } = storeToRefs(appStore);
 const msg = ref<IObj>({}),
-    strategies = ref<any[]>([]),
     paramsAreaRef = ref<any>();
 
+const intervals = [5, 15, 30, 60].map((e) => ({ label: `${e}m`, value: e }));
+const margins = [1, 2, 3, 4, 5].map((e) => ({ label: `x${e}`, value: e }));
+
+const formState = reactive({
+    strategy: strategies.value[6],
+    interval: intervals[1],
+    bal: 1000,
+    offline: true,
+    lev: margins[0],
+    symbol: selectSymbols.find((el) => el.value.toString() == "SOL,USDT"),
+    date: {
+        start: new Date("2024-06-07 00:00:00"),
+        end: new Date("2024-10-28 23:59:00"),
+    },
+});
+
 const getData = (ts: string) => res.value.data[ts];
+const parseData = (data: IObj) => {
+    let d = Object.keys(data.data).map((ts, i) => {
+        let obj =data.data[ts]
+        obj = {...obj, side: {value: obj.side.toUpperCase(), class:  i % 2 != 0 ? '!text-red-500' : '!text-primary'}, balance: `${obj.side == 'buy' ? data.base : data.ccy} ${obj.balance}\t${obj.profit ?? ''}`, class: i % 2 != 0 ? 'bg-gray-800' : ''}
+        return obj
+    });
+    return d;
+};
 
 const onBacktest = (data: any) => {
     console.log("ON BACKTEST");
@@ -302,23 +242,19 @@ onMounted(() => {
 
 const handleSubmit = async (e: any) => {
     try {
-        let data = fd.value;
-        const start = data.start
-            ? data.start.split("T").join(" ") + ":00 GMT+2"
-            : null;
-        const end = data.end
-            ? data.end.split("T").join(" ") + ":00 GMT+2"
-            : null;
-        data = {
-            ...data,
-            start,
-            end,
-            username: "tonnidiaz",
-            symbol: data.symbol.value,
+        let fd: IObj = {
+            ...formState,
+            strategy: strategies.value.indexOf(formState.strategy) + 1,
+            lev: formState.lev.value,
+            symbol: formState.symbol?.value,
+            interval: formState.interval.value,
+            ...formState.date,
         };
-        console.log(data);
+        delete fd["date"];
+        fd = { ...fd, start: parseDate(fd.start), end: parseDate(fd.end) };
+        console.log(fd);
         res.value = initRes;
-        socket.emit("backtest", data);
+        socket.emit("backtest", fd);
     } catch (e) {
         console.log(e);
     }

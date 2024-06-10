@@ -1,8 +1,8 @@
 <template>
     <li>
         <span>
-        <nuxt-link v-if="to" :to="to" class="flex items-center gap-2 justify-start"><i v-if="icon" :class="icon"/> <slot/></nuxt-link>
-        <span v-else class="flex items-center gap-2 justify-start"><i v-if="icon" :class="icon"/> <span><slot/></span></span>
+        <nuxt-link v-if="to" :to="to" :class="`flex items-center gap-2 justify-start ${innerClass}`"><i v-if="icon" :class="icon"/> <slot/></nuxt-link>
+        <span v-else :class="`flex items-center gap-2 justify-start ${innerClass}`"><i v-if="icon" :class="icon"/> <span><slot/></span></span>
      </span>
     </li>
      
@@ -12,6 +12,7 @@
 
 defineProps({
     to: {type: String},
+    innerClass: {type: String},
     icon: {type: String},
 })
 </script>

@@ -31,7 +31,7 @@
 }
 
 @font-face {
-    font-family: Poppins;
+    font-family: Inter;
     src: url("/assets/fonts/Inter/Inter-Regular.ttf");
 }
 
@@ -55,6 +55,8 @@
     font-style: "extra-bold";
 }
 
+/* DM SANS */
+@import url("/src/assets/fonts/DMSans/fonts.css");
 
 main,
 .sidebar {

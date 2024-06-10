@@ -1,19 +1,20 @@
 <template>
-    <aside >
-        <ul class="menu gap-0 sm:gap-5  sidebar">
-   
-    
-   <li class="tooltip tooltip-right" data-tip="Home">
-       <NuxtLink to="/">
-        <i class="fi fi-rr-home"></i>
-       </NuxtLink>
-   </li>
-   <li class="tooltip tooltip-right" data-tip="Backtest">
-       <NuxtLink to="/backtest">
-        <i class="fi fi-rr-blood-test-tube-alt"></i>
-       </NuxtLink>
-   </li>
-<!--    <li class="tooltip tooltip-right" data-tip="Contact us">
+    <aside>
+        <ul class="menu flex flex-col sm:gap-5 sidebar">
+            <menu-item
+            title="Home"
+                inner-class="justify-center"
+                icon="fi fi-rr-house-window"
+                to="/"
+            />
+            
+            <menu-item title="Backtest"
+                
+                inner-class="justify-center"
+                icon="fi fi-rr-blood-test-tube-alt"
+                to="/backtest"
+            ></menu-item>
+            <!--    <li class="tooltip tooltip-right" data-tip="Contact us">
        <NuxtLink to="/contact">
         <i class="fi fi-rr-envelope"></i>
        </NuxtLink>
@@ -23,7 +24,7 @@
         <i class="fi fi-rr-info"></i>
        </NuxtLink>
    </li> -->
-</ul>
+        </ul>
     </aside>
 </template>
 

@@ -1,0 +1,1 @@
+export const useTuFetch : typeof useFetch= (...args)=> useFetch(args[0], {...args[1], headers: {...args[1]?.headers, Authorization:  `Bearer ${localStorage.getItem(STORAGE_KEYS.authTkn)}`}})

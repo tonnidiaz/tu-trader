@@ -1,6 +1,7 @@
 <template>
     <Html lang="en" class="dark" data-theme="">
          <TMeta/>
+         
          <NuxtLayout>
  
              <NuxtPage></NuxtPage>
@@ -11,5 +12,6 @@
  <script setup lang="ts">
  import "@/src/styles/styles.scss";
  import "@/src/styles/styles2.scss";
+ import "@/src/styles/daisy.scss";
  </script>
   
