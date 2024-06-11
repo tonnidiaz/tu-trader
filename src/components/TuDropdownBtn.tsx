@@ -40,7 +40,8 @@ const MenuJSX: FC<IMenuProps> = ({x, y, items, setIsOpen, router}) => {
             })
         })
     }, [ref.current])
-    return ( <ul ref={ref}
+    return ( 
+    <ul ref={ref}
         style={{
             top: y ?? 0,
             left: x ?? x,

@@ -1,3 +1,6 @@
+import { NextRequest } from "next/server";
+import { IUser } from "../models/user";
+import { Document } from "mongoose";
 
 export interface IObj {[key: string]: any}
 export interface IAddress  {
@@ -12,4 +15,8 @@ export interface IAddress  {
     postcode: number,
     phone: string,
     name: string,
+}
+
+export interface IRequest extends NextRequest {
+    user:  Document | null
 }

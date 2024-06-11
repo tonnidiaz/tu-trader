@@ -1,5 +1,4 @@
-import { Schema, InferSchemaType, Document } from "mongoose";
-import { IAddress } from "../utils/interfaces";
+import { Schema, InferSchemaType, Document, Model } from "mongoose";
 import { UserPermissions } from "../utils/enums";
 
 const UserSchema = new Schema(
@@ -43,5 +42,5 @@ const UserSchema = new Schema(
     { timestamps: true }
 );
 
-export interface IUser extends Document, InferSchemaType<typeof UserSchema> {}
+export interface IUser extends Model<typeof UserSchema> {}
 export { UserSchema };

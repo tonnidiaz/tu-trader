@@ -1,4 +1,4 @@
-import { HydratedDocumentFromSchema, InferSchemaType, Schema } from "mongoose";
+import { HydratedDocumentFromSchema, InferSchemaType, Model, Schema } from "mongoose";
 
 export const OrderSchema = new Schema(
     {
@@ -21,4 +21,4 @@ export const OrderSchema = new Schema(
     },
     { timestamps: true }
 );
-export interface IOrder extends HydratedDocumentFromSchema<typeof OrderSchema> {}
+export interface IOrder extends Model<typeof OrderSchema> {}

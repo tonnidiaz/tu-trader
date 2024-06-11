@@ -1,11 +1,9 @@
-export async function GET() {
-    const result = await fetch(
-      'http://worldtimeapi.org/api/timezone/America/Chicago',
-      {
-        cache: 'no-store',
-      },
-    );
-    const data = await result.json();
-   
-    return Response.json({ datetime: data.datetime });
-  }
+import { Bot } from "@/src/server/models";
+import { IBot } from "@/src/server/models/bot";
+import { connectDb } from "@/src/server/utils/db";
+
+export async function GET(b: IBot) {
+    await connectDb()
+    const bots = await Bot.find().exec()
+    return Response.json({  });
+  }  

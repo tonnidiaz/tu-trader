@@ -83,7 +83,8 @@ const Backtest = () => {
         $(paramsArea!).toggleClass("open");
     };
     return (
-        <><TuMeta title={`Backtest - ${SITE}`}/>
+        <>
+        <TuMeta title={`Backtest - ${SITE}`}/>
             <div className=" w-100p h-100p relative md:p-5 p-2 flex flex-col">
                 <div className="md:p-4 p-2 my-2 border-md border-card border-1 br-10 flex-1 overflow-y-scroll max-h-80vh">
                     <h2 className="font-bold fs-20">RESULTS</h2>

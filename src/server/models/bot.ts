@@ -1,4 +1,4 @@
-import mn, { HydratedDocument, HydratedDocumentFromSchema, InferSchemaType, Schema, Types } from "mongoose";
+import mn, { HydratedDocument, HydratedDocumentFromSchema, InferSchemaType, Model, Schema, Types } from "mongoose";
 
 export const BotSchema = new Schema(
     {
@@ -22,5 +22,5 @@ export const BotSchema = new Schema(
 );
 
 
-export interface IBot extends HydratedDocumentFromSchema<typeof BotSchema>{}
+export interface IBot extends Model<typeof BotSchema>{}
 

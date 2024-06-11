@@ -22,7 +22,7 @@ interface IProps {
 }
 const theme = {
     scheme: "monokai",
-    author: "Tonni Diaz",
+    author: "Tonni Diaz", 
     base00: "#1d232a",
     base01: "#383830",
     base02: "#49483e",

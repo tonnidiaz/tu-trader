@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Untitled",
+    "test": "Untitled",
+    "type": "request",
+    "end": "2024-06-09T04:12:11.696Z",
+    "result": {
+      "status": "Submitted",
+      "message": "Request 'Untitled' SUBMITTED"
+    },
+    "request": {
+      "name": "Untitled",
+      "type": "request",
+      "url": "http://localhost:3000/api/bots",
+      "method": "GET",
+      "headers": {},
+      "submitted": "2024-06-09T04:12:11.511Z"
+    },
+    "response": {
+      "runId": "4cf2407f1933",
+      "status": {
+        "code": 200,
+        "message": "OK"
+      },
+      "headers": {
+        "connection": "close",
+        "content-length": "1463",
+        "content-type": "application/json",
+        "date": "Sun, 09 Jun 2024 04:12:11 GMT"
+      },
+      "body": "[\n  {\n    \"_id\": \"665bd4887865dc26b780c81a\",\n    \"active\": false,\n    \"demo\": true,\n    \"base\": \"DOGE\",\n    \"ccy\": \"USDT\",\n    \"category\": \"spot\",\n    \"interval\": 15,\n    \"mult\": 1.8,\n    \"ce_length\": 1,\n    \"strategy\": 7,\n    \"start_amt\": 30,\n    \"curr_amt\": 0,\n    \"name\": \"Thabiso's bot babs\",\n    \"desc\": \"Bloodshed\",\n    \"user\": \"665bbc7655ba945bfee4bff5\",\n    \"createdAt\": \"2024-06-02T02:10:16.059Z\",\n    \"updatedAt\": \"2024-06-07T05:52:57.171Z\",\n    \"__v\": 58,\n    \"orders\": []\n  },\n  {\n    \"_id\": \"665bd4bf3c5d94e18bcc92c6\",\n    \"active\": false,\n    \"demo\": true,\n    \"base\": \"SOL\",\n    \"ccy\": \"USDT\",\n    \"category\": \"spot\",\n    \"interval\": 15,\n    \"mult\": 1.8,\n    \"ce_length\": 1,\n    \"strategy\": 7,\n    \"start_amt\": 10,\n    \"curr_amt\": 0,\n    \"name\": \"#2\",\n    \"desc\": \"The winning bot\",\n    \"user\": \"665bbc7655ba945bfee4bff5\",\n    \"createdAt\": \"2024-06-02T02:11:11.332Z\",\n    \"updatedAt\": \"2024-06-06T09:49:48.633Z\",\n    \"__v\": 10,\n    \"orders\": []\n  },\n  {\n    \"_id\": \"6662535437f416e4feedaafd\",\n    \"active\": false,\n    \"demo\": true,\n    \"base\": \"PEOPLE\",\n    \"ccy\": \"USDT\",\n    \"category\": \"spot\",\n    \"interval\": 15,\n    \"mult\": 1.8,\n    \"ce_length\": 1,\n    \"strategy\": 7,\n    \"orders\": [\n      \"6662a8959a61496c92e0503b\"\n    ],\n    \"start_amt\": 50,\n    \"curr_amt\": 0,\n    \"name\": \"My Local People\",\n    \"user\": \"665bbc7655ba945bfee4bff5\",\n    \"createdAt\": \"2024-06-07T00:24:52.972Z\",\n    \"updatedAt\": \"2024-06-09T00:32:44.570Z\",\n    \"__v\": 2\n  }\n]",
+      "time": 146
+    }
+  }
+]

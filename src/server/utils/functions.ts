@@ -1,4 +1,3 @@
-import { OTP } from "../models/otp";
 import jwt from "jsonwebtoken";
 import nodemailer from 'nodemailer';
 import fs from 'fs';
@@ -19,15 +18,7 @@ const genToken = (data: IObj, exp? : string | number | undefined) => {
           )
         : jwt.sign({ payload: data }, SECRET_KEY!);
 };
-const genOTP = async (phone?: string, email?: string) => {
-    const pin = randomInRange(1000, 9999);
-    const otp = new OTP();
-    otp.pin = pin;
-    if (phone) otp.phone = phone;
-    else otp.email = email;
-    await otp.save();
-    return otp;
-};
+
 
 export function clog(message?: any, ...params: any[]){
         console.log(message, ...params);
@@ -38,11 +29,8 @@ import { IObj } from "./interfaces";
 import { NextApiResponse } from "next";
 import { IBot } from "../models/bot";
 
-const tunedErr = (res: NextApiResponse, status: number, msg: string, e?: any) => {
-    if (e){
-        console.log(e)
-    }
-    return res.status(status).send(`tuned:${msg}`)
+const tunedErr = (status: number = 500, msg: string = "Something went wrong",) => {
+    return Response.json(`tuned:${msg}`, {status: status})
 }
 
 
@@ -200,7 +188,7 @@ const sendMail = async (subject: string, body: string, clients: string | string[
     let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return emailAdress.match(regex) ? true : false
 }
-  export { sendMail,getStoreDetails, genToken,  genOTP, randomInRange, tunedErr };
+  export { sendMail,getStoreDetails, genToken, randomInRange, tunedErr };
 
   export const readJson = (fp: string)=>{
     const data = fs.readFileSync(fp, {encoding: "utf-8"})

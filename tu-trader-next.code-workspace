@@ -11,9 +11,15 @@
         },
         {
             "path": "../../../../GitHub/tunedbass"
+        },
+        {
+            "path": "../../Nuxt/tu-trader"
         }
     ],
     "settings": {
-        "liveServer.settings.multiRootWorkspaceName": "tu-trader-next"
+        "liveServer.settings.multiRootWorkspaceName": "tu-trader-next",
+        "files.associations": {
+            "plyconfig.json": "jsonc"
+        }
     }
 }

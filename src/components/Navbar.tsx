@@ -8,12 +8,12 @@ import { sleep } from "../utils/funcs";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-const Navbar = () => {
+const Navbar = () => { 
     const userStore = useSelector((state: RootState) => state.user);
     const pathname = usePathname();
 
     useEffect(()=>{
-    },[])
+    },[]) 
     return (
         <NB className=" pr-5">
             <NB.Start>{/* {<TuDropdownBtn /> } */}</NB.Start>
