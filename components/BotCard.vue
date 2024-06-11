@@ -42,9 +42,9 @@
                     :set-is-open="(val : boolean) =>menuOpen = val"
                 >
                     <template v-slot:toggler>
-                        <UButton variant="ghost" color="gray-500"
-                            ><span class="fs-16">
-                                <i class="fi fi-rr-circle-ellipsis"></i> </span
+                        <UButton size="sm" :ui="{rounded: 'rounded-full'}" variant="ghost" color="gray"
+                            ><span class="fs-16 relative top-1">
+                                <i class="fi fi-br-menu-dots-vertical"></i> </span
                         ></UButton>
                     </template>
                     <template v-slot:children>

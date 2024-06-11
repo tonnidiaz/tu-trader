@@ -68,3 +68,7 @@ input:-webkit-autofill:active
 {
  -webkit-box-shadow: 0 0 0 30px var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity))) inset !important;
 }
+
+.form-group{
+    @apply my-2;
+}

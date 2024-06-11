@@ -102,7 +102,7 @@ export const symbols =true ? bybit_coins:[
 ]
 export const intervals = [5, 15, 30, 60]
 export const selectIntervals = intervals.map((e) => ({
-    label: `${e}m`,
+    label: `${e}m`, 
     value: e,
 }))
 

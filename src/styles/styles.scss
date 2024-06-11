@@ -82,7 +82,8 @@ main {
     position: fixed;
     border-radius: 0px;
     z-index: 90;
-    border-bottom: 1px solid $on-bg-tb;
+    border-bottom-width: 1px;
+    
     i{
         font-size: 17px;
     }
@@ -97,7 +98,7 @@ main {
     width: $sidenav-w;
     border-radius: 0;
     padding: 1.2rem 4px;
-    border-right: 1px solid $on-bg-tb;
+    border-right-width: 1px;
     z-index: 50;
     height: calc(100vh - $sidenav-w);
     i{

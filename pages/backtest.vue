@@ -193,19 +193,19 @@ const { strategies } = storeToRefs(appStore);
 const msg = ref<IObj>({}),
     paramsAreaRef = ref<any>();
 
-const intervals = [5, 15, 30, 60].map((e) => ({ label: `${e}m`, value: e }));
+const intervals = [1, 5, 15, 30, 60].map((e) => ({ label: `${e}m`, value: e }));
 const margins = [1, 2, 3, 4, 5].map((e) => ({ label: `x${e}`, value: e }));
 
 const formState = reactive({
     strategy: strategies.value[6],
-    interval: intervals[1],
+    interval: intervals[2],
     bal: 1000,
     offline: true,
     lev: margins[0],
     symbol: selectSymbols.find((el) => el.value.toString() == "SOL,USDT"),
     date: {
-        start: new Date("2024-06-07 00:00:00"),
-        end: new Date("2024-10-28 23:59:00"),
+        start: new Date("2023-01-01 00:00:00"),
+        end: new Date("2023-10-28 23:59:00"),
     },
 });
 
@@ -213,7 +213,7 @@ const getData = (ts: string) => res.value.data[ts];
 const parseData = (data: IObj) => {
     let d = Object.keys(data.data).map((ts, i) => {
         let obj =data.data[ts]
-        obj = {...obj, side: {value: obj.side.toUpperCase(), class:  i % 2 != 0 ? '!text-red-500' : '!text-primary'}, balance: `${obj.side == 'buy' ? data.base : data.ccy} ${obj.balance}\t${obj.profit ?? ''}`, class: i % 2 != 0 ? 'bg-gray-800' : ''}
+        obj = {...obj,  side: {value: obj.side.toUpperCase(), class:  i % 2 != 0 ? '!text-red-500' : '!text-primary'}, balance: `${i%2 == 0 ? data.base : data.ccy} ${obj.balance}\t${obj.profit ?? ''}`, class: i % 2 != 0 ? 'bg-gray-800' : ''}
         return obj
     });
     return d;

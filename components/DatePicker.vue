@@ -8,7 +8,7 @@ const props = defineProps({
         type: [Date, Object] as PropType<
             DatePickerDate | DatePickerRangeObject | null
         >,
-        default: null,
+        default: null, 
     },
 });
 
@@ -18,6 +18,7 @@ const date = computed({
     get: () => props.modelValue,
     set: (value) => {
         emit("update:model-value", value);
+        console.log(value);
         //emit('close')
     },
 });
@@ -31,21 +32,20 @@ const attrs = {
 </script>
 
 <template>
-    <VCalendarDatePicker
+          <VCalendarDatePicker
         mode="dateTime"
         is24hr
         v-if="date && typeof date === 'object'"
         v-model.range="date"
         :columns="1"
-        v-bind="{ ...attrs, ...$attrs }"
-    />
-    <VCalendarDatePicker
+        v-bind="{ ...attrs, ...$attrs }"/>
+ <!--    <VCalendarDatePicker
         mode="dateTime"
         is24hr
         v-else
         v-model="date"
         v-bind="{ ...attrs, ...$attrs }"
-    />
+    /> -->
 </template>
 
 <style>
