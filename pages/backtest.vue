@@ -204,14 +204,14 @@ const formState = reactive({
     lev: margins[0],
     symbol: selectSymbols.find((el) => el.value.toString() == "SOL,USDT"),
     date: {
-        start: new Date("2023-01-01 00:00:00"),
-        end: new Date("2023-10-28 23:59:00"),
+        start: "2023-01-01 00:00:00",
+        end:  "2023-10-28 23:59:00",
     },
 });
 
 const getData = (ts: string) => res.value.data[ts];
 const parseData = (data: IObj) => {
-    let d = Object.keys(data.data).map((ts, i) => {
+    let d = Object.keys(data.data).slice(0,50).map((ts, i) => {
         let obj =data.data[ts]
         obj = {...obj,  side: {value: obj.side.toUpperCase(), class:  i % 2 != 0 ? '!text-red-500' : '!text-primary'}, balance: `${i%2 == 0 ? data.base : data.ccy} ${obj.balance}\t${obj.profit ?? ''}`, class: i % 2 != 0 ? 'bg-gray-800' : ''}
         return obj

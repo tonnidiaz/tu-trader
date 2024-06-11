@@ -1,14 +1,14 @@
 <template>
     <!-- component -->
     <div class="">
-        <div class="sm:flex sm:space-x-4">
+        <div class="flex overflow-x-scroll">
             <div v-for="stat in stats"
                 class="inline-block px-3 py-2 align-bottom bg-gray-900 rounded-lg text-center overflow-hidden shadow"
             >
                 <h3 class="text-sm leading-6 font-medium text-gray-400">
                     {{ stat.title}}
                 </h3>
-                <p class="text-3xl font-bold text-gray-200">{{ stat.subtitle }}</p>
+                <p class="sm:text-3xl text-lg font-bold text-gray-200">{{ stat.subtitle }}</p>
             </div>
         </div>
     </div>
