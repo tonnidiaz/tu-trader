@@ -144,7 +144,7 @@
                                                     <span
                                                         class="text-heading fw-6"
                                                         >In:</span
-                                                    ><span>{{ order.buy_timestamp?.i ? order.buy_timestamp?.i.slice(0, 16) : '-- -- --'
+                                                    ><span>{{ order.buy_timestamp?.i ? order.buy_timestamp?.i : '-- -- --'
                                                     }}</span>
                                                 </div>
                                                 <div
@@ -153,7 +153,7 @@
                                                     <span
                                                         class="text-heading fw-6"
                                                         >Out:</span
-                                                    ><span>{{ order.buy_timestamp?.o ?order.buy_timestamp?.o.slice(0, 16) : '-- -- --'
+                                                    ><span>{{ order.buy_timestamp?.o ?order.buy_timestamp?.o : '-- -- --'
                                                     }}</span>
                                                 </div>
                                             </div>
@@ -166,7 +166,7 @@
                                                         class="text-heading fw-6"
                                                         >In:</span
                                                     ><span>{{
-                                                      order.sell_timestamp?.i ? order.sell_timestamp?.i.slice(0, 16) : '-- -- --'
+                                                      order.sell_timestamp?.i ? order.sell_timestamp?.i : '-- -- --'
                                                     }}</span>
                                                 </div>
                                                 <div
@@ -177,7 +177,7 @@
                                                         >Out:</span
                                                     ><span>{{ order.sell_timestamp?.o  ?
                                                             order.sell_timestamp.o
-                                                            .slice(0, 16) : '-- -- --'
+                                                             : '-- -- --'
                                                     }}</span>
                                                 </div>
                                             </div>
