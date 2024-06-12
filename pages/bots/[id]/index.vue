@@ -181,9 +181,15 @@
                                                     }}</span>
                                                 </div>
                                             </div>
-                                            <p class="flex justify-between"><span class="fw-6 text-heading">Entry price:</span><span>{{ order.ccy }} {{ order.ccy_amt }}</span></p>
-                                            <p class="flex justify-between"><span class="fw-6 text-heading">Exit price:</span><span>{{ order.ccy }} {{ order.new_ccy_amt }}</span></p>
-                                            <p class="flex justify-between"><span class="fw-6 text-heading">Base amount:</span><span>{{ order.base }} {{ order.base_amt }}</span></p>
+                                            <div class=""><p class="flex justify-between"><span class="fw-6 text-heading">Entry amount:</span><span>{{ order.ccy }} {{ order.ccy_amt }}</span></p>
+                                            <p class="flex justify-between"><span class="fw-6 text-heading">Exit amount:</span><span>{{ order.ccy }} {{ order.new_ccy_amt }}</span></p>
+                                           </div>
+                                             <div class="my-1">
+                                                <p class=" flex justify-between"><span class="fw-6 text-heading">Entry price:</span><span>{{ order.ccy }} {{ order.buy_price ?? '-- -- --' }}</span></p>
+                                            <p class="flex justify-between"><span class="fw-6 text-heading">Exit price:</span><span>{{ order.ccy }} {{ order.sell_price ?? '-- -- --' }}</span></p>
+                                           
+                                            </div>
+                                             <p class="flex justify-between"><span class="fw-6 text-heading">Base amount:</span><span>{{ order.base }} {{ order.base_amt }}</span></p>
                                             <p class="flex justify-between"><span class="fw-6 text-heading">Buy fee:</span><span>{{ order.base }} {{ order.buy_fee }}</span></p>
                                             <p class="flex justify-between"><span class="fw-6 text-heading">Sell fee:</span><span>{{ order.ccy }} {{ order.sell_fee }}</span></p>
                                         <div class="grid grid-cols-2"></div>

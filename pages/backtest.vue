@@ -238,7 +238,7 @@ onMounted(() => {
         console.log("IO DISCONNECTED");
         msg.value = {msg: 'IO DISCONNECTED'}
     });
-    socket.on("connect", (r, d) => {
+    socket.on("connect", () => {
         console.log("IO CONNECTED");
         msg.value = {msg: 'IO CONNECTED'}
     });
