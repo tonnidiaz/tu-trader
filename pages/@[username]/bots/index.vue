@@ -1,7 +1,7 @@
 <template>
     <div>
         <TMeta :title="`${username}'s bots - ${SITE}`" />
-        <div class="p-5">
+        <div class="sm:p-5 p-1">
             <h1 class="text-xl text-gray-200">My bots</h1>
             <div class="mt-5">
                 <div v-if="bots.length" class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
@@ -12,6 +12,12 @@
                 </div>
             </div>
         </div>
+        <Teleport to="#floating-actions">
+            <UButton @click="modalOpen = true" class="rounded rounded-full h-45px w-45px shadow shadow-lg fs-40">
+                <span class="fs-20"><i class="fi fi-rr-plus"></i></span>
+            </UButton>
+        </Teleport>
+        <BotFormModal v-model="modalOpen" :onDone="val=>userStore.setBots({...bots, val})"/>
     </div>
 </template>
 <script setup lang="ts">
@@ -23,7 +29,7 @@ const { bots } = storeToRefs(userStore);
 
 const route = useRoute();
 const username = ref(route.params.username);
-const newBotModalRef = ref<any>();
+const modalOpen = ref(false);
 
 const { data, error } = await useTuFetch<any>(
     "/api/bots?user=" + username.value,

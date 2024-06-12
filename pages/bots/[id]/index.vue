@@ -25,11 +25,7 @@
                     class="btn btn-sm btn-rounded btn-neutral"
                     title="Modify"
                     color="gray"
-                    @click="
-                        (_) => {
-                            /*  botModal?.showModal() */
-                        }
-                    "
+                    @click="modalOpen = true"
                 >
                     <span>
                         <i class="fi fi-br-pencil"></i>
@@ -41,11 +37,11 @@
                     class="items-center justify-center gap-2"
                     :stats="[
                         {title: 'L:', subtitle: _bot.orders?.filter((el: any) => el.profit < 0)
-                                    ?.length ?? 0, click: ()=> orderType = EOrder.lose},
+                                    ?.length ?? 0, click: ()=> orderType = EOrder.lose, classes: orderType == EOrder.lose ? 'text-primary' : ''},
                         {title: 'Total orders:', subtitle: _bot.orders
-                                    ?.length ?? 0, click: ()=> orderType = EOrder.all},
+                                    ?.length ?? 0, click: ()=> orderType = EOrder.all, classes: orderType == EOrder.all ? 'text-primary' : ''},
                         {title: 'W:', subtitle: _bot.orders?.filter((el: any) => el.profit > 0)
-                                    ?.length ?? 0, click: ()=> orderType = EOrder.win},
+                                    ?.length ?? 0, click: ()=> orderType = EOrder.win, classes: orderType == EOrder.win ? 'text-primary' : ''},
                                     ]"
                 >
                 </TuStats>
@@ -107,7 +103,7 @@
                     <template #item>
                         <div class="flex flex-col gap-2 items-center pl-4">
                             <UAccordion
-                                v-for="(order, i) in _bot.orders ?? []"
+                                v-for="(order, i) in orders ?? []"
                                 :items="[
                                     {
                                         label: `${i + 1}. ${order.base}/${
@@ -221,20 +217,9 @@
                 desc: _bot.desc,
                 demo: _bot.demo,
                 id: _bot._id,
-                symbol: [_bot.base, _bot.ccy],
-                /* pair: selectSymbols.find(
-                        (el) =>
-                            el.value.toString() ==
-                            [_bot.base, _bot.ccy].toString()
-                    ),
-                   strategy: toSelectStrategies(appStore.strategies).find(
-                        (el) => el.value == _bot.strategy
-                    ),
-                    interval: selectIntervals.find(
-                        (el) => el.value == _bot.interval
-                    ), */
-            }"
-            v-model="modalOpen"
+                symbol: [_bot.base, _bot.ccy].toString(),
+                interval: _bot.interval, strategy: _bot.strategy, start_amt: _bot.start_amt }"
+            v-model="modalOpen" :onDone="(val)=>_bot = val"
         />
     </div>
 </template>

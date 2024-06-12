@@ -5,7 +5,10 @@
          <NuxtLayout>
  
              <NuxtPage></NuxtPage>
-             <div id="ctx-overlay"></div>
+             <div id="ctx-overlay">
+                
+            </div>
+             <div id="floating-actions"></div>
          </NuxtLayout> 
      </Html>
  </template>

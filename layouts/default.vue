@@ -20,13 +20,18 @@ import { useUserStore } from "~/src/stores/user";
     const {ready} = storeToRefs(useAppStore())
 
     onMounted(() => {
+        socket.on('strategies', ({data, err})=>{
+            if (err) {console.log(err); return}
+            setStrategies(data)
+            console.log("GOT THE STRATEGIES");
+        })
         init();
     });
 
     const getUser = async () => {
         try {
             console.log("GETTING USER");
-            const res = await api(true).post("/auth/login", {});
+            const res = await localApi(true).post("/auth/login", {});
             setUser(res.data.user);
         } catch (e) {
             console.log(e);
@@ -36,9 +41,7 @@ import { useUserStore } from "~/src/stores/user";
     const getStrategies = async () => {
         try {
             console.log("GETTING STRATEGIES...");
-            const res = await api().get("/strategies");
-            setStrategies(res.data);
-            console.log("GOT THE STRATEGIES");
+            socket.emit('strategies')
         } catch (error) {
             console.log(error);
         }

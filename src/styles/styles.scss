@@ -81,7 +81,7 @@ main {
 .navbar {
     position: fixed;
     border-radius: 0px;
-    z-index: 90;
+    z-index: $bottombar-z;
     border-bottom-width: 1px;
     
     i{
@@ -99,7 +99,7 @@ main {
     border-radius: 0;
     padding: 1.2rem 4px;
     border-right-width: 1px;
-    z-index: 50;
+    z-index: $bottombar-z;
     height: calc(100vh - $sidenav-w);
     i{
         font-size: 20px;

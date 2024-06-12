@@ -110,9 +110,7 @@ export const selectSymbols = symbols.map((e) => ({
     label: e.join("/"),
     value: e,
 }))
-export const api = (auth = false) => axios.create({ baseURL: BEND_URL, headers: {
-    Authorization: auth ? `Bearer ${localStorage.getItem(STORAGE_KEYS.authTkn)}` : null, "Content-Type": "application/json"
-},  });
+
 
 export const socket = io(BEND_URL, {auth: {username: 'tonnidiaz',}, timeout: 100 * 10000000});
 socket.on("connect", () => {

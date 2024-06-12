@@ -1,20 +1,20 @@
 <template>
     <!-- component -->
         <div class="flex overflow-x-scroll">
-            <div v-for="stat in stats"
-                class="inline-block px-3 py-2 align-bottom bg-gray-900 rounded-lg text-center overflow-hidden shadow-sm"
+            <div v-for="stat in stats" @click="stat.click"
+                :class="`inline-block px-3 py-2 align-bottom bg-gray-900 rounded-lg text-center overflow-hidden shadow-sm ${stat.classes}`"
             >
-                <h3 class="text-sm leading-6 font-medium text-gray-400">
+                <h3 :class="`text-sm leading-6 font-medium text-gray-400 ${stat.titleClasses}`">
                     {{ stat.title}}
                 </h3>
-                <p class="stat-value text-lg font-bold ">{{ stat.subtitle }}</p>
+                <p :class="`stat-value text-lg font-bold ${stat.valClasses}` ">{{ stat.subtitle }}</p>
             </div>
         </div>
 </template>
 
 <script setup lang="ts">
 
-interface IStat {title: string, subtitle: any, click?: ()=> any}
+interface IStat {title: string, subtitle: any, click?: ()=> any, valClasses?: string, titleClasses?: string, classes?: string}
 const testStats : IStat[] = [
     {title: "Trades", subtitle: 445},
     {title: "Profit", subtitle: `USDT ${formatter.format(127439943254).replace('$', '')}`},

@@ -54,7 +54,7 @@ import { useUserStore } from '~/src/stores/user';
             
             const formData = formState
             console.log(formData);
-            const res = await api().post('/auth/login', formData)
+            const res = await localApi().post('/auth/login', formData)
             console.log(res.data);
             setUser(res.data.user)
             localStorage.setItem(STORAGE_KEYS.authTkn, res.data.token)

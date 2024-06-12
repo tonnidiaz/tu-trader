@@ -1,5 +1,4 @@
 import $ from "jquery";
-import { ROOT, SITE, api } from "./constants";
 
 export const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -21,7 +20,7 @@ export const activateBot = async (el: any, bot: IObj, updateBot?: any) => {
         el.innerHTML = `<span class="loading loading-dots loading-sm m-auto"></span>`;
         await sleep(1500)
         const val = !bot.active;
-        const res = await api(true).post(`/bots/${bot._id}/edit`, {
+        const res = await localApi(true).post(`/bots/${bot._id}/edit`, {
             key: "active",
             val: val,
         });
@@ -41,7 +40,7 @@ export const clearBotOrders = async (el: any, bot: IObj, updateBot?: any) => {
     try {
         console.log(bot);
         el.innerHTML = `<span class="loading loading-dots loading-sm m-auto"></span>`;
-        const res = await api(true).post(`/bots/${bot._id}/clear-orders`);
+        const res = await localApi(true).post(`/bots/${bot._id}/clear-orders`);
 
         if (updateBot) updateBot(res.data);
         el.innerHTML = `<span>Clear orders</span>`;
