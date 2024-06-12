@@ -68,7 +68,7 @@ interface IMetaProps {
 
 const ddNum = (e: any)=>{
     e = `${e}`.trim()
-    return Number(e) < 10 ? `0${e}` : `${e}`
+    return e.length == 1 ? `0${e}` : e
 }
 const toISOString = (date: string)=>{
     let dateArr = date.split(',')
