@@ -133,6 +133,8 @@
                                                         : "-- -- --"
                                                 }}</span>
                                             </p>
+                                            <p class="flex justify-between mt-3"><span class="fw-6 text-heading">ID:</span><span>{{ order._id }}</span></p>
+                                            <p class="flex justify-between mt-3"><span class="fw-6 text-heading">Profit:</span><span>{{ order.ccy }} {{ order.profit }}</span></p>
                                         </div>
                                             <div>
                                                 <h6 class="fw-6">Entry time</h6>
@@ -258,11 +260,12 @@ if (error.value) {
 const filterOrders = (val: any[]) => {
     orders.value = val.filter((el: IObj) =>
         orderType.value == EOrder.win
-            ? el.prifit > 0
+            ? el.profit > 0
             : orderType.value == EOrder.lose
             ? el.profit < 0
             : true
     );
+    console.log(orders.value?.length);
 };
 onMounted(() => {
     const bot = data.value;
@@ -272,6 +275,6 @@ onMounted(() => {
 });
 
 watch(orderType, (val) => {
-    filterOrders(data.value.orders);
+    filterOrders(_bot.value.orders);
 });
 </script>
