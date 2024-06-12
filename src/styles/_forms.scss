@@ -54,7 +54,8 @@ input:disabled {
 }
 
 
-input, textarea, select {color: $color-white-2 !important;
+input, textarea, select {
+   // color: $color-white-2;// !important;
     &::placeholder{
     opacity: 0.4 !important;
     

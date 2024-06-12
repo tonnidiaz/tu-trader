@@ -122,8 +122,8 @@ body,
     margin: 0;
     font-weight: 500;
     font-family: Poppins, monospace;//DM Sans, "DM Sans Fallback: Arial",ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;//Inter, sans-serif;
-    @apply bg-gray-900;
-    @apply text-gray-300;
+    background-color: $bg-color;
+    color: $fg-color;
     * {
        &:not(button){ };
         &::-webkit-scrollbar-track {
@@ -153,4 +153,35 @@ button{
 }
 .navbar{height: $sidenav-w;
 *{align-self: center;}
+}
+
+.navbar, h1, h2, h3, h4, h5, h6, .text-heading {
+    color: $heading-color
+}
+
+.text-subtitle{
+    color: $fg-color-2
+}
+
+ul, li{
+    &.disc{
+        list-style-type: disc !important;
+    }
+}
+
+.font-monospace {
+    font-family: monospace;
+    &.all{
+        * {
+            font-family: monospace;
+        }
+    }
+}
+.font-inter {
+    font-family: Inter;
+    &.all{
+        * {
+            font-family: Inter;
+        }
+    }
 }

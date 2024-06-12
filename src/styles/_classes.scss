@@ -130,8 +130,8 @@
 }
 .border-card, .navbar, .sidebar{
     
-    @apply border-gray-800;
-    //border-color: #353535 !important;
+   
+    border-color: $border-color !important;
 }
 .border-1{
     border-width: 1px;

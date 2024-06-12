@@ -1,17 +1,15 @@
 <template>
     <!-- component -->
-    <div class="">
         <div class="flex overflow-x-scroll">
             <div v-for="stat in stats"
-                class="inline-block px-3 py-2 align-bottom bg-gray-900 rounded-lg text-center overflow-hidden shadow"
+                class="inline-block px-3 py-2 align-bottom bg-gray-900 rounded-lg text-center overflow-hidden shadow-sm"
             >
                 <h3 class="text-sm leading-6 font-medium text-gray-400">
                     {{ stat.title}}
                 </h3>
-                <p class="sm:text-3xl text-lg font-bold text-gray-200">{{ stat.subtitle }}</p>
+                <p class="stat-value text-lg font-bold ">{{ stat.subtitle }}</p>
             </div>
         </div>
-    </div>
 </template>
 
 <script setup lang="ts">
@@ -33,3 +31,11 @@ const testStats : IStat[] = [
 ]}
     })
 </script>
+<style lang="scss"
+>
+.stat-value {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    font-weight: 800;
+}
+</style>

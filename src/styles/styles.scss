@@ -144,7 +144,7 @@ a.link{
 }
 
 .sidebar, .navbar, input, textarea, main{
-//@apply bg-base-100 /* TODO: Apply bg color */
+background-color: $bg-color;
 }  
 
 input, textarea{
