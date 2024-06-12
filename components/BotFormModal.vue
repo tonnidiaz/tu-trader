@@ -99,7 +99,7 @@ const handleSubmit = async () => {
             let data =formState.value
             delete data.id
             const {mode, bot, onDone} = props
-            data = mode == "Create" ? {...data,  user: userStore.user?.username} : {key: "multi", val: data} 
+            data = mode == "Create" ? {...data,  user: userStore.user?.username} : {key: "multi", val: {...data, symbol: data.symbol.split(',')}} 
             console.log(data);
             setBtnLoading(true)
             const url = mode == "Create" ? "/bots/create" : `/bots/${bot!.id}/edit`

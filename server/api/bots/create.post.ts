@@ -8,7 +8,7 @@ export default defineEventHandler(async e=>{
             bot.set(k, body[k]);
         };
         
-        [bot.base, bot.ccy] = body.pair;
+        [bot.base, bot.ccy] = body.symbol;
         const user = await User.findOne({ username: body.user }).exec();
         if (!user) return tunedErr(400, "User account does not exist");
         bot.user = user.id;

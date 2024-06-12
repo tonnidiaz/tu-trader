@@ -18,7 +18,7 @@ export default defineEventHandler(async e=>{
             for (let k of Object.keys(val)) {
                 const v = val[k];
 
-                if (k == "pair") {
+                if (k == "symbol") {
                     bot.set("base", v[0]);
                     bot.set("ccy", v[1]);
                 }
