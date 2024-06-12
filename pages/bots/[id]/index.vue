@@ -144,12 +144,7 @@
                                                     <span
                                                         class="text-heading fw-6"
                                                         >In:</span
-                                                    ><span>{{ order.buy_timestamp?.i ?
-                                                        new Date(
-                                                            order.buy_timestamp?.i
-                                                        )
-                                                            .toISOString()
-                                                            .slice(0, 16) : '-- -- --'
+                                                    ><span>{{ order.buy_timestamp?.i ? order.buy_timestamp?.i.slice(0, 16) : '-- -- --'
                                                     }}</span>
                                                 </div>
                                                 <div
@@ -158,12 +153,7 @@
                                                     <span
                                                         class="text-heading fw-6"
                                                         >Out:</span
-                                                    ><span>{{ order.buy_timestamp?.o ?
-                                                        new Date(
-                                                            order.buy_timestamp?.o
-                                                        )
-                                                            .toISOString()
-                                                            .slice(0, 16) : '-- -- --'
+                                                    ><span>{{ order.buy_timestamp?.o ?order.buy_timestamp?.o.slice(0, 16) : '-- -- --'
                                                     }}</span>
                                                 </div>
                                             </div>
@@ -176,11 +166,7 @@
                                                         class="text-heading fw-6"
                                                         >In:</span
                                                     ><span>{{
-                                                      order.sell_timestamp?.i ?  new Date(
-                                                            order.sell_timestamp?.i
-                                                        )
-                                                            .toISOString()
-                                                            .slice(0, 16) : '-- -- --'
+                                                      order.sell_timestamp?.i ? order.sell_timestamp?.i.slice(0, 16) : '-- -- --'
                                                     }}</span>
                                                 </div>
                                                 <div
@@ -190,10 +176,7 @@
                                                         class="text-heading fw-6"
                                                         >Out:</span
                                                     ><span>{{ order.sell_timestamp?.o  ?
-                                                        new Date(
-                                                            order.sell_timestamp?.o
-                                                        )
-                                                            .toISOString()
+                                                            order.sell_timestamp.o
                                                             .slice(0, 16) : '-- -- --'
                                                     }}</span>
                                                 </div>

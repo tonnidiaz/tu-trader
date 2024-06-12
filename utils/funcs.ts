@@ -65,16 +65,23 @@ interface IMetaProps {
     keywords?: string;
 }
 
+
+const ddNum = (e: any)=>{
+    e = `${e}`.trim()
+    return Number(e) < 10 ? `0${e}` : `${e}`
+}
 const toISOString = (date: string)=>{
     let dateArr = date.split(',')
-    const time = dateArr[1]
+    let time = dateArr[1]
+    time = time.split(':').map(el=> ddNum(el)).join(':')
     dateArr = dateArr[0].split('/')
-    date = `${dateArr[2]}-${dateArr[0]}-${dateArr[1]}`
-    return `${date}${time} GMT+2`
+    date = `${dateArr[2]}-${ddNum(dateArr[0])}-${ddNum(dateArr[1])}`
+    return `${date} ${time} GMT+2`
 
 }
+export const parseDate = (date?: string | Date) => !date ? null :
+   toISOString(new Date(date).toLocaleString("en-US", {timeZone: "Africa/Johannesburg"})) /* .replaceAll("/", "-").replaceAll(",", ""); */
 
-export const parseDate = (date: string)=> toISOString(new Date(date).toLocaleString('en-US', {timeZone: 'Africa/Johannesburg'}))
 export const isValidDate = function(date: string) {
     return (new Date(date) .toString()!== "Invalid Date") && !isNaN(Date.parse(date));
 }
