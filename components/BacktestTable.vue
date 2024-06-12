@@ -5,7 +5,7 @@
         >
             <UInput v-model="q" placeholder="Filter orders..." />
         </div>
-        <UTable :columns="tableCols" :rows="filteredRows">
+        <UTable class="backtest-table" :columns="tableCols" :rows="filteredRows">
             <template #side-data="{ row }">
                 {{ row.side.value }}
             </template>
@@ -51,3 +51,4 @@ const filteredRows = computed<any[]>(() => {
     filteredRows.value = val.rows
 }, {deep: true, immediate: true}) */
 </script>
+

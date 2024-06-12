@@ -92,24 +92,9 @@
                         class="space-y-5 flex flex-col items-center"
                         @submit="handleSubmit"
                     >
-                        <div class="flex items-center gap-4">
-                            <USelectMenu
-                                searchable
-                                searchable-placeholder="Search strategy..."
-                                placeholder="Strategy"
-                                :options="strategies"
-                                option-attribute="name"
-                                v-model="formState.strategy"
-                            />
-                            <USelectMenu
-                                searchable
-                                searchable-placeholder="Search interval..."
-                                placeholder="Interval"
-                                :options="intervals"
-                                option-attribute="label"
-                                v-model="formState.interval"
-                            />
-                            <UFormGroup>
+                    <div class="w-full grid grid-cols-2 gap-4 items-center">
+                        <TuSelect placeholder="Platform" :options="selectPlatforms(platforms)" v-model="formState.platform" required/>
+                        <UFormGroup>
                                 <UCheckbox
                                     color="primary"
                                     label="Offline"
@@ -118,6 +103,27 @@
                                     v-model="formState.offline"
                                 />
                             </UFormGroup>
+                    </div>
+                        <div class="grid grid-cols-2 items-center gap-4 w-full">
+                            <USelectMenu
+                                searchable
+                                searchable-placeholder="Search strategy..."
+                                placeholder="Strategy"
+                                :options="strategies"
+                                option-attribute="name"
+                                v-model="formState.strategy"
+                                required
+                            />
+                            <USelectMenu
+                                searchable
+                                searchable-placeholder="Search interval..."
+                                placeholder="Interval"
+                                :options="intervals"
+                                option-attribute="label"
+                                v-model="formState.interval"
+                                required
+                            />
+                          
                         </div>
                         <div class="flex items-end justify-center gap-4">
                             <UFormGroup label="Start balance">
@@ -185,11 +191,12 @@
 import $ from "jquery";
 import TuDatePicker from "~/components/TuDatePicker.vue";
 import { useAppStore } from "~/src/stores/app";
+import { selectPlatforms } from "~/utils/constants";
 const appStore = useAppStore();
 const initRes = { data: {} };
 const res = ref<IObj>(initRes);
 
-const { strategies } = storeToRefs(appStore);
+const { strategies, platforms } = storeToRefs(appStore);
 const msg = ref<IObj>({}),
     paramsAreaRef = ref<any>();
 
@@ -202,6 +209,7 @@ const formState = reactive({
     bal: 1000,
     offline: true,
     lev: margins[0],
+    platform: 1,
     symbol: selectSymbols.find((el) => el.value.toString() == "SOL,USDT"),
     date: {
         start: "2023-01-01 00:00:00",

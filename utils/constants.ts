@@ -54688,3 +54688,6 @@ export const dummyBacktestData : IObj = {
     "base": "SOL",
     "ccy": "USDT"
 }
+
+
+export const selectPlatforms = (lst: string[]) => lst.map((el, i)=>({label: el, value: i}))

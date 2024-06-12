@@ -210,3 +210,12 @@ ul, li{
         margin-bottom: 0;
     }
 }
+
+
+.backtest-table{
+    tbody{
+        * {
+            @apply font-monospace
+        }
+    }
+}

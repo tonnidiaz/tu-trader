@@ -15,7 +15,7 @@ import { useAppStore } from "~/src/stores/app";
 import { useUserStore } from "~/src/stores/user";
 
     const appStore = useAppStore()
-    const { setReady, setStrategies}= appStore
+    const { setReady, setStrategies, setPlatforms}= appStore
     const {setUser} = useUserStore()
     const {ready} = storeToRefs(useAppStore())
 
@@ -24,6 +24,13 @@ import { useUserStore } from "~/src/stores/user";
             if (err) {console.log(err); return}
             setStrategies(data)
             console.log("GOT THE STRATEGIES");
+        })
+        socket.on('platforms', 
+            ({data, err})=>{
+            if (err) {console.log(err); return}
+            setPlatforms(data)
+            console.log("GOT THE PLATFORMS");
+        
         })
         init();
     });
@@ -50,6 +57,8 @@ import { useUserStore } from "~/src/stores/user";
     const init = async () => {
         console.log(pagesWithLayout.indexOf(location.pathname ) == -1 );
         await getUser();
+        console.log('GETTING PLATFORMS...');
+        socket.emit('platforms')
         await getStrategies();
         setReady(true)
     };

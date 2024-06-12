@@ -74,6 +74,7 @@ const toISOString = (date: string)=>{
     return `${date}${time} GMT+2`
 
 }
+
 export const parseDate = (date: string)=> toISOString(new Date(date).toLocaleString('en-US', {timeZone: 'Africa/Johannesburg'}))
 export const isValidDate = function(date: string) {
     return (new Date(date) .toString()!== "Invalid Date") && !isNaN(Date.parse(date));
