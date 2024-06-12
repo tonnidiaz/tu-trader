@@ -275,6 +275,6 @@ onMounted(() => {
 });
 
 watch(orderType, (val) => {
-    filterOrders(_bot.value.orders);
+    filterOrders(_bot.value?.orders ?? []);
 });
 </script>

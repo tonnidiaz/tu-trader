@@ -18,9 +18,8 @@ export const activateBot = async (el: any, bot: IObj, updateBot?: any) => {
     try {
         console.log(bot);
         el.innerHTML = `<span class="loading loading-dots loading-sm m-auto"></span>`;
-        await sleep(1500)
         const val = !bot.active;
-        const res = await localApi(true).post(`/bots/${bot._id}/edit`, {
+        const res = await api(true).post(`/bots/${bot._id}/edit`, {
             key: "active",
             val: val,
         });
