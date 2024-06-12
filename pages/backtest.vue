@@ -168,13 +168,6 @@
                             <span>{{ msg.msg }}</span>
                         </div>
                         <UButton
-                            :disabled="
-                                !(
-                                    formState.bal > 0 &&
-                                    formState.symbol != null
-                                ) ||
-                                (Object.keys(msg).length > 0 && !msg.err)
-                            "
                             type="submit"
                             class="w-full"
                         >
@@ -243,8 +236,11 @@ onMounted(() => {
     socket.on("backtest", onBacktest);
     socket.on("disconnect", (r, d) => {
         console.log("IO DISCONNECTED");
-        console.log(r);
-        console.log(d);
+        msg.value = {msg: 'IO DISCONNECTED'}
+    });
+    socket.on("connect", (r, d) => {
+        console.log("IO CONNECTED");
+        msg.value = {msg: 'IO CONNECTED'}
     });
 });
 
