@@ -37,9 +37,7 @@
                 </div>
             </div>
             <div class="">
-                <CtxMenu
-                    :open="menuOpen"
-                    :set-is-open="(val : boolean) =>menuOpen = val"
+                <CtxMenu v-model="menuOpen"
                 >
                     <template v-slot:toggler>
                         <UButton size="sm" :ui="{rounded: 'rounded-full'}" variant="ghost" color="gray"

@@ -19,7 +19,12 @@
  import "@/src/styles/daisy.scss";
 
  //import "@/src/assets/pace-1.2.4/pace.js"
-
+ const route = useRoute()
+ const pth = ref(route.fullPath)
+ watch(route, (old, val)=>{
+   //console.log(old, val);
+    //isOpen.value = false
+}, {deep: true, immediate: true})
  useHead({
     script: [{src: '/assets/pace-1.2.4/pace.min.js'}]
  })

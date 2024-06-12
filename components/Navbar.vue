@@ -40,8 +40,7 @@
         <div class="navbar-end flex">
             <div v-if="user">
                 <CtxMenu
-                    :open="menuOpen"
-                    :set-is-open="(val: boolean)=>menuOpen = val"
+                  v-model="menuOpen"
                 >
                     <template v-slot:toggler
                         ><UAvatar class="pointer"
