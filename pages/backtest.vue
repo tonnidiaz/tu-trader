@@ -76,7 +76,7 @@
                 class="p-4 border- border-card br-10 params-area bg-gray-900 shadow-lg open"
             >
                 <div class="flex justify-between items-center w-100p p-2 gap-2">
-                    <span>{{ formState?.symbol?.value.toString() }}</span>
+                    <span>{{ formState?.symbol }}</span>
                     <UButton
                         @click="onCtrlBtnClick"
                         class="ctrl-btn btn btn-primary mb-2"
@@ -105,21 +105,24 @@
                             </UFormGroup>
                     </div>
                         <div class="grid grid-cols-2 items-center gap-4 w-full">
-                            <USelectMenu
+                            <div class="flex items-center gap-2">
+                                 <TuSelect
+                                 class="flex-1"
                                 searchable
-                                searchable-placeholder="Search strategy..."
+                                innerHint="Search strategy..."
                                 placeholder="Strategy"
-                                :options="strategies"
-                                option-attribute="name"
+                                :options="toSelectStrategies(strategies)"
                                 v-model="formState.strategy"
                                 required
                             />
-                            <USelectMenu
-                                searchable
-                                searchable-placeholder="Search interval..."
+                            <a target="_blank" title="More info on strategies" href="/utils/strategies">
+                                <span class="text-primary"><i class="fi fi-br-interrogation"></i></span>
+                            </a>
+                            </div>
+                           
+                            <TuSelect
                                 placeholder="Interval"
                                 :options="intervals"
-                                option-attribute="label"
                                 v-model="formState.interval"
                                 required
                             />
@@ -137,22 +140,20 @@
                             </UFormGroup>
                             <div class="flex gap-4">
                                 <UFormGroup label="Margin"
-                                    ><USelectMenu
+                                    ><TuSelect
                                         placeholder="Margin"
                                         :options="margins"
-                                        option-attribute="label"
                                         v-model="formState.lev"
-                                    ></USelectMenu
+                                    ></TuSelect
                                 ></UFormGroup>
                                 <UFormGroup label="Pair"
-                                    ><USelectMenu
+                                    ><TuSelect
                                         placeholder="Pair"
                                         :options="selectSymbols"
-                                        option-attribute="label"
                                         v-model="formState.symbol"
                                         searchable
-                                        searchable-placeholder="Search pair..."
-                                    ></USelectMenu
+                                        innerHint="Search pair..."
+                                    ></TuSelect
                                 ></UFormGroup>
                             </div>
                         </div>
@@ -183,6 +184,7 @@
 <script setup lang="ts">
 import $ from "jquery";
 import TuDatePicker from "~/components/TuDatePicker.vue";
+import TuSelect from "~/components/TuSelect.vue";
 import { useAppStore } from "~/src/stores/app";
 import { selectPlatforms } from "~/utils/constants";
 const appStore = useAppStore();
@@ -197,22 +199,24 @@ const intervals = [1, 5, 15, 30, 60].map((e) => ({ label: `${e}m`, value: e }));
 const margins = [1, 2, 3, 4, 5].map((e) => ({ label: `x${e}`, value: e }));
 
 const formState = reactive({
-    strategy: strategies.value[6],
-    interval: intervals[2],
+    strategy: 2,
+    interval: 15,
     bal: 1000,
     offline: true,
-    lev: margins[0],
-    platform: 1,
-    symbol: selectSymbols.find((el) => el.value.toString() == "SOL,USDT"),
+    lev: 1,
+    platform: 0,
+    symbol: ["SOL", "USDT"].toString(),
     date: {
         start: "2023-01-01 00:00:00",
-        end:  "2023-10-28 23:59:00",
+        end:  "2023-10-28 23:59:00", 
     },
 });
 
 const getData = (ts: string) => res.value.data[ts];
 const parseData = (data: IObj) => {
-    let d = Object.keys(data.data).slice(0,50).map((ts, i) => {
+    const dataKeys = Object.keys(data.data)
+    const dataLength = dataKeys.length
+    let d = [...dataKeys.slice(0,50), ...dataKeys.slice(dataLength - 2, dataLength)].map((ts, i) => {
         let obj =data.data[ts]
         obj = {...obj,  side: {value: obj.side.toUpperCase(), class:  i % 2 != 0 ? '!text-red-500' : '!text-primary'}, balance: `${i%2 == 0 ? data.base : data.ccy} ${obj.balance}\t${obj.profit ?? ''}`, class: i % 2 != 0 ? 'bg-gray-800' : ''}
         return obj
@@ -248,10 +252,10 @@ const handleSubmit = async (e: any) => {
     try {
         let fd: IObj = {
             ...formState,
-            strategy: strategies.value.indexOf(formState.strategy) + 1,
-            lev: formState.lev.value,
-            symbol: formState.symbol?.value,
-            interval: formState.interval.value,
+            strategy: formState.strategy,
+            lev: formState.lev,
+            symbol: formState.symbol.split(","),
+            interval: formState.interval,
             ...formState.date,
         };
         delete fd["date"];

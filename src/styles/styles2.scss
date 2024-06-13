@@ -136,7 +136,7 @@ body,
             //background-color: #6666;
         }
         &::-webkit-scrollbar-thumb {
-            background-color: rgb(var(--color-primary-400) / var(--tw-bg-opacity))//var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity)))
+            background-color: rgb(var(--color-primary-400) / 1)//var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity)))
         }
     }
 }
