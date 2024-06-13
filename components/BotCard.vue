@@ -22,6 +22,9 @@
                     <h6 class="fs-11 fw-6 text-gray-400">
                         {{ bot.base }}/{{ bot.ccy }}
                     </h6>
+                    <h6 class="fs-11 fw-6 text-gray-200">
+                        {{ bot.orders?.length ?? 0}} orders
+                    </h6>
                     <div class="mt-1 overflow-hidden">
                         <p
                             class="fs-13"
