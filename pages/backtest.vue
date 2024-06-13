@@ -214,9 +214,10 @@ const formState = reactive({
 
 const getData = (ts: string) => res.value.data[ts];
 const parseData = (data: IObj) => {
-    const dataKeys = Object.keys(data.data)
+    let dataKeys = Object.keys(data.data)
     const dataLength = dataKeys.length
-    let d = [...dataKeys.slice(0,50), ...dataKeys.slice(dataLength - 2, dataLength)].map((ts, i) => {
+    dataKeys = dataLength > 51 ? [...dataKeys.slice(0,50), ...dataKeys.slice(dataLength - 1, dataLength)] : dataKeys
+    let d = dataKeys.map((ts, i) => {
         let obj =data.data[ts]
         obj = {...obj,  side: {value: obj.side.toUpperCase(), class:  i % 2 != 0 ? '!text-red-500' : '!text-primary'}, balance: `${i%2 == 0 ? data.base : data.ccy} ${obj.balance}\t${obj.profit ?? ''}`, class: i % 2 != 0 ? 'bg-gray-800' : ''}
         return obj
