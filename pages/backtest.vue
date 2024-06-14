@@ -94,7 +94,9 @@
                     >
                     <div class="w-full grid grid-cols-2 gap-4 items-center">
                         <TuSelect placeholder="Platform" :options="selectPlatforms(platforms)" v-model="formState.platform" required/>
-                        <UFormGroup>
+                            
+                        <div class="flex items-center gap-2">
+                              <UFormGroup>
                                 <UCheckbox
                                     color="primary"
                                     label="Offline"
@@ -102,8 +104,19 @@
                                 "
                                     v-model="formState.offline"
                                 />
-                            </UFormGroup>
-                    </div>
+                            </UFormGroup>                        
+                            <UFormGroup>
+                                <UCheckbox
+                                    color="primary"
+                                    label="Use file"
+                                    variant="primary
+                                "
+                                    v-model="formState.useFile"
+                                />
+                            </UFormGroup>             
+                        </div>
+                                 
+                    </div> <UInput :required="formState.useFile" size="sm" type="file" @change="(e)=> formState.file = e[0]"/>
                         <div class="grid grid-cols-2 items-center gap-4 w-full">
                             <div class="flex items-center gap-2">
                                  <TuSelect
@@ -198,7 +211,7 @@ const msg = ref<IObj>({}),
 const intervals = [1, 5, 15, 30, 60].map((e) => ({ label: `${e}m`, value: e }));
 const margins = [1, 2, 3, 4, 5].map((e) => ({ label: `x${e}`, value: e }));
 
-const formState = reactive({
+const formState = reactive<IObj>({
     strategy: 2,
     interval: 15,
     bal: 1000,
@@ -216,10 +229,12 @@ const getData = (ts: string) => res.value.data[ts];
 const parseData = (data: IObj) => {
     let dataKeys = Object.keys(data.data)
     const dataLength = dataKeys.length
-    dataKeys = dataLength > 51 ? [...dataKeys.slice(0,50), ...dataKeys.slice(dataLength - 1, dataLength)] : dataKeys
+    dataKeys = dataLength > 501 ? [...dataKeys.slice(0,500), ...dataKeys.slice(dataLength - 1, dataLength)] : dataKeys
     let d = dataKeys.map((ts, i) => {
         let obj =data.data[ts]
-        obj = {...obj,  side: {value: obj.side.toUpperCase(), class:  i % 2 != 0 ? '!text-red-500' : '!text-primary'}, balance: `${i%2 == 0 ? data.base : data.ccy} ${obj.balance}\t${obj.profit ?? ''}`, class: i % 2 != 0 ? 'bg-gray-800' : ''}
+        const _side = obj.side.toLowerCase()
+        const isSell = _side.startsWith('sell')
+        obj = {...obj,  side: {value: obj.side.toUpperCase(), class:  obj.balance ? (isSell ? '!text-red-500' : '!text-primary' ):'!text-white'}, balance: `${!isSell ? data.base : data.ccy} ${obj.balance ?? 'N/A'}\t${obj.profit ?? ''}`, class: `${isSell ? 'bg-gray-800' : ''} ${!obj.balance ? 'linethrough bg-red-500' : ''}`}
         return obj
     });
     return d;
@@ -262,6 +277,7 @@ const handleSubmit = async (e: any) => {
         delete fd["date"];
         fd = { ...fd, start: parseDate(fd.start), end: parseDate(fd.end) };
         console.log(fd);
+        
         res.value = initRes;
         socket.emit("backtest", fd);
     } catch (e) {
