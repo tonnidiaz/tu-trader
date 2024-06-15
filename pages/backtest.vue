@@ -7,16 +7,28 @@
             >
                 <h2 class="font-bold fs-20">RESULTS</h2>
                 <div class="my-2 flex gap-10">
-                    <TuStats :stats="[{title: 'Trades', subtitle: res.trades ?? 0}, {title: 'Profit', subtitle: `${res.ccy ?? ''} ${formatter
-                                .format(res.profit ?? 0)
-                                .replace('$', '')}`}, {title: 'W', subtitle: `${(res.gain ?? 0).toFixed(2)}%`}, {title: 'L', subtitle: `${(res.loss ?? 0).toFixed(2)}%`}]"/>
-                  
+                    <TuStats
+                        :stats="[
+                            { title: 'Trades', subtitle: res.trades ?? 0 },
+                            {
+                                title: 'Profit',
+                                subtitle: `${res.ccy ?? ''} ${formatter
+                                    .format(res.profit ?? 0)
+                                    .replace('$', '')}`,
+                            },
+                            {
+                                title: 'W',
+                                subtitle: `${(res.gain ?? 0).toFixed(2)}%`,
+                            },
+                            {
+                                title: 'L',
+                                subtitle: `${(res.loss ?? 0).toFixed(2)}%`,
+                            },
+                        ]"
+                    />
                 </div>
                 <div class="mt-4 overflow-y-scroll">
-                    <BacktestTable
-                        v-if="true"
-                        :rows="parseData(res)"
-                    />
+                    <BacktestTable v-if="true" :rows="parseData(res)" />
                     <table
                         v-else
                         class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
@@ -92,60 +104,94 @@
                         class="space-y-5 flex flex-col items-center"
                         @submit="handleSubmit"
                     >
-                    <div class="w-full grid grid-cols-2 gap-4 items-center">
-                        <TuSelect placeholder="Platform" :options="selectPlatforms(platforms)" v-model="formState.platform" required/>
-                            
-                        <div class="flex items-center gap-2">
-                              <UFormGroup>
-                                <UCheckbox
-                                    color="primary"
-                                    label="Offline"
-                                    variant="primary
-                                "
-                                    v-model="formState.offline"
-                                />
-                            </UFormGroup>                        
-                            <UFormGroup>
-                                <UCheckbox
-                                    color="primary"
-                                    label="Use file"
-                                    variant="primary
-                                "
-                                    v-model="formState.useFile"
-                                />
-                            </UFormGroup>             
-                        </div>
-                                 
-                    </div> <UInput :required="formState.useFile" size="sm" type="file" @change="(e)=> formState.file = e[0]"/>
-                        <div class="grid grid-cols-2 items-center gap-4 w-full">
-                            <div class="flex items-center gap-2">
-                                 <TuSelect
-                                 class="flex-1"
-                                searchable
-                                innerHint="Search strategy..."
-                                placeholder="Strategy"
-                                :options="toSelectStrategies(strategies)"
-                                v-model="formState.strategy"
+                        <div class="w-full grid grid-cols-2 gap-4 items-center">
+                            <TuSelect
+                                placeholder="Platform"
+                                :options="selectPlatforms(platforms)"
+                                v-model="formState.platform"
                                 required
                             />
-                            <a target="_blank" title="More info on strategies" href="/utils/strategies">
-                                <span class="text-primary"><i class="fi fi-br-interrogation"></i></span>
-                            </a>
+
+                            <div class="flex items-center gap-2">
+                                <UFormGroup>
+                                    <UCheckbox
+                                        color="primary"
+                                        label="Offline"
+                                        variant="primary
+                                "
+                                        v-model="formState.offline"
+                                    />
+                                </UFormGroup>
+                                <UFormGroup>
+                                    <UCheckbox
+                                        color="primary"
+                                        label="Use file"
+                                        variant="primary
+                                "
+                                        v-model="formState.useFile"
+                                    />
+                                </UFormGroup>
                             </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <UInput
+                                :required="formState.useFile"
+                                size="sm"
+                                type="file"
+                                @change="(e) => (formState.file = e[0])"
+                            />
                            
+                        </div>
+                        <div class="flex items-center gap-3 justify-center">
+                            <UCheckbox
+                                    color="primary"
+                                    label="Parsed"
+                                    variant="primary
+                                "
+                                    v-model="formState.isParsed"
+                                />
+                                <UCheckbox
+                                    color="primary"
+                                    label="Heikin-ashi"
+                                    variant="primary
+                                "
+                                    v-model="formState.isHa"
+                                />
+                        </div>
+
+                        <div class="grid grid-cols-2 items-center gap-4 w-full">
+                            <div class="flex items-center gap-2">
+                                <TuSelect
+                                    class="flex-1"
+                                    searchable
+                                    innerHint="Search strategy..."
+                                    placeholder="Strategy"
+                                    :options="toSelectStrategies(strategies)"
+                                    v-model="formState.strategy"
+                                    required
+                                />
+                                <a
+                                    target="_blank"
+                                    title="More info on strategies"
+                                    href="/utils/strategies"
+                                >
+                                    <span class="text-primary"
+                                        ><i class="fi fi-br-interrogation"></i
+                                    ></span>
+                                </a>
+                            </div>
+
                             <TuSelect
                                 placeholder="Interval"
                                 :options="intervals"
                                 v-model="formState.interval"
                                 required
                             />
-                          
                         </div>
                         <div class="flex items-end justify-center gap-4">
                             <UFormGroup label="Start balance">
                                 <UInput
                                     type="text"
-                                    
                                     placeholder="Enter start balance..."
                                     required
                                     v-model="formState.bal"
@@ -181,12 +227,7 @@
                         >
                             <span>{{ msg.msg }}</span>
                         </div>
-                        <UButton
-                            type="submit"
-                            class="w-full"
-                        >
-                            Start
-                        </UButton>
+                        <UButton type="submit" class="w-full"> Start </UButton>
                     </UForm>
                 </div>
             </div>
@@ -221,21 +262,43 @@ const formState = reactive<IObj>({
     symbol: ["SOL", "USDT"].toString(),
     date: {
         start: "2023-01-01 00:00:00",
-        end:  "2023-10-28 23:59:00", 
+        end: "2023-10-28 23:59:00",
     },
 });
 
 const getData = (ts: string) => res.value.data[ts];
 const parseData = (data: IObj) => {
-    let dataKeys = Object.keys(data.data)
-    const dataLength = dataKeys.length
-    dataKeys = dataLength > 501 ? [...dataKeys.slice(0,500), ...dataKeys.slice(dataLength - 1, dataLength)] : dataKeys
+    let dataKeys = Object.keys(data.data);
+    const dataLength = dataKeys.length;
+    dataKeys =
+        dataLength > 501
+            ? [
+                  ...dataKeys.slice(0, 500),
+                  ...dataKeys.slice(dataLength - 1, dataLength),
+              ]
+            : dataKeys;
     let d = dataKeys.map((ts, i) => {
-        let obj =data.data[ts]
-        const _side = obj.side.toLowerCase()
-        const isSell = _side.startsWith('sell')
-        obj = {...obj,  side: {value: obj.side.toUpperCase(), class:  obj.balance ? (isSell ? '!text-red-500' : '!text-primary' ):'!text-white'}, balance: `${!isSell ? data.base : data.ccy} ${obj.balance ?? 'N/A'}\t${obj.profit ?? ''}`, class: `${isSell ? 'bg-gray-800' : ''} ${!obj.balance ? 'linethrough bg-red-500' : ''}`}
-        return obj
+        let obj = data.data[ts];
+        const _side = obj.side.toLowerCase();
+        const isSell = _side.startsWith("sell");
+        obj = {
+            ...obj,
+            side: {
+                value: obj.side.toUpperCase(),
+                class: obj.balance
+                    ? isSell
+                        ? "!text-red-500"
+                        : "!text-primary"
+                    : "!text-white",
+            },
+            balance: `${!isSell ? data.base : data.ccy} ${
+                obj.balance ?? "N/A"
+            }\t${obj.profit ?? ""}`,
+            class: `${isSell ? "bg-gray-800" : ""} ${
+                !obj.balance ? "linethrough bg-red-500" : ""
+            }`,
+        };
+        return obj;
     });
     return d;
 };
@@ -256,11 +319,11 @@ onMounted(() => {
     socket.on("backtest", onBacktest);
     socket.on("disconnect", (r, d) => {
         console.log("IO DISCONNECTED");
-        msg.value = {msg: 'IO DISCONNECTED'}
+        msg.value = { msg: "IO DISCONNECTED" };
     });
     socket.on("connect", () => {
         console.log("IO CONNECTED");
-        msg.value = {msg: 'IO CONNECTED'}
+        msg.value = { msg: "IO CONNECTED" };
     });
 });
 
@@ -277,7 +340,7 @@ const handleSubmit = async (e: any) => {
         delete fd["date"];
         fd = { ...fd, start: parseDate(fd.start), end: parseDate(fd.end) };
         console.log(fd);
-        
+
         res.value = initRes;
         socket.emit("backtest", fd);
     } catch (e) {
