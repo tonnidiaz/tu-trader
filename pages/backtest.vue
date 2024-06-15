@@ -160,7 +160,7 @@
                         </div>
 
                         <div class="grid grid-cols-2 items-center gap-4 w-full">
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-1">
                                 <TuSelect
                                     class="flex-1"
                                     searchable
@@ -169,16 +169,25 @@
                                     :options="toSelectStrategies(strategies)"
                                     v-model="formState.strategy"
                                     required
+                                    :click="()=> console.log('click')"
+                                    :pointer-down="()=> console.log('click')"
+
                                 />
-                                <a
+                                <div class="flex flex-col gap- items-center">
+                                    <UButton @click="socket.emit('strategies')" size="sm" variant="ghost">
+                                        <span><i class="fi fi-rr-refresh"></i></span>
+                                    </UButton>
+                                    <a
                                     target="_blank"
                                     title="More info on strategies"
                                     href="/utils/strategies"
                                 >
-                                    <span class="text-primary"
+                                    <span class="text-primary text-center"
                                         ><i class="fi fi-br-interrogation"></i
                                     ></span>
                                 </a>
+                                </div>
+                                
                             </div>
 
                             <TuSelect
@@ -244,7 +253,7 @@ import { selectPlatforms } from "~/utils/constants";
 const appStore = useAppStore();
 const initRes = { data: {} };
 const res = ref<IObj>(initRes);
-
+const {setStrategies} = appStore
 const { strategies, platforms } = storeToRefs(appStore);
 const msg = ref<IObj>({}),
     paramsAreaRef = ref<any>();
@@ -352,4 +361,12 @@ const onCtrlBtnClick = (e: any) => {
     const paramsArea = paramsAreaRef.value;
     $(paramsArea!).toggleClass("open");
 };
+
+onMounted(()=>{
+    socket.on('strategies', ({data, err})=>{
+            if (err) {console.log(err); return}
+            setStrategies(data)
+            console.log("GOT THE STRATEGIES");
+        })
+})
 </script>

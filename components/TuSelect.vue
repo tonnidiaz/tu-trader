@@ -3,6 +3,7 @@
     :searchable-placeholder="innerHint"
     option-attribute="label" value-attribute="value"
     :options="options"
+    
   />
 </template>
 
