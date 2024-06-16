@@ -1,4 +1,4 @@
-import { HydratedDocumentFromSchema, Schema } from "mongoose";
+import mn, { HydratedDocument, HydratedDocumentFromSchema, InferSchemaType, Schema, Types } from "mongoose";
 
 export const BotSchema = new Schema(
     {
@@ -17,6 +17,7 @@ export const BotSchema = new Schema(
         orders: { type: [Schema.ObjectId], ref: "Order" },
         start_amt: { type: Number, default: 10 },
         curr_amt: { type: Number, default: 0 },
+        platform: { type: String, enum: ['bybit', 'okx'], default: 'bybit'}
     },
     { timestamps: true }
 );
