@@ -37,13 +37,12 @@
                 <UFormGroup label="Start amount">
                     <UInput
                         required
-                        :disabled="mode == 'Edit'"
                         v-model="formState.start_amt"
                         placeholder="Enter start amount..."
                         type="number" step="any"
                     />
                 </UFormGroup>
-               
+               <TuSelect required :options="platforms.map(el=> ({label: el.toUpperCase() , value: el.toLocaleLowerCase()}))" placeholder="Platform" v-model="formState.platform" />
                 <div class="grid grid-cols-2 gap-3">
                     <TuSelect required :options="toSelectStrategies(strategies)" v-model="formState.strategy" searchable placeholder="Strategy" innerHint="Search strategy..."/>
                     <TuSelect required :options="selectIntervals" v-model="formState.interval" placeholder="Interval"/>
@@ -72,7 +71,7 @@ import { selectIntervals } from "~/utils/constants";
 import { useUserStore } from "~/src/stores/user";
 const userStore = useUserStore()
 
-const { strategies } = storeToRefs(useAppStore())
+const { strategies, platforms } = storeToRefs(useAppStore())
 
 const props = withDefaults(
     defineProps<{ mode?: "Create" | "Edit"; modelValue: boolean, bot?: IObj, onDone?: (bot: IObj)=> any }>(),
@@ -87,7 +86,7 @@ const modalOpen = computed({
     set: (val)=> emit('update:modelValue', val)
 })
 
-const formState = ref<IObj>({demo: true}), err = ref(""), setErr = (val: string) => err.value = val;
+const formState = ref<IObj>({demo: true, platform: 'bybit'}), err = ref(""), setErr = (val: string) => err.value = val;
 const btnLoading = ref(false), setBtnLoading = (val: boolean) => btnLoading.value = val;
 
 const handleSubmit = async () => {
@@ -99,6 +98,7 @@ const handleSubmit = async () => {
             let data =formState.value
             delete data.id
             const {mode, bot, onDone} = props
+            console.log(data.symbol);
             data.symbol = data.symbol.split(',')
             data = mode == "Create" ? {...data,  user: userStore.user?.username} : {key: "multi", val: {...data}} 
             console.log(data);

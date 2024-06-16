@@ -119,4 +119,4 @@ socket.on("connect", () => {
 
 
 
-export const selectPlatforms = (lst: string[]) => lst.map((el, i)=>({label: el, value: i}))
+export const selectPlatforms = (lst: string[]) => lst.map((el, i)=>({label: el.toUpperCase(), value: i}))

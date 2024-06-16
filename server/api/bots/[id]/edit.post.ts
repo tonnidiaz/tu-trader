@@ -22,7 +22,7 @@ export default defineEventHandler(async e=>{
                     bot.set("base", v[0]);
                     bot.set("ccy", v[1]);
                 }
-                if (k != "start_amt") bot.set(k, v);
+                bot.set(k, v);
             }
         }
         await bot.save();

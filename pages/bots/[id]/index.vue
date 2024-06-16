@@ -13,6 +13,7 @@
                     class="badge badge-success"
                 />
             </div>
+           
             <div class="flex gap-4 justify-center mt-3 items-center">
                 <UButton
                     @click="(e : any)=> activateBot(e.currentTarget, _bot!, (val: any)=> _bot = val)"
@@ -45,6 +46,9 @@
                                     ]"
                 >
                 </TuStats>
+            </div>
+            <div class="mb-3">
+                <TuSelect disabled v-model="_bot.platform" :options="platforms.map(el=> ({label: el.toUpperCase(), value: el.toLowerCase()}))"/>
             </div>
             <div class="flex flex-col gap-2">
                 <UAccordion :items="moreInfo">
@@ -218,7 +222,7 @@
 <script setup lang="ts">
 import { useAppStore } from "~/src/stores/app";
 
-const { strategies } = storeToRefs(useAppStore());
+const { strategies, platforms } = storeToRefs(useAppStore());
 
 enum EOrder {
     all,
