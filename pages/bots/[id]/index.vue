@@ -32,6 +32,18 @@
                         <i class="fi fi-br-pencil"></i>
                     </span>
                 </UButton>
+                <CtxMenu v-model="menuOpen"
+                >
+                    <template v-slot:toggler>
+                        <UButton size="sm" :ui="{rounded: 'rounded-full'}" variant="ghost" color="gray"
+                            ><span class="fs-16 relative top-1">
+                                <i class="fi fi-br-menu-dots-vertical"></i> </span
+                        ></UButton>
+                    </template>
+                    <template v-slot:children>
+                        <li :class="!_bot.orders.length ? 'disabled' : ''"  @click="clearBotOrders(($event.target as any).parentElement, _bot, (val)=>{_bot = val})"><span>Clear orders</span></li>
+                    </template>
+                </CtxMenu>
             </div>
             <div class="my-3">
                 <TuStats
@@ -229,7 +241,7 @@ enum EOrder {
     win,
     lose,
 }
-const _bot = ref<IObj>(),
+const _bot = ref<IObj>(), menuOpen = ref(false),
     modalOpen = ref(false),
     orders = ref<IObj[]>([]),
     orderType = ref<EOrder>(EOrder.all);
@@ -264,10 +276,13 @@ onMounted(() => {
     const bot = data.value;
     _bot.value = bot;
     //setOrders(bot.orders);
-    if (bot.orders) filterOrders(bot.orders);
+    
 });
 
 watch(orderType, (val) => {
     filterOrders(_bot.value?.orders ?? []);
 });
+watch(_bot, val=>{
+    if (val?.orders) filterOrders(val.orders);
+})
 </script>
