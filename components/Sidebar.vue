@@ -14,6 +14,12 @@
                 icon="fi fi-rr-blood-test-tube-alt"
                 to="/backtest"
             ></menu-item>
+            <menu-item title="Candles test"
+                
+                inner-class="justify-center"
+                icon="fi fi-rr-chart-candlestick"
+                to="/test/candles"
+            ></menu-item>
             <!--    <li class="tooltip tooltip-right" data-tip="Contact us">
        <NuxtLink to="/contact">
         <i class="fi fi-rr-envelope"></i>
