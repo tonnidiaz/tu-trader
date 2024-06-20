@@ -59,8 +59,9 @@
                 >
                 </TuStats>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 grid grid-cols-2 gap-3">
                 <TuSelect disabled v-model="_bot.platform" :options="platforms.map(el=> ({label: el.toUpperCase(), value: el.toLowerCase()}))"/>
+                <TuSelect disabled v-model="_bot.order_type" :options="['Market', 'Limit'].map(el=> ({label: el, value: el}))"/>
             </div>
             <div class="flex flex-col gap-2">
                 <UAccordion :items="moreInfo">
@@ -224,6 +225,7 @@
                 desc: _bot.desc,
                 demo: _bot.demo,
                 id: _bot._id,
+                order_type: _bot.order_type,
                 symbol: [_bot.base, _bot.ccy].toString(),
                 interval: _bot.interval, strategy: _bot.strategy, start_amt: _bot.start_amt }"
             v-model="modalOpen" :onDone="(val)=>_bot = val"
