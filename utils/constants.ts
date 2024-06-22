@@ -100,7 +100,7 @@ export const symbols =true ? bybit_coins:[
     ["STETH", "ETH"],
     ["TRX", "ETH"]
 ]
-export const intervals = [5, 15, 30, 60]
+export const intervals = [1, 3, 5, 15, 30, 60]
 export const selectIntervals = intervals.map((e) => ({
     label: `${e}m`, 
     value: e,
