@@ -144,7 +144,7 @@ const btnLoading = ref(false),
 const handleSubmit = async () => {
     try {
         setErr("");
-        let data = formState.value;
+        let data = {...formState.value};
         delete data.id;
         const { mode, bot, onDone } = props;
         console.log(data.symbol);

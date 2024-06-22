@@ -253,7 +253,7 @@ const id = ref(route.params.id);
 
 const moreInfo = [{ label: "More info", content: "Lorem Ipsum" }];
 
-const { data, error } = await useTuFetch<any>("/api/bots/" + id.value, {
+const { data, error } = await useTuFetch<any>("/bots/" + id.value, {
     watch: [id],
 });
 if (error.value) {

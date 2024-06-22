@@ -17,7 +17,7 @@
                 <span class="fs-20"><i class="fi fi-rr-plus"></i></span>
             </UButton>
         </Teleport>
-        <BotFormModal v-model="modalOpen" :onDone="val=>userStore.setBots({...bots, val})"/>
+        <BotFormModal v-model="modalOpen" :onDone="val=>userStore.setBots([val, ...bots,])"/>
     </div>
 </template>
 <script setup lang="ts">
@@ -32,7 +32,7 @@ const username = ref(route.params.username);
 const modalOpen = ref(false);
 
 const { data, error } = await useTuFetch<any>(
-    "/api/bots?user=" + username.value,
+    "/bots?user=" + username.value,
     {
         watch: [username],
     }
