@@ -192,7 +192,7 @@
 
                             <TuSelect
                                 placeholder="Interval"
-                                :options="intervals"
+                                :options="selectIntervals"
                                 v-model="formState.interval"
                                 required
                             />
@@ -249,7 +249,7 @@ import $ from "jquery";
 import TuDatePicker from "~/components/TuDatePicker.vue";
 import TuSelect from "~/components/TuSelect.vue";
 import { useAppStore } from "~/src/stores/app";
-import { selectPlatforms } from "~/utils/constants";
+import { selectIntervals, selectPlatforms } from "~/utils/constants";
 const appStore = useAppStore();
 const initRes = { data: {} };
 const res = ref<IObj>(initRes);
@@ -258,7 +258,6 @@ const { strategies, platforms } = storeToRefs(appStore);
 const msg = ref<IObj>({}),
     paramsAreaRef = ref<any>();
 
-const intervals = [1, 5, 15, 30, 60].map((e) => ({ label: `${e}m`, value: e }));
 const margins = [1, 2, 3, 4, 5].map((e) => ({ label: `x${e}`, value: e }));
 
 const formState = reactive<IObj>({
