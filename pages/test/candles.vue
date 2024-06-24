@@ -5,10 +5,44 @@
             <div
                 class="md:p-4 p-2 my-2 border-md border-card border-1 br-10 flex-1 overflow-y-scroll max-h-80vh"
             >
+                <div class="flex items-center gap-3 mb-3">
+                    <TuSelect
+                        class="w-150px"
+                        placeholder="Display type"
+                        :options="
+                            ['chart', 'table'].map((el) => ({
+                                label: el.toUpperCase(),
+                                value: el,
+                            }))
+                        "
+                        v-model="displayType"
+                    />
+                    <TuSelect
+                        class="w-150px"
+                        placeholder="Candle type"
+                        :options="
+                            ['ha', 'std'].map((el) => ({
+                                label: el.toUpperCase(),
+                                value: el,
+                            }))
+                        "
+                        v-model="candleType"
+                    />
+                </div>
+
                 <h2 class="font-bold fs-20">RESULTS</h2>
 
                 <div class="mt-4 overflow-y-scroll">
-                    <CandleTestTable v-if="true" :rows="parseData(res.data)" />
+                    <CandleTestTable
+                        v-if="displayType == 'table'"
+                        :rows="parseData(res.data)"
+                    />
+                    <TuChart
+                        v-else
+                        :interval="res.interval"
+                        :symbol="res.symbol"
+                        :df="res.data" :cType="candleType"
+                    />
                 </div>
             </div>
             <div
@@ -122,6 +156,8 @@ const { setStrategies } = appStore;
 const { strategies, platforms } = storeToRefs(appStore);
 const msg = ref<IObj>({}),
     paramsAreaRef = ref<any>();
+const displayType = ref<"chart" | "table">("chart");
+const candleType = ref<"ha" | "std">("ha");
 
 const intervals = [1, 5, 15, 30, 60].map((e) => ({ label: `${e}m`, value: e }));
 const margins = [1, 2, 3, 4, 5].map((e) => ({ label: `x${e}`, value: e }));
@@ -133,7 +169,7 @@ const formState = reactive<IObj>({
     symbol: ["SOL", "USDT"].toString(),
     date: {
         start: "2021-01-01 00:00:00",
-        end: "2021-10-28 23:59:00",
+        end: "2021-01-28 23:59:00",
     },
 });
 
@@ -149,11 +185,12 @@ const parseData = (data: any[]) => {
               ];
     return data;
 };
+
+
 const onBacktest = (data: any) => {
     console.log("ON BACKTEST");
     if (data.data) {
         res.value = data;
-        console.log(data.data);
         msg.value = {};
     } else if (data.err) {
         msg.value = { msg: data.err, err: true };

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <TuRightMenu
         :on-trigger="
             (e) => {
@@ -16,23 +16,22 @@
             class="m-auto rounded-md w-100p bg-gray-1000 p-2"
             id="chart"
         >
-            <div v-if="symbol" class="legend flex items-center gap-3">
+            <div class="legend flex items-center gap-3">
                 {{ symbol.join("/") }}&nbsp;&bull;&nbsp;{{
                     interval ? `${interval}m` : ""
                 }}&nbsp;
-                <span v-for="k in Object.keys(legendContent)">
-                    <span v-if="k != 'ts'"
-                        >{{ k.toLocaleUpperCase() }}
-                        <span
-                            :class="
-                                Number(legendContent.c) >
-                                Number(legendContent.o)
-                                    ? 'text-green-500'
-                                    : 'text-red-500'
-                            "
-                            >{{ legendContent[k] }}</span
-                        ></span
+                <span v-for="k in Object.keys(legendContent)" 
                     >
+                    <span v-if="k != 'ts'">{{ k.toLocaleUpperCase() }}
+                    <span
+                        :class="
+                            Number(legendContent.c) > Number(legendContent.o)
+                                ? 'text-green-500'
+                                : 'text-red-500'
+                        "
+                        >{{ legendContent[k] }}</span
+                    ></span>
+                    
                 </span>
             </div>
         </div>
@@ -44,34 +43,53 @@ import {
     CrosshairMode,
     createChart,
     type CandlestickData,
-    type DeepPartial,
     type IChartApi,
     type Time,
-    type TimeChartOptions,
 } from "lightweight-charts";
 
 const cursorPos = ref({ x: 0, y: 0 });
-const props = withDefaults(
-    defineProps<{
-        type: string;
-        cType: typeof candleType.value;
-        symbol: string[];
-        interval: number;
-        df: any[];
-        autosize: boolean;
-        chartOptions?: DeepPartial<TimeChartOptions>;
-    }>(),
-    { type: "candlestick", cType: "ha", autosize: true }
-);
+const props = defineProps<{
+    type: string
+}>({
+    type: {
+        type: String,
+        default: "candlestick",
+    },
+    cType: {
+        type: typeof candleType,
+        default: "ha",
+    },
+    symbol: { type: Array, default: ["", ""] },
+    interval: { type: Number },
+    df: {
+        type: Array,
+        required: true,
+    },
+    autosize: {
+        default: true,
+        type: Boolean,
+    },
+    chartOptions: {
+        type: Object,
+    },
+    seriesOptions: {
+        type: Object,
+    },
+    timeScaleOptions: {
+        type: Object,
+    },
+    priceScaleOptions: {
+        type: Object,
+    },
+});
 
-const data = ref<any[]>([]);
+const data = ref<any[]>([])
 
 const candleType = ref<"ha" | "std">("ha");
-const parseCandleData = (df: any[], cType: typeof candleType.value) => {
-    console.log('PARSE CANDLE DATA');
-    data.value = df.map((el) => {
+const parseCandleData = (data: any[], cType: typeof candleType.value) => {
+    return data.map((el) => {
         const candle = cType == "ha" ? el.ha : el.std;
-        return{
+        return {
             time: new Date(el.ts).getTime() / 1000,
             open: candle.o,
             high: candle.h,
@@ -79,7 +97,6 @@ const parseCandleData = (df: any[], cType: typeof candleType.value) => {
             close: candle.c,
         };
     });
-   
 };
 // Function to get the correct series constructor name for current series type.
 function getChartSeriesConstructorName(type) {
@@ -122,14 +139,20 @@ const resizeHandler = () => {
     chart.resize(dimensions.width, dimensions.height);
 };
 
-const onCrossHair = (param) => {
+// Creates the chart series and sets the data.
+const addSeriesAndData = (prps: typeof props) => {
+
+    const _data = data.value
+    const seriesConstructor = getChartSeriesConstructorName(prps.type);
+    series = chart![seriesConstructor](prps.seriesOptions);
+    series.setData(_data);
+
+    chart!.subscribeCrosshairMove((param) => {
         let priceFormatted = "";
         if (param.time) {
-            const dataPoint: CandlestickData<Time> | undefined = param.seriesData.get(
+            const dataPoint: CandlestickData<Time> = param.seriesData.get(
                 series
-            ) as any | undefined;
-
-            if (!dataPoint) return
+            )! as any;
             legendContent.value = {
                 ts: dataPoint.time,
                 o: Number(dataPoint.open.toFixed(2)),
@@ -139,29 +162,15 @@ const onCrossHair = (param) => {
             };
         }
         // legend is a html element which has already been created
-    }
-// Creates the chart series and sets the data.
-const addSeriesAndData = (prps: typeof props) => {
-    console.log('ADD SERIES DATA...');
-    const _data = data.value;
-    const seriesConstructor = getChartSeriesConstructorName(prps.type);
-    if (series)
-        chart?.removeSeries(series)
-    series = chart![seriesConstructor]();
-    
-    
-    series.setData(_data);
-    
-    chart?.unsubscribeCrosshairMove(onCrossHair)
-
-    chart!.subscribeCrosshairMove(onCrossHair);
+    });
     return series;
 };
 const lockCursor = () => {
-    const data = legendContent.value;
-    const time = data.ts!;
-    const price = data.c;
-    chart?.setCrosshairPosition(price, time, series);
+
+    const data = legendContent.value
+    const time = data.ts!
+    const price = data.c
+    chart?.setCrosshairPosition(price, time, series,)
 };
 onMounted(() => {
     // Create the Lightweight Charts Instance using the container ref.
@@ -188,10 +197,17 @@ onMounted(() => {
     });
 
     setLocale("en-US");
-    parseCandleData(props.df, props.cType)
+
     addSeriesAndData(props);
 
-    chart.timeScale().applyOptions({ barSpacing: 10000 });
+    if (props.priceScaleOptions) {
+        chart.priceScale("").applyOptions(props.priceScaleOptions);
+    }
+
+    if (props.timeScaleOptions || true) {
+        chart.timeScale().applyOptions({ barSpacing: 10000 });
+    }
+
     chart.timeScale().fitContent();
 
     if (props.autosize) {
@@ -249,11 +265,12 @@ watch(
         series.setData(newData);
     }
 );
-watch(()=>[props.df, props.cType], ([newData, newType]) => {
-    if (!series) return;
-    parseCandleData(newData as any[], newType as typeof candleType.value);
-    addSeriesAndData(props)
-}, {deep: true, immediate:true});
+watch([props.df, props.cType],
+    ([newData, newType]) => {
+        if (!series) return;
+        parseCandleData(newData as any[], newType)
+    }
+);
 
 watch(
     () => props.chartOptions,
@@ -263,29 +280,29 @@ watch(
     }
 );
 
-/* watch(
+watch(
     () => props.seriesOptions,
     (newOptions) => {
         if (!series) return;
         series.applyOptions(newOptions);
     }
-); */
+);
 
-/* watch(
+watch(
     () => props.priceScaleOptions,
     (newOptions) => {
         if (!chart) return;
         chart.priceScale("").applyOptions(newOptions as any);
     }
-); */
+);
 
-/* watch(
+watch(
     () => props.timeScaleOptions,
     (newOptions) => {
         if (!chart) return;
         chart.timeScale().applyOptions(newOptions as any);
     }
-); */
+);
 </script>
 
 <style lang="scss">
@@ -308,4 +325,4 @@ watch(
     font-weight: 500;
 }
 </style>
-type DeepPartial, , type TimeChartOptions
+ -->
