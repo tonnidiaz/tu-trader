@@ -6,9 +6,9 @@
                 class="md:p-4 p-2 my-2 border-md border-card border-1 br-10 flex-1 overflow-y-scroll max-h-80vh"
             >
                 <h2 class="font-bold fs-20">RESULTS</h2>
-     
+
                 <div class="mt-4 overflow-y-scroll">
-                    <CandleTestTable v-if="true" :rows="res.data" />
+                    <CandleTestTable v-if="true" :rows="parseData(res.data)" />
                 </div>
             </div>
             <div
@@ -68,30 +68,28 @@
                                 type="file"
                                 @change="(e) => (formState.file = e[0])"
                             />
-                           
                         </div>
 
                         <div class="grid grid-cols-2 items-center gap-4 w-full">
                             <UFormGroup label="Pair"
-                                    ><TuSelect
-                                        placeholder="Pair"
-                                        :options="selectSymbols"
-                                        v-model="formState.symbol"
-                                        searchable
-                                        innerHint="Search pair..."
-                                    ></TuSelect
-                                ></UFormGroup>
-                                <UFormGroup label="Interval">
-                                     <TuSelect
-                                placeholder="Interval"
-                                :options="intervals"
-                                v-model="formState.interval"
-                                required
-                            />
-                                </UFormGroup>
-                           
+                                ><TuSelect
+                                    placeholder="Pair"
+                                    :options="selectSymbols"
+                                    v-model="formState.symbol"
+                                    searchable
+                                    innerHint="Search pair..."
+                                ></TuSelect
+                            ></UFormGroup>
+                            <UFormGroup label="Interval">
+                                <TuSelect
+                                    placeholder="Interval"
+                                    :options="intervals"
+                                    v-model="formState.interval"
+                                    required
+                                />
+                            </UFormGroup>
                         </div>
-                
+
                         <div class="flex justify-center">
                             <UFormGroup>
                                 <TuDatePicker v-model="formState.date" />
@@ -120,7 +118,7 @@ import { selectPlatforms } from "~/utils/constants";
 const appStore = useAppStore();
 const initRes = { data: [] };
 const res = ref<IObj>(initRes);
-const {setStrategies} = appStore
+const { setStrategies } = appStore;
 const { strategies, platforms } = storeToRefs(appStore);
 const msg = ref<IObj>({}),
     paramsAreaRef = ref<any>();
@@ -134,14 +132,23 @@ const formState = reactive<IObj>({
     platform: 0,
     symbol: ["SOL", "USDT"].toString(),
     date: {
-        start: "2024-06-15 00:00:00",
-        end: "2024-10-28 23:59:00",
+        start: "2021-01-01 00:00:00",
+        end: "2021-10-28 23:59:00",
     },
 });
 
 const getData = (ts: string) => res.value.data[ts];
 
-
+const parseData = (data: any[]) => {
+    data =
+        data.length < 500
+            ? data
+            : [
+                  ...data.slice(0, 500),
+                  ...data.slice(data.length - 50, data.length),
+              ];
+    return data;
+};
 const onBacktest = (data: any) => {
     console.log("ON BACKTEST");
     if (data.data) {
@@ -190,11 +197,14 @@ const onCtrlBtnClick = (e: any) => {
     $(paramsArea!).toggleClass("open");
 };
 
-onMounted(()=>{
-    socket.on('strategies', ({data, err})=>{
-            if (err) {console.log(err); return}
-            setStrategies(data)
-            console.log("GOT THE STRATEGIES");
-        })
-})
+onMounted(() => {
+    socket.on("strategies", ({ data, err }) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        setStrategies(data);
+        console.log("GOT THE STRATEGIES");
+    });
+});
 </script>

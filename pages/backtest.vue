@@ -261,7 +261,7 @@ const msg = ref<IObj>({}),
 const margins = [1, 2, 3, 4, 5].map((e) => ({ label: `x${e}`, value: e }));
 
 const formState = reactive<IObj>({
-    strategy: 2,
+    strategy: 3,
     interval: 15,
     bal: 1000,
     offline: true,
@@ -269,8 +269,8 @@ const formState = reactive<IObj>({
     platform: 0,
     symbol: ["SOL", "USDT"].toString(),
     date: {
-        start: "2023-01-01 00:00:00",
-        end: "2023-10-28 23:59:00",
+        start: "2021-01-01 00:00:00",
+        end: "2021-10-28 23:59:00",
     },
 });
 
@@ -282,7 +282,7 @@ const parseData = (data: IObj) => {
         dataLength > 501
             ? [
                   ...dataKeys.slice(0, 500),
-                  ...dataKeys.slice(dataLength - 1, dataLength),
+                  ...dataKeys.slice(dataLength - 50, dataLength),
               ]
             : dataKeys;
     let d = dataKeys.map((ts, i) => {
