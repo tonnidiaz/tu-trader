@@ -46,6 +46,7 @@ import {
     type CandlestickData,
     type DeepPartial,
     type IChartApi,
+    type SeriesMarker,
     type Time,
     type TimeChartOptions,
 } from "lightweight-charts";
@@ -65,21 +66,24 @@ const props = withDefaults(
 );
 
 const data = ref<any[]>([]);
-
+const utc = ref(2);
 const candleType = ref<"ha" | "std">("ha");
+
+const parseTime = (ts: string) => {
+    return (new Date(ts).getTime() + utc.value * 60 * 60000) / 1000;
+};
 const parseCandleData = (df: any[], cType: typeof candleType.value) => {
-    console.log('PARSE CANDLE DATA');
+    console.log("PARSE CANDLE DATA");
     data.value = df.map((el) => {
         const candle = cType == "ha" ? el.ha : el.std;
-        return{
-            time: new Date(el.ts).getTime() / 1000,
+        return {
+            time: parseTime(el.ts),
             open: candle.o,
             high: candle.h,
             low: candle.l,
             close: candle.c,
         };
     });
-   
 };
 // Function to get the correct series constructor name for current series type.
 function getChartSeriesConstructorName(type) {
@@ -88,6 +92,7 @@ function getChartSeriesConstructorName(type) {
 
 // Lightweight Charts™ instances are stored as normal JS variables
 // If you need to use a ref then it is recommended that you use `shallowRef` instead
+let seriesList: any[] = [];
 let series;
 let chart: IChartApi | null;
 
@@ -123,38 +128,60 @@ const resizeHandler = () => {
 };
 
 const onCrossHair = (param) => {
-        let priceFormatted = "";
-        if (param.time) {
-            const dataPoint: CandlestickData<Time> | undefined = param.seriesData.get(
-                series
-            ) as any | undefined;
+    let priceFormatted = "";
+    if (param.time) {
+        const dataPoint: CandlestickData<Time> | undefined =
+            param.seriesData.get(series) as any | undefined;
 
-            if (!dataPoint) return
-            legendContent.value = {
-                ts: dataPoint.time,
-                o: Number(dataPoint.open.toFixed(2)),
-                h: Number(dataPoint.high.toFixed(2)),
-                l: Number(dataPoint.low.toFixed(2)),
-                c: Number(dataPoint.close.toFixed(2)),
-            };
-        }
-        // legend is a html element which has already been created
+        if (!dataPoint) return;
+        legendContent.value = {
+            ts: dataPoint.time,
+            o: Number(dataPoint.open.toFixed(4)),
+            h: Number(dataPoint.high.toFixed(4)),
+            l: Number(dataPoint.low.toFixed(4)),
+            c: Number(dataPoint.close.toFixed(4)),
+        };
     }
+    // legend is a html element which has already been created
+};
 // Creates the chart series and sets the data.
 const addSeriesAndData = (prps: typeof props) => {
-    console.log('ADD SERIES DATA...');
+    console.log("ADD SERIES DATA...");
+    if (!chart) return;
     const _data = data.value;
+    const _df = props.df;
     const seriesConstructor = getChartSeriesConstructorName(prps.type);
-    if (series)
-        chart?.removeSeries(series)
+    for (let series of seriesList) {
+        if (series) chart?.removeSeries(series);
+    }
+    seriesList = []
     series = chart![seriesConstructor]();
-    
-    
     series.setData(_data);
-    
-    chart?.unsubscribeCrosshairMove(onCrossHair)
-
+    chart?.unsubscribeCrosshairMove(onCrossHair);
     chart!.subscribeCrosshairMove(onCrossHair);
+
+    const markers: SeriesMarker<number>[] = [];
+    const haCloses: any[] = [];
+    _df.forEach((el, i) => {
+        const haRow = el.ha;
+        const time = parseTime(el.ts);
+        if (el.sma_20 > el.sma_50) {
+            markers.push({
+                time,
+                position: "aboveBar",
+                text: "B",
+                shape: "arrowDown",
+                color: "green",
+            });
+            haCloses.push({ time, value: haRow.c });
+        }
+    });
+
+    series.setMarkers(markers);
+    const maSeries = chart.addLineSeries({ color: "#2962FF", lineWidth: 2 });
+
+    maSeries.setData(haCloses);
+    seriesList.push(series, maSeries)
     return series;
 };
 const lockCursor = () => {
@@ -188,7 +215,7 @@ onMounted(() => {
     });
 
     setLocale("en-US");
-    parseCandleData(props.df, props.cType)
+    parseCandleData(props.df, props.cType);
     addSeriesAndData(props);
 
     chart.timeScale().applyOptions({ barSpacing: 10000 });
@@ -249,11 +276,15 @@ watch(
         series.setData(newData);
     }
 );
-watch(()=>[props.df, props.cType], ([newData, newType]) => {
-    if (!series) return;
-    parseCandleData(newData as any[], newType as typeof candleType.value);
-    addSeriesAndData(props)
-}, {deep: true, immediate:true});
+watch(
+    () => [props.df, props.cType],
+    ([newData, newType]) => {
+        if (!series) return;
+        parseCandleData(newData as any[], newType as typeof candleType.value);
+        addSeriesAndData(props);
+    },
+    { deep: true, immediate: true }
+);
 
 watch(
     () => props.chartOptions,

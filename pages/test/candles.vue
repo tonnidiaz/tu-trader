@@ -30,7 +30,7 @@
                     />
                 </div>
 
-                <h2 class="font-bold fs-20">RESULTS</h2>
+                <h2 v-if="displayType == 'table'" class="font-bold fs-20">RESULTS</h2>
 
                 <div class="mt-4 overflow-y-scroll">
                     <CandleTestTable
