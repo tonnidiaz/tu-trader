@@ -31,6 +31,7 @@
     "v-calendar": "^3.1.2",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2",
+    "vue3-apexcharts": "^1.5.3",
     "vue3-json-viewer": "^2.2.2"
   },
   "devDependencies": {

@@ -20,6 +20,12 @@
                 icon="fi fi-rr-chart-candlestick"
                 to="/test/candles"
             ></menu-item>
+            <menu-item title="Chart test"
+                
+                inner-class="justify-center"
+                icon="fi fi-r-chart-candlestick"
+                to="/test/chart"
+            ></menu-item>
             <!--    <li class="tooltip tooltip-right" data-tip="Contact us">
        <NuxtLink to="/contact">
         <i class="fi fi-rr-envelope"></i>
