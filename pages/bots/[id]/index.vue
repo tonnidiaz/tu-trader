@@ -221,6 +221,7 @@
         <BotFormModal
             mode="Edit"
             :bot="{
+                platform: _bot.platform,
                 name: _bot.name,
                 desc: _bot.desc,
                 demo: _bot.demo,
